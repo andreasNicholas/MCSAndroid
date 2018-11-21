@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import project.aigo.myapplication.R;
 
-public class SplashscreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

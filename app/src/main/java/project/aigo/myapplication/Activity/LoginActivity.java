@@ -10,7 +10,7 @@ import android.widget.Button;
 import project.aigo.myapplication.R;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    Button login;
+    Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,29 +21,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        login = findViewById(R.id.loginButton);
-        login.setOnClickListener(this);
-    }
-
-    public void tryLogin(){
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("appPref", 0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.commit();
-
-        editor.putString("email", "");
-        editor.putString("password", "");
-
-        editor.commit();
-
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
+        btnLogin = findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if(view == login){
-            tryLogin();
+        if(view == btnLogin){
+
         }
     }
 }

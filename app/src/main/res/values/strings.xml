@@ -10,4 +10,18 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="Aigo">AIGo! </string>
+    <string name="tvRegister">Register</string>
+    <string name="nameHint">Name</string>
+    <string name="emailHint">Email</string>
+    <string name="passwordHint">Password</string>
+    <string name="reTypePasswordHint">Re-type Password</string>
+    <string name="phoneHint">Phone</string>
+    <string name="addressHint">Address</string>
+    <string name="birthDateHint">Birth Date</string>
+    <string name="tvGender">Gender </string>
+    <string name="rdbtnMale">Male</string>
+    <string name="rdbtnFemale">Female</string>
+    <string name="cbxTerm">Agree Term and Condition</string>
+    <string name="btnRegister">Register</string>
 </resources>

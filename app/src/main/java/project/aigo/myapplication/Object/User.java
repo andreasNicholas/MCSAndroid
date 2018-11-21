@@ -1,63 +1,81 @@
 package project.aigo.myapplication.Object;
 
 import java.util.Date;
-import java.util.Vector;
 
 public class User {
-    public static Vector<User> objUserList = new Vector<>();
 
-    private String userEmail;
-    private String userPassword;
-    private String userPhone;
-    private Date userBirthDate;
-    private String userAddress;
-    private String userGender;
+    private String name;
+    private String email;
+    private String password;
+    private String phone;
+    private Date birthDate;
+    private String address;
+    private String gender;
 
-    public String getUserEmail() {
-        return userEmail;
+    public User ( String name , String email , String password , String phone , Date birthDate , String address , String gender ) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.birthDate = birthDate;
+        this.address = address;
+        this.gender = gender;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public String getName () {
+        return name;
     }
 
-    public String getUserPassword() {
-        return userPassword;
+    public void setName ( String name ) {
+        this.name = name;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public String getEmail () {
+        return email;
     }
 
-    public String getUserPhone() {
-        return userPhone;
+    public void setEmail ( String email ) {
+        this.email = email;
     }
 
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
+    public String getPassword () {
+        return password;
     }
 
-    public Date getUserBirthDate() {
-        return userBirthDate;
+    public void setPassword ( String password ) {
+        this.password = password;
     }
 
-    public void setUserBirthDate(Date userBirthDate) {
-        this.userBirthDate = userBirthDate;
+    public String getPhone () {
+        return phone;
     }
 
-    public String getUserAddress() {
-        return userAddress;
+    public void setPhone ( String phone ) {
+        this.phone = phone;
     }
 
-    public void setUserAddress(String userAddress) {
-        this.userAddress = userAddress;
+    public Date getBirthDate () {
+        return birthDate;
     }
 
-    public String getUserGender() {
-        return userGender;
+    public void setBirthDate ( Date birthDate ) {
+        this.birthDate = birthDate;
     }
 
-    public void setUserGender(String userGender) {
-        this.userGender = userGender;
+    public String getAddress () {
+        return address;
     }
+
+    public void setAddress ( String address ) {
+        this.address = address;
+    }
+
+    public String getGender () {
+        return gender;
+    }
+
+    public void setGender ( String gender ) {
+        this.gender = gender;
+    }
+
 }

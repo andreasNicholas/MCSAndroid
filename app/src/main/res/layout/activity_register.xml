@@ -1,43 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registerActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.MainActivity">
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".Activity.RegisterActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif-smallcaps"
-            android:text="AIGo! "
+            android:text="@string/Aigo"
             android:textAppearance="@style/TextAppearance.AppCompat.Display2"
             android:textStyle="italic"
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
             app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="@+id/constraintLayout"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="0.363" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="558dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="100dp"
             android:layout_marginEnd="32dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/roundedbackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -57,92 +68,114 @@
                     android:id="@+id/textView5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Register"
+                    android:text="@string/tvRegister"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:textSize="24sp"
                     android:textStyle="bold|italic" />
 
                 <EditText
-                    android:id="@+id/emailET"
+                    android:id="@+id/etName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/white"
                     android:drawableTint="@android:color/white"
                     android:ems="10"
                     android:foregroundTint="@android:color/white"
-                    android:hint="Email"
+                    android:hint="@string/nameHint"
                     android:inputType="textEmailAddress"
+                    android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white"
                     android:textColorLink="@android:color/white" />
 
                 <EditText
-                    android:id="@+id/passET"
+                    android:id="@+id/etEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/white"
                     android:drawableTint="@android:color/white"
                     android:ems="10"
                     android:foregroundTint="@android:color/white"
-                    android:hint="Password"
+                    android:hint="@string/emailHint"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:textColorLink="@android:color/white" />
+
+                <EditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/white"
+                    android:drawableTint="@android:color/white"
+                    android:ems="10"
+                    android:foregroundTint="@android:color/white"
+                    android:hint="@string/passwordHint"
                     android:inputType="textPassword"
+                    android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white"
                     android:textColorLink="@android:color/white" />
 
                 <EditText
-                    android:id="@+id/repassET"
+                    android:id="@+id/etRetypePassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/white"
                     android:drawableTint="@android:color/white"
                     android:ems="10"
                     android:foregroundTint="@android:color/white"
-                    android:hint="Re-type Password"
+                    android:hint="@string/reTypePasswordHint"
                     android:inputType="textPassword"
+                    android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white"
                     android:textColorLink="@android:color/white" />
 
                 <EditText
-                    android:id="@+id/phoneET"
+                    android:id="@+id/etPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/white"
                     android:drawableTint="@android:color/white"
                     android:ems="10"
                     android:foregroundTint="@android:color/white"
-                    android:hint="Phone"
+                    android:hint="@string/phoneHint"
                     android:inputType="phone"
+                    android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white"
                     android:textColorLink="@android:color/white" />
 
                 <EditText
-                    android:id="@+id/addressET"
+
+                    android:id="@+id/etAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/white"
                     android:drawableTint="@android:color/white"
                     android:ems="10"
                     android:foregroundTint="@android:color/white"
-                    android:hint="Address"
+                    android:hint="@string/addressHint"
                     android:inputType="textMultiLine"
+                    android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white"
                     android:textColorLink="@android:color/white" />
 
                 <EditText
-                    android:id="@+id/birthET"
+                    android:id="@+id/etBirthDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/white"
                     android:drawableTint="@android:color/white"
                     android:ems="10"
                     android:foregroundTint="@android:color/white"
-                    android:hint="Birth Date"
+                    android:hint="@string/birthDateHint"
                     android:inputType="date"
+                    android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white"
                     android:textColorLink="@android:color/white" />
@@ -157,25 +190,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text=" Gender"
+                        android:text="@string/tvGender"
                         android:textAppearance="@android:style/TextAppearance.Material.Medium"
                         android:textColor="@android:color/white" />
 
                     <RadioButton
-                        android:id="@+id/maleRB"
+                        android:id="@+id/rdbtnMale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/white"
                         android:buttonTint="@android:color/white"
                         android:drawableTint="@android:color/white"
                         android:foregroundTint="@android:color/white"
-                        android:text="Male"
+                        android:text="@string/rdbtnMale"
                         android:textColor="@android:color/white"
                         android:textColorHint="@android:color/white"
                         android:textColorLink="@android:color/white" />
 
                     <RadioButton
-                        android:id="@+id/femaleRB"
+                        android:id="@+id/rdbtnFemale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -183,7 +216,7 @@
                         android:buttonTint="@android:color/white"
                         android:drawableTint="@android:color/white"
                         android:foregroundTint="@android:color/white"
-                        android:text="Female"
+                        android:text="@string/rdbtnFemale"
                         android:textColor="@android:color/white"
                         android:textColorHint="@android:color/white"
                         android:textColorLink="@android:color/white" />
@@ -192,44 +225,44 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="bottom|right"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom|end"
                     android:orientation="vertical">
 
                     <ProgressBar
-                        android:id="@+id/progressBar"
+                        android:id="@+id/pbRegister"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/white"
                         android:foregroundTint="@android:color/white"
                         android:indeterminateTint="@android:color/white"
-                        android:max="8"
+                        android:max="9"
                         android:progress="0"
                         android:progressBackgroundTint="@android:color/white"
                         android:progressTint="@android:color/white"
                         android:secondaryProgressTint="@android:color/white" />
 
                     <CheckBox
-                        android:id="@+id/termCB"
+                        android:id="@+id/cbxTerm"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|right"
+                        android:layout_gravity="bottom|end"
                         android:backgroundTint="@android:color/white"
                         android:buttonTint="@android:color/white"
                         android:drawableTint="@android:color/white"
                         android:foregroundTint="@android:color/white"
-                        android:text="Agree Term and Condition"
+                        android:text="@string/cbxTerm"
                         android:textColor="@android:color/white"
                         android:textColorHint="@android:color/white"
                         android:textColorLink="@android:color/white" />
 
                     <Button
-                        android:id="@+id/registerButton"
+                        android:id="@+id/btnRegister"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|right"
-                        android:text="Register" />
+                        android:layout_gravity="bottom|end"
+                        android:text="@string/btnRegister" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -237,4 +270,4 @@
 
     </android.support.constraint.ConstraintLayout>
 
-</android.support.constraint.ConstraintLayout>
+</ScrollView>
