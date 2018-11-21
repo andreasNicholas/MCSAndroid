@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home_menu"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/news_menu"
+        android:icon="@drawable/ic_import_contacts_white_24dp"
+        android:title="@string/news" />
+    <item
+        android:id="@+id/search_menu"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/search" />
+    <item
+        android:id="@+id/donation_menu"
+        android:icon="@drawable/ic_monetization_on_white_24dp"
+        android:title="@string/donation" />
+    <item
+        android:id="@+id/events_menu"
+        android:icon="@drawable/ic_event_white_24dp"
+        android:title="@string/events" />
+</menu>
