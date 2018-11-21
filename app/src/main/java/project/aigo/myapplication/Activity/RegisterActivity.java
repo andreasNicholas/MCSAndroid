@@ -72,9 +72,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public String toStringTrim ( EditText editText ) {
-        String string = editText.getText().toString().trim();
-
-        return string;
+        return editText.getText().toString().trim();
     }
 
     public void reRegisterProgressBar () {
@@ -297,15 +295,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 Toast.makeText(RegisterActivity.this , message , Toast.LENGTH_LONG).show();
             }
 
-            ;
-
         }) {
 
             @Override
             protected VolleyError parseNetworkError ( VolleyError volleyError ) {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
-                    VolleyError error = new VolleyError(new String(volleyError.networkResponse.data));
-                    volleyError = error;
+
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
                 }
 
                 return volleyError;
