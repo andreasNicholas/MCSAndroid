@@ -227,7 +227,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if (view == btnRegister) {
 
             if (pbRegister.getProgress() == 9) {
-                sendAndRequestResponse();
+                postRegister();
 //                Intent intent = new Intent(this , LoginActivity.class);
 //                startActivity(intent);
             } else {
@@ -249,7 +249,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             termCondStat = 1;
     }
 
-    private void sendAndRequestResponse () {
+    private void postRegister () {
 //        String url = "https://middleware.bslc.or.id/oauth/token";
         String url1 = "https://mobileapi.bslc.or.id/register";
 
