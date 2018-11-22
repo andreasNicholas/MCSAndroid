@@ -1,13 +1,10 @@
 package project.aigo.myapplication.Activity;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,25 +12,14 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
-
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import project.aigo.myapplication.Object.User;
 import project.aigo.myapplication.R;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
@@ -241,7 +227,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if (view == btnRegister) {
 
             if (pbRegister.getProgress() == 9) {
-                register();
+                sendAndRequestResponse();
 //                Intent intent = new Intent(this , LoginActivity.class);
 //                startActivity(intent);
             } else {
@@ -251,9 +237,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void genderCondition () {
-        if (rdbtnMale.isChecked())
+        if (rdbtnMale.isChecked()) {
             pickedGender = "Male";
-        genderStat = 1;
+            genderStat = 1;
+        }
         if (rdbtnFemale.isChecked()) {
             pickedGender = "Female";
             genderStat = 1;
@@ -262,40 +249,41 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             termCondStat = 1;
     }
 
-    private void register () {
+    private void sendAndRequestResponse () {
+//        String url = "https://middleware.bslc.or.id/oauth/token";
+        String url1 = "https://mobileapi.bslc.or.id/register";
 
-        String url = "https://mobileapi.bslc.or.id/register";
-
+        //RequestQueue initialized
         RequestQueue mRequestQueue = Volley.newRequestQueue(this);
 
-        @SuppressWarnings("unchecked")
-        Map<String, String> params = new HashMap();
-        params.put("name" , toStringTrim(etName));
-        params.put("email" , toStringTrim(etEmail));
-        params.put("password" , toStringTrim(etPassword));
-        params.put("password_confirmation" , toStringTrim(etRetypePassword));
-        params.put("gender" , pickedGender);
-        params.put("phone" , toStringTrim(etPhone));
-        params.put("birth_date" , toStringTrim(etBirthDate));
-        params.put("address" , toStringTrim(etAddress));
-
-        JSONObject parameters = new JSONObject(params);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST , url , parameters , new Response.Listener<JSONObject>() {
-            @SuppressLint("DefaultLocale")
+        //String Request initialized
+        StringRequest mStringRequest = new StringRequest(Request.Method.POST , url1 , new Response.Listener<String>() {
             @Override
-            public void onResponse ( JSONObject response ) {
-
-
+            public void onResponse ( String response ) {
+                Toast.makeText(RegisterActivity.this , response , Toast.LENGTH_LONG).show();
             }
         } , new Response.ErrorListener() {
             @Override
             public void onErrorResponse ( VolleyError error ) {
-                String message = error.getMessage().replaceAll("," , "\n");
-                Toast.makeText(RegisterActivity.this , message , Toast.LENGTH_LONG).show();
+
+                Toast.makeText(RegisterActivity.this , error.getMessage() , Toast.LENGTH_LONG).show();
             }
 
         }) {
+            @Override
+            protected Map<String, String> getParams () {
+                Map<String, String> params = new HashMap<>();
+                params.put("name" , toStringTrim(etName));
+                params.put("email" , toStringTrim(etEmail));
+                params.put("password" , toStringTrim(etPassword));
+                params.put("password_confirmation" , toStringTrim(etRetypePassword));
+                params.put("gender" , pickedGender);
+                params.put("phone" , toStringTrim(etPhone));
+                params.put("birth_date" , toStringTrim(etBirthDate));
+                params.put("address" , toStringTrim(etAddress));
+
+                return params;
+            }
 
             @Override
             protected VolleyError parseNetworkError ( VolleyError volleyError ) {
@@ -308,6 +296,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
         };
 
-        mRequestQueue.add(jsonObjectRequest);
+        mRequestQueue.add(mStringRequest);
+
     }
+
 }
