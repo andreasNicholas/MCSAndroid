@@ -11,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -260,13 +259,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         StringRequest mStringRequest = new StringRequest(Request.Method.POST , url1 , new Response.Listener<String>() {
             @Override
             public void onResponse ( String response ) {
-                Toast.makeText(RegisterActivity.this , response , Toast.LENGTH_LONG).show();
+                Snackbar.make(view , response , Snackbar.LENGTH_SHORT).show();
             }
         } , new Response.ErrorListener() {
             @Override
             public void onErrorResponse ( VolleyError error ) {
-
-                Toast.makeText(RegisterActivity.this , error.getMessage() , Toast.LENGTH_LONG).show();
+                Snackbar.make(view , error.getMessage() , Snackbar.LENGTH_SHORT).show();
             }
 
         }) {
