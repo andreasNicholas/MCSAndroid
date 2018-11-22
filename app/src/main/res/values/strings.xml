@@ -10,7 +10,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="Aigo">AIGo! </string>
+    <string name="Aigo">AIGo!&#032;</string>
     <string name="tvRegister">Register</string>
     <string name="nameHint">Name</string>
     <string name="emailHint">Email</string>
@@ -24,4 +24,6 @@
     <string name="rdbtnFemale">Female</string>
     <string name="cbxTerm">Agree Term and Condition</string>
     <string name="btnRegister">Register</string>
+    <string name="login">Login</string>
+    <string name="registerLink">Dont have account? Register here!</string>
 </resources>

@@ -1,5 +1,6 @@
 package project.aigo.myapplication.Activity;
 
+import android.app.DatePickerDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,16 +9,22 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import project.aigo.myapplication.R;
 
@@ -30,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     int nameStat = 0, emailStat = 0, passwordStat = 0, retypePasswordStat = 0, phoneStat = 0, birthdateStat = 0, addressStat = 0, genderStat = 0, termCondStat = 0;
     String pickedGender;
     View view;
+    SimpleDateFormat dateFormatter;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
@@ -54,6 +62,34 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         rdbtnFemale.setOnClickListener(this);
         cbxTerm.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
+        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        final Calendar newCalendar = Calendar.getInstance();
+
+
+        final DatePickerDialog.OnDateSetListener datePickerDialog = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                newCalendar.set(Calendar.YEAR, year);
+                newCalendar.set(Calendar.MONTH, monthOfYear);
+                newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                String myFormat = "MM/dd/yy";
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                etBirthDate.setText(sdf.format(newCalendar.getTime()));
+            }
+        };
+
+        etBirthDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(RegisterActivity.this, datePickerDialog,
+                        newCalendar.get(Calendar.YEAR),
+                        newCalendar.get(Calendar.MONTH),
+                        newCalendar.get(Calendar.DAY_OF_MONTH)
+                ).show();
+            }
+        });
     }
 
     public String toStringTrim ( EditText editText ) {
@@ -67,129 +103,79 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onResume () {
         super.onResume();
-
         genderCondition();
 
         etName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
-            @Override
-            public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
+            @Override public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
+            @Override public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
             @Override
             public void afterTextChanged ( Editable editable ) {
-                if (toStringTrim(etName).length() <= 0) nameStat = 0;
-                else nameStat = 1;
-
+                //TERNARY Operator
+                //if (toStringTrim(etName).length() <= 0) nameStat = 0; else nameStat = 1;
+                nameStat = ((etName.length() <=0)? 0 : 1);
                 reRegisterProgressBar();
             }
         });
 
         etEmail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
-            @Override
-            public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
+            @Override public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
+            @Override public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
             @Override
             public void afterTextChanged ( Editable editable ) {
-                if (toStringTrim(etEmail).length() <= 0) emailStat = 0;
-                else emailStat = 1;
+                emailStat = ((etEmail.length() <=0)? 0 : 1);
                 reRegisterProgressBar();
             }
         });
 
         etPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
-            @Override
-            public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
+            @Override public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
+            @Override public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
             @Override
             public void afterTextChanged ( Editable editable ) {
-                if (toStringTrim(etPassword).length() <= 0) passwordStat = 0;
-                else passwordStat = 1;
+                passwordStat = ((etPassword.length() <=0)? 0 : 1);
                 reRegisterProgressBar();
             }
         });
 
         etRetypePassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
-            @Override
-            public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
+            @Override public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
+            @Override public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
             @Override
             public void afterTextChanged ( Editable editable ) {
-                if (toStringTrim(etRetypePassword).length() <= 0) retypePasswordStat = 0;
-                else retypePasswordStat = 1;
+                retypePasswordStat = ((etRetypePassword.length() <=0)? 0 : 1);
                 reRegisterProgressBar();
             }
         });
 
         etPhone.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
-            @Override
-            public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
+            @Override public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
+            @Override public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
             @Override
             public void afterTextChanged ( Editable editable ) {
-                if (toStringTrim(etPhone).length() <= 0) phoneStat = 0;
-                else phoneStat = 1;
+                phoneStat = ((etPhone.length() <=0)? 0 : 1);
                 reRegisterProgressBar();
             }
         });
 
         etBirthDate.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
-            @Override
-            public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
+            @Override public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
+            @Override public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
             @Override
             public void afterTextChanged ( Editable editable ) {
-                if (toStringTrim(etBirthDate).length() <= 0) birthdateStat = 0;
-                else birthdateStat = 1;
+                birthdateStat = ((etBirthDate.length() <=0)? 0 : 1);
                 reRegisterProgressBar();
             }
         });
 
         etAddress.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
-            @Override
-            public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-            }
-
+            @Override public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
+            @Override public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
             @Override
             public void afterTextChanged ( Editable editable ) {
-                if (toStringTrim(etAddress).length() <= 0) addressStat = 0;
-                else addressStat = 1;
+                addressStat = ((etAddress.length() <=0)? 0 : 1);
                 reRegisterProgressBar();
             }
         });
-
     }
 
     @Override
@@ -215,17 +201,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         if (view == cbxTerm) {
             if (cbxTerm.isChecked()) {
-                termCondStat = 1;
-                pbRegister.setProgress(pbRegister.getProgress() + 1);
+                termCondStat = 1; pbRegister.setProgress(pbRegister.getProgress() + 1);
             } else {
-                termCondStat = 0;
-                pbRegister.setProgress(pbRegister.getProgress() - 1);
+                termCondStat = 0; pbRegister.setProgress(pbRegister.getProgress() - 1);
             }
         }
 
         if (view == btnRegister) {
 
-            if (pbRegister.getProgress() == 9) {
+            if (pbRegister.getProgress() == pbRegister.getMax()) {
                 postRegister();
 //                Intent intent = new Intent(this , LoginActivity.class);
 //                startActivity(intent);
@@ -249,13 +233,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void postRegister () {
-//        String url = "https://middleware.bslc.or.id/oauth/token";
+        //String url = "https://middleware.bslc.or.id/oauth/token";
         String url1 = "https://mobileapi.bslc.or.id/register";
 
         //RequestQueue initialized
         RequestQueue mRequestQueue = Volley.newRequestQueue(this);
 
         //String Request initialized
+        //new StringRequest(RequestMethod, url, ToastForResponse, ToastForError)
         StringRequest mStringRequest = new StringRequest(Request.Method.POST , url1 , new Response.Listener<String>() {
             @Override
             public void onResponse ( String response ) {
@@ -266,7 +251,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             public void onErrorResponse ( VolleyError error ) {
                 Snackbar.make(view , error.getMessage() , Snackbar.LENGTH_SHORT).show();
             }
-
         }) {
             @Override
             protected Map<String, String> getParams () {
@@ -286,7 +270,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             protected VolleyError parseNetworkError ( VolleyError volleyError ) {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
-
                     volleyError = new VolleyError(new String(volleyError.networkResponse.data));
                 }
 

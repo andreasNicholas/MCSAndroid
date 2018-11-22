@@ -22,7 +22,6 @@
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif-smallcaps"
             android:text="@string/Aigo"
             android:textAppearance="@style/TextAppearance.AppCompat.Display2"
@@ -41,7 +40,6 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="100dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="8dp"
             android:background="@drawable/roundedbackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -222,6 +220,10 @@
                         android:textColorLink="@android:color/white" />
 
                 </RadioGroup>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
