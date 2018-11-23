@@ -24,4 +24,6 @@
     <string name="rdbtnFemale">Female</string>
     <string name="cbxTerm">Agree Term and Condition</string>
     <string name="btnRegister">Register</string>
+    <string name="login">Login</string>
+    <string name="lblRegister">Don\'t have account? Register here!</string>
 </resources>

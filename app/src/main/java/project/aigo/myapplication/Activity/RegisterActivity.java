@@ -11,15 +11,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import project.aigo.myapplication.API;
 import project.aigo.myapplication.R;
+
+import static project.aigo.myapplication.Activity.SplashScreenActivity.snackShort;
+import static project.aigo.myapplication.Activity.SplashScreenActivity.toStringTrim;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     EditText etName, etEmail, etPassword, etRetypePassword, etPhone, etBirthDate, etAddress;
@@ -29,7 +29,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     ProgressBar pbRegister;
     int nameStat = 0, emailStat = 0, passwordStat = 0, retypePasswordStat = 0, phoneStat = 0, birthdateStat = 0, addressStat = 0, genderStat = 0, termCondStat = 0;
     String pickedGender;
-    View view;
+    View layoutView;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
@@ -48,16 +48,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         cbxTerm = findViewById(R.id.cbxTerm);
         btnRegister = findViewById(R.id.btnRegister);
         pbRegister = findViewById(R.id.pbRegister);
-        view = findViewById(R.id.registerActivity);
+        layoutView = findViewById(R.id.registerActivity);
 
         rdbtnMale.setOnClickListener(this);
         rdbtnFemale.setOnClickListener(this);
         cbxTerm.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
-    }
-
-    public String toStringTrim ( EditText editText ) {
-        return editText.getText().toString().trim();
     }
 
     public void reRegisterProgressBar () {
@@ -226,11 +222,22 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if (view == btnRegister) {
 
             if (pbRegister.getProgress() == 9) {
-                postRegister();
+
+                Map<String, String> params = new HashMap<>();
+                params.put("name" , toStringTrim(etName));
+                params.put("email" , toStringTrim(etEmail));
+                params.put("password" , toStringTrim(etPassword));
+                params.put("password_confirmation" , toStringTrim(etRetypePassword));
+                params.put("gender" , pickedGender);
+                params.put("phone" , toStringTrim(etPhone));
+                params.put("birth_date" , toStringTrim(etBirthDate));
+                params.put("address" , toStringTrim(etAddress));
+
+                API.postRegister(this , layoutView , params);
 //                Intent intent = new Intent(this , LoginActivity.class);
 //                startActivity(intent);
             } else {
-                Snackbar.make(view , "Please fill all field and check the agreement first!" , Snackbar.LENGTH_SHORT).show();
+                snackShort(layoutView, "Please fill all field and check the agreement first!");
             }
         }
     }
@@ -248,54 +255,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             termCondStat = 1;
     }
 
-    private void postRegister () {
-//        String url = "https://middleware.bslc.or.id/oauth/token";
-        String url1 = "https://mobileapi.bslc.or.id/register";
-
-        //RequestQueue initialized
-        RequestQueue mRequestQueue = Volley.newRequestQueue(this);
-
-        //String Request initialized
-        StringRequest mStringRequest = new StringRequest(Request.Method.POST , url1 , new Response.Listener<String>() {
-            @Override
-            public void onResponse ( String response ) {
-                Snackbar.make(view , response , Snackbar.LENGTH_SHORT).show();
-            }
-        } , new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse ( VolleyError error ) {
-                Snackbar.make(view , error.getMessage() , Snackbar.LENGTH_SHORT).show();
-            }
-
-        }) {
-            @Override
-            protected Map<String, String> getParams () {
-                Map<String, String> params = new HashMap<>();
-                params.put("name" , toStringTrim(etName));
-                params.put("email" , toStringTrim(etEmail));
-                params.put("password" , toStringTrim(etPassword));
-                params.put("password_confirmation" , toStringTrim(etRetypePassword));
-                params.put("gender" , pickedGender);
-                params.put("phone" , toStringTrim(etPhone));
-                params.put("birth_date" , toStringTrim(etBirthDate));
-                params.put("address" , toStringTrim(etAddress));
-
-                return params;
-            }
-
-            @Override
-            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
-                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
-
-                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
-                }
-
-                return volleyError;
-            }
-        };
-
-        mRequestQueue.add(mStringRequest);
-
-    }
 
 }
