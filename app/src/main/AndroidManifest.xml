@@ -25,6 +25,7 @@
         <activity
             android:name=".Activity.HomeActivity"
             android:label="@string/title_activity_home" />
+        <activity android:name=".Activity.empty"></activity>
     </application>
 
 </manifest>
