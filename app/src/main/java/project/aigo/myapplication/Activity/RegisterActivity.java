@@ -18,11 +18,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import project.aigo.myapplication.API;
+import project.aigo.myapplication.Fragment.DatePickerFragment;
 import project.aigo.myapplication.R;
+
 import static project.aigo.myapplication.Activity.SplashScreenActivity.snackShort;
 import static project.aigo.myapplication.Activity.SplashScreenActivity.toStringTrim;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher, DatePickerDialog.OnDateSetListener {
     EditText etName, etEmail, etPassword, etRetypePassword, etPhone, etBirthDate, etAddress;
     RadioButton rdbtnMale, rdbtnFemale;
     CheckBox cbxTerm;
@@ -55,6 +57,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         rdbtnFemale.setOnClickListener(this);
         cbxTerm.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
+        etBirthDate.setOnClickListener(this);
 
         clickeableComponentCondition();
 
@@ -65,29 +68,22 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         etPhone.addTextChangedListener(this);
         etBirthDate.addTextChangedListener(this);
         etAddress.addTextChangedListener(this);
+    }
 
-        final Calendar newCalendar = Calendar.getInstance();
-        final DatePickerDialog.OnDateSetListener datePickerDialog = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet ( DatePicker view , int year , int monthOfYear , int dayOfMonth ) {
-                newCalendar.set(Calendar.YEAR , year);
-                newCalendar.set(Calendar.MONTH , monthOfYear);
-                newCalendar.set(Calendar.DAY_OF_MONTH , dayOfMonth);
-                String myFormat = "yyyy-MM-dd";
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat , Locale.US);
-                etBirthDate.setText(sdf.format(newCalendar.getTime()));
-            }
-        };
-        etBirthDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick ( View view ) {
-                new DatePickerDialog(RegisterActivity.this , datePickerDialog ,
-                        newCalendar.get(Calendar.YEAR) ,
-                        newCalendar.get(Calendar.MONTH) ,
-                        newCalendar.get(Calendar.DAY_OF_MONTH)
-                ).show();
-            }
-        });
+    public void showDatePickerDialog(View v){
+        DatePickerFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(),"datePicker");
+    }
+
+    @Override
+    public void onDateSet ( DatePicker datePicker , int year , int monthOfYear , int dayOfMonth ) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String myFormat = "yyyy-MM-dd";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat , Locale.US);
+        etBirthDate.setText(sdf.format(calendar.getTime()));
     }
 
     @Override
@@ -101,8 +97,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }
                 pickedGender = "Male";
             }
-        }
-        if (view == rdbtnFemale) {
+        } else if (view == rdbtnFemale) {
             if (rdbtnFemale.isChecked()) {
                 if (genderStat == 0) {
                     genderStat = 1;
@@ -110,9 +105,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }
                 pickedGender = "Female";
             }
-        }
-
-        if (view == cbxTerm) {
+        } else if (view == cbxTerm) {
             if (cbxTerm.isChecked()) {
                 termCondStat = 1;
                 pbRegister.setProgress(pbRegister.getProgress() + 1);
@@ -120,9 +113,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 termCondStat = 0;
                 pbRegister.setProgress(pbRegister.getProgress() - 1);
             }
-        }
-
-        if (view == btnRegister) {
+        } else if (view == etBirthDate){
+            showDatePickerDialog(view);
+        } else if (view == btnRegister) {
 
             if (pbRegister.getProgress() == pbRegister.getMax()) {
 
@@ -158,14 +151,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-
-    }
+    public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
 
     @Override
-    public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
-
-    }
+    public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) { }
 
     @Override
     public void afterTextChanged ( Editable editable ) {
@@ -182,4 +171,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 + addressStat + birthdateStat + phoneStat + genderStat + termCondStat);
 
     }
+
 }
