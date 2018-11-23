@@ -2,7 +2,9 @@ package project.aigo.myapplication;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.view.View;
 
 import com.android.volley.Request;
@@ -13,10 +15,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
+
+import project.aigo.myapplication.Activity.LoginActivity;
 
 import static project.aigo.myapplication.Activity.SplashScreenActivity.route;
 import static project.aigo.myapplication.Activity.SplashScreenActivity.snackShort;
@@ -26,7 +29,6 @@ public class API {
     public static void postRegister ( final Context context , final View view , final Map<String, String> params ) {
 
         String url = route("register");
-
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
 
         //String Request initialized
@@ -34,13 +36,22 @@ public class API {
             @Override
             public void onResponse ( String response ) {
                 snackShort(view , response);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run () {
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        context.startActivity(intent);
+                    }
+                } , 2000);
+
+
             }
         } , new Response.ErrorListener() {
             @Override
             public void onErrorResponse ( VolleyError error ) {
                 snackShort(view , error.getMessage());
             }
-
         }) {
             @Override
             protected Map<String, String> getParams () {
@@ -60,9 +71,10 @@ public class API {
         };
 
         mRequestQueue.add(mStringRequest);
+
     }
 
-    public static void postLogin ( final Context context , final View view , final Map<String, String> params, final SharedPreferences sharedPreferences ) {
+    public static void postLogin ( final Context context , final View view , final Map<String, String> params , final SharedPreferences sharedPreferences ) {
 
         String url = route("login");
 
