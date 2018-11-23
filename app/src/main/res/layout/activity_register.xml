@@ -172,11 +172,12 @@
                     android:ems="10"
                     android:foregroundTint="@android:color/white"
                     android:hint="@string/birthDateHint"
-                    android:inputType="date"
+                    android:inputType="none"
                     android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white"
-                    android:textColorLink="@android:color/white" />
+                    android:textColorLink="@android:color/white"
+                    android:focusable="false"/>
 
                 <RadioGroup
                     android:layout_width="match_parent"
