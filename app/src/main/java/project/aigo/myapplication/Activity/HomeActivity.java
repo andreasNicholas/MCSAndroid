@@ -5,12 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
 import project.aigo.myapplication.Adapter.ImageSliderAdapter;
+import project.aigo.myapplication.Adapter.NewsFeedAdapter;
 import project.aigo.myapplication.Object.Donation;
 import project.aigo.myapplication.Object.News;
 import project.aigo.myapplication.R;
@@ -45,6 +48,8 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         //chnage later get from DB
+        Donation.donationList.clear();
+        News.newsList.clear();
         Donation donation = new Donation("this is donation 1", R.drawable.ic_launcher_background, 0, "content for donation 1");
         donation.donationList.add(donation);
         Donation donation2 = new Donation("this is donation 2", R.drawable.ic_launcher_background, 0, "content for donation");
@@ -64,6 +69,11 @@ public class HomeActivity extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.slider);
         ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(this);
         viewPager.setAdapter(imageSliderAdapter);
+
+        RecyclerView recyclerView = findViewById(R.id.rcNews);
+        NewsFeedAdapter newsFeedAdapter = new NewsFeedAdapter(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(newsFeedAdapter);
     }
 
 }

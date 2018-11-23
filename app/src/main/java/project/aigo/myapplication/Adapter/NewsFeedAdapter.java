@@ -23,20 +23,30 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     public NewsFeedAdapter(Context context) {
         this.mContext = context;
+        mImageIds = new int[News.newsList.size()];
+        for(int i=0; i<mImageIds.length; i++){
+            mImageIds[i] = News.newsList.get(i).getImage_id();
+        }
+        mImageTitles = new String[News.newsList.size()];
+        for(int i=0; i<mImageTitles.length; i++){
+            mImageTitles[i] = News.newsList.get(i).getNews_title();
+        }
     }
 
     @NonNull
     @Override
     public NewsFeedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+        layoutInflater = LayoutInflater.from(mContext);
         View v = layoutInflater.inflate(R.layout.news, parent, false);
 
-        return null;
+        return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NewsFeedAdapter.ViewHolder holder, int position) {
         holder.imageNews.setImageResource(mImageIds[position]);
+        holder.imageNews.setScaleType(ImageView.ScaleType.FIT_XY);
+        holder.imageNews.getLayoutParams().height = ((mContext.getResources().getDisplayMetrics().heightPixels)/4);
         holder.imageTitles.setText(mImageTitles[position]);
     }
 
@@ -53,5 +63,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             imageNews = itemView.findViewById(R.id.ivNews);
             imageTitles = itemView.findViewById(R.id.tvNews);
         }
+    }
+
+    public Context getmContext() {
+        return mContext;
     }
 }

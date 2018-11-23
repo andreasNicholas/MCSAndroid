@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 import project.aigo.myapplication.API;
+import project.aigo.myapplication.Activity.Admin.adminNewsActivity;
 import project.aigo.myapplication.R;
 import static project.aigo.myapplication.Activity.SplashScreenActivity.toStringTrim;
 
@@ -40,15 +41,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick ( View view ) {
         if (view == btnLogin) {
 
-            Map<String, String> params = new HashMap<>();
+            Intent intent = new Intent(this , adminNewsActivity.class);
+            startActivity(intent);
+            /*Map<String, String> params = new HashMap<>();
             params.put("email" , toStringTrim(etEmail));
-            params.put("password" , toStringTrim(etPassword));
+            params.put("password" , toStringTrim(etPassword));*/
 
-            API.postLogin(this , layoutView , params, sharedPreferences);
+            //API.postLogin(this , layoutView , params, sharedPreferences);
         } else if (view == tvRegister) {
             Intent intent = new Intent(this , RegisterActivity.class);
             startActivity(intent);
-            finish();
         }
     }
 
