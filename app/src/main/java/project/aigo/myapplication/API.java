@@ -15,14 +15,17 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
 
+import project.aigo.myapplication.Activity.HomeActivity;
 import project.aigo.myapplication.Activity.LoginActivity;
 
 import static project.aigo.myapplication.Activity.SplashScreenActivity.route;
 import static project.aigo.myapplication.Activity.SplashScreenActivity.snackShort;
+import static project.aigo.myapplication.Activity.SplashScreenActivity.toastShort;
 
 public class API {
 
@@ -39,7 +42,7 @@ public class API {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run () {
-                        Intent intent = new Intent(context, LoginActivity.class);
+                        Intent intent = new Intent(context , LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         context.startActivity(intent);
                     }
@@ -87,8 +90,39 @@ public class API {
             @Override
             public void onResponse ( JSONObject response ) {
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.apply();
+                try {
+                    int id = response.getInt("id");
+                    String name = response.getString("name");
+                    String email = response.getString("email");
+                    String gender = response.getString("gender");
+                    String role = response.getString("role");
+                    String address = response.getString("address");
+                    String phone = response.getString("phone");
+                    String birthdate = response.getString("birthdate");
+                    String remember_token = response.getString("remember_token");
+
+                    String message = "Welcome, " + name;
+                    toastShort(context , message);
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("id" , id);
+                    editor.putString("name" , name);
+                    editor.putString("email" , email);
+                    editor.putString("gender" , gender);
+                    editor.putString("role" , role);
+                    editor.putString("address" , address);
+                    editor.putString("phone" , phone);
+                    editor.putString("birthdate" , birthdate);
+                    editor.putString("remember_token" , remember_token);
+                    editor.apply();
+
+                    Intent intent = new Intent(context , HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    context.startActivity(intent);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
         } , new Response.ErrorListener() {
             @Override

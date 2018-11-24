@@ -20,6 +20,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         Snackbar.make(view , message , Snackbar.LENGTH_SHORT).show();
     }
 
+    public static void toastShort ( Context context , String message ) {
+        Toast.makeText(context , message , Toast.LENGTH_SHORT).show();
+    }
+
     public static String route ( String uri ) {
         return "https://mobileapi.bslc.or.id/" + uri;
     }
