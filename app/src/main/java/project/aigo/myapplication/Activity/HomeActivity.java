@@ -48,20 +48,6 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         //chnage later get from DB
-        Donation.donationList.clear();
-        News.newsList.clear();
-        Donation donation = new Donation("this is donation 1", R.drawable.ic_launcher_background, 0, "content for donation 1");
-        donation.donationList.add(donation);
-        Donation donation2 = new Donation("this is donation 2", R.drawable.ic_launcher_background, 0, "content for donation");
-        donation2.donationList.add(donation2);
-        Donation donation3 = new Donation("this is donation 3", R.drawable.ic_launcher_foreground, 0, "content for donation 3");
-        donation3.donationList.add(donation3);
-        News news = new News("this is news 1", R.drawable.ic_launcher_background, 0, "content for news 1");
-        news.newsList.add(news);
-        News news2 = new News("this is news 2", R.drawable.ic_launcher_background, 0, "content for news 2");
-        news.newsList.add(news2);
-        News news3 = new News("this is news 3", R.drawable.ic_launcher_foreground, 0, "content for news 3");
-        news.newsList.add(news3);
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
