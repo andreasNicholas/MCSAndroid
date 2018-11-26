@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.dell7567i7.tm_1901459081.MainActivity" >
+    <item
+        android:id="@+id/btnEditNews"
+        android:title="@string/Edit" />
+    <item
+        android:id="@+id/btnDeleteNews"
+        android:title="@string/Delete"/>
+</menu>
