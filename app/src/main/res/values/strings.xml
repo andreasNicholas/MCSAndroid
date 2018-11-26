@@ -26,4 +26,9 @@
     <string name="btnRegister">Register</string>
     <string name="login">Login</string>
     <string name="lblRegister">Don\'t have account? Register here!</string>
+    <string name="Edit">Edit</string>
+    <string name="Delete">Delete</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
