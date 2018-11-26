@@ -3,24 +3,23 @@ package project.aigo.myapplication.Fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -29,16 +28,18 @@ import project.aigo.myapplication.Object.News;
 import project.aigo.myapplication.R;
 
 import static android.app.Activity.RESULT_OK;
+import static project.aigo.myapplication.Activity.NewsActivity.fragmentState;
 
-public class adminAddNewsFragment extends Fragment {
-    EditText etNewsTitle, etNewsImage, etNewsVideo, etNewsContent;
+public class AddNewsFragment extends Fragment {
+    EditText etNewsTitle, etNewsContent;
+    ImageView ivNewsImage;
     Button btnAddNews;
     String imgPath;
     String imageResultName = null;
     Bitmap bitmapContainer;
     Fragment fragment = this;
 
-    public adminAddNewsFragment() {
+    public AddNewsFragment() {
         // Required empty public constructor
     }
 
@@ -47,11 +48,14 @@ public class adminAddNewsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_admin_add_news, parent, false);
         etNewsTitle = view.findViewById(R.id.etNewsTitle);
-        etNewsImage = view.findViewById(R.id.etNewsImage);
-        etNewsVideo = view.findViewById(R.id.etNewsVideo);
         etNewsContent = view.findViewById(R.id.etNewsContent);
         btnAddNews = view.findViewById(R.id.btnAddNews);
+        ivNewsImage = view.findViewById(R.id.ivNewsImage);
+        fragmentState = 2;
+
         Bundle bundle;
+        FloatingActionButton fabBtn = (FloatingActionButton)getActivity().findViewById(R.id.addNewNews);
+        fabBtn.setVisibility(View.INVISIBLE);
 
         try {
             bundle = getArguments();
@@ -60,6 +64,7 @@ public class adminAddNewsFragment extends Fragment {
         }
 
         if (bundle == null) {
+            btnAddNews.setText("ADD NEWS");
             //IF THERES NO BUNDLE, ITS ADD MODE
             btnAddNews.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -67,26 +72,26 @@ public class adminAddNewsFragment extends Fragment {
                 if (v == btnAddNews) {
                     //laravel validation for TITLE, IMAGE, AND CONTENT, video is optional
                     //if(true){
-                    News news = new News(etNewsTitle.getText().toString(), etNewsImage.getText().toString(), "", etNewsContent.getText().toString(), bitmapContainer);
+                    News news = new News(etNewsTitle.getText().toString(), etNewsContent.getText().toString(), bitmapContainer);
                     News.newsList.add(news);
-                    //sementara data tidak muncul karena di clear dan input ulang di adminNewsViewFragment.java
+                    //sementara data tidak muncul karena di clear dan input ulang di ViewNewsFragment.java
 
                     uploadMultipart(imageResultName, imgPath, bitmapContainer);
 
                     FragmentManager fm = getFragmentManager();
                     android.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                    fragmentTransaction.replace(R.id.frameLayout, new adminNewsViewFragment());
+                    fragmentTransaction.replace(R.id.frameLayout, new ViewNewsFragment());
                     fragmentTransaction.commit();
                     //else snackbar
                 }
                 }
             });
 
-            etNewsImage.setOnClickListener(new View.OnClickListener() {
+            ivNewsImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Activity activity = getActivity();
-                    if (v == etNewsImage) CropImage.activity().setAspectRatio(3,1).start(activity, fragment);
+                    CropImage.activity().setAspectRatio(3,1).start(activity, fragment);
                 }
             });
 
@@ -106,8 +111,8 @@ public class adminAddNewsFragment extends Fragment {
             }
 
             etNewsTitle.setText(News.newsList.get(newsIndex).getNews_title());
-            etNewsImage.setText(News.newsList.get(newsIndex).getImage_name());
             etNewsContent.setText(News.newsList.get(newsIndex).getNews_content());
+            //GET DARI DATABASE ivNewsImage;
             //END
 
             btnAddNews = view.findViewById(R.id.btnAddNews);
@@ -120,29 +125,26 @@ public class adminAddNewsFragment extends Fragment {
                         //laravel validation for TITLE, IMAGE, AND CONTENT, video is optional
                         //if(true){
                         News.newsList.elementAt(finalNewsIndex).setNews_title(etNewsTitle.getText().toString());
-                        News.newsList.elementAt(finalNewsIndex).setImage_name(etNewsImage.getText().toString());
-                        News.newsList.elementAt(finalNewsIndex).setVideo_name("");
                         News.newsList.elementAt(finalNewsIndex).setNews_content(etNewsContent.getText().toString());
                         News.newsList.elementAt(finalNewsIndex).setImage_bitmap(bitmapContainer);
-                        //sementara data tidak muncul karena di clear dan input ulang di adminNewsViewFragment.java
 
                         //UNTUK UPLOAD
                         uploadMultipart(imageResultName, imgPath, bitmapContainer);
 
                         FragmentManager fm = getFragmentManager();
                         android.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                        fragmentTransaction.replace(R.id.frameLayout, new adminNewsViewFragment());
+                        fragmentTransaction.replace(R.id.frameLayout, new ViewNewsFragment());
                         fragmentTransaction.commit();
                         //else snackbar
                     }
                 }
             });
 
-            etNewsImage.setOnClickListener(new View.OnClickListener() {
+            ivNewsImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Activity activity = getActivity();
-                    if (v == etNewsImage) CropImage.activity().setAspectRatio(3,1).start(activity, fragment);
+                    CropImage.activity().setAspectRatio(3,1).start(activity, fragment);
                 }
             });
 
@@ -156,7 +158,6 @@ public class adminAddNewsFragment extends Fragment {
         if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data != null){
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             Uri selectedImage = result.getUri();
-            etNewsImage.setText(getImageName(selectedImage));
 
             Bitmap bitmap= null;
             try {
@@ -165,6 +166,7 @@ public class adminAddNewsFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            ivNewsImage.setImageBitmap(bitmap);
         }
     }
 
@@ -180,7 +182,7 @@ public class adminAddNewsFragment extends Fragment {
         if (imageResultName == null) {
             imageResultName = selectedImage.getPath();
             imgPath = imageResultName;
-            imageResultName = imageResultName.substring(imageResultName.lastIndexOf('/')+1, imageResultName.length());
+            imageResultName = imageResultName.substring(imageResultName.lastIndexOf('.')+1, imageResultName.length());
         }
         return imageResultName;
     }

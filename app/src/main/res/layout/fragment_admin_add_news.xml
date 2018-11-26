@@ -26,28 +26,16 @@
             android:hint="Title"
             android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/etNewsImage"
+        <ImageView
+            android:id="@+id/ivNewsImage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Image"
-            android:inputType="textPersonName"
-            android:focusable="false"/>
-
-        <EditText
-            android:id="@+id/etNewsVideo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Video"
-            android:inputType="textPersonName"
-            android:focusable="false"/>
+            android:layout_height="247dp"
+            app:srcCompat="@drawable/ic_launcher_background" />
 
         <EditText
             android:id="@+id/etNewsContent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="190dp"
             android:background="#dcdcdc"
             android:ems="10"
             android:hint="Content"

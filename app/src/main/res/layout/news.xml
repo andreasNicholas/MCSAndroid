@@ -15,7 +15,6 @@
             android:id="@+id/ivNews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,43 +31,32 @@
 
             <TextView
                 android:id="@+id/tvNews"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="TextView"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btnMenu"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_weight="0"
+                android:background="@drawable/ic_more_vert_black_24dp"
+                android:foregroundGravity="right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="right"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnEditNews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvNews"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/btnDeleteNews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete" />
-    </LinearLayout>
 
     <Space
         android:layout_width="match_parent"

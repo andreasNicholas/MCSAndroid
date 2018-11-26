@@ -27,7 +27,7 @@
         <activity
             android:name=".Activity.HomeActivity"
             android:label="@string/title_activity_home" />
-        <activity android:name=".Activity.Admin.adminNewsActivity"></activity>
+        <activity android:name=".Activity.NewsActivity"></activity>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/> <!-- optional (needed if default theme has no action bar) -->
     </application>

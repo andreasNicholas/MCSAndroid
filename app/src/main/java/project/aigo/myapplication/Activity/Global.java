@@ -5,8 +5,8 @@ import static project.aigo.myapplication.Activity.SplashScreenActivity.toastShor
 
 public class Global extends AppCompatActivity {
 
-    private static final int TIME_INTERVAL = 2000; // # milliseconds, desired time passed between two back presses.
-    private long mBackPressed;
+    protected static final int TIME_INTERVAL = 2000; // # milliseconds, desired time passed between two back presses.
+    protected long mBackPressed;
 
     @Override
     public void onBackPressed () {
