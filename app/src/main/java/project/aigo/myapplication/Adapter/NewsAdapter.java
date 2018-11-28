@@ -25,6 +25,8 @@ import project.aigo.myapplication.Fragment.AddNewsFragment;
 import project.aigo.myapplication.Object.News;
 import project.aigo.myapplication.R;
 
+import static project.aigo.myapplication.Activity.GlobalActivity.DEFAULT_IMAGE;
+
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private Context mContext;
     private List<News> newsList;
@@ -49,7 +51,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     public void onBindViewHolder ( @NonNull final NewsAdapter.ViewHolder holder , final int position ) {
 
         final News news = newsList.get(position);
-        Picasso.get().load(news.getImageSrc()).into(holder.imageNews);
+        String img = (news.getImageSrc().equals("null")) ? DEFAULT_IMAGE : news.getImageSrc();
+
+        Picasso.get().load(img).into(holder.imageNews);
+
         holder.imageNews.setScaleType(ImageView.ScaleType.FIT_XY);
         holder.imageNews.getLayoutParams().height = ((mContext.getResources().getDisplayMetrics().heightPixels) / 4);
         holder.imageTitles.setText(news.getTitle());

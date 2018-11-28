@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 public class GlobalActivity extends AppCompatActivity {
 
+    public static final String DEFAULT_IMAGE = "https://via.placeholder.com/400x400";
     protected static final int TIME_INTERVAL = 2000; // # milliseconds, desired time passed between two back presses.
     protected long mBackPressed;
 

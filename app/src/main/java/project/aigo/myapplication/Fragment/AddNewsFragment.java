@@ -27,6 +27,7 @@ import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.R;
 
 import static android.app.Activity.RESULT_OK;
+import static project.aigo.myapplication.Activity.GlobalActivity.DEFAULT_IMAGE;
 
 public class AddNewsFragment extends Fragment implements View.OnClickListener {
     EditText etNewsTitle, etNewsContent;
@@ -59,16 +60,17 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
             currentNewsID = (arrayNews != null) ? arrayNews[0] : "";
             String currentTitle = (arrayNews != null) ? arrayNews[1] : "";
             String currentDescription = (arrayNews != null) ? arrayNews[2] : "";
-            String currentImgSrc = (arrayNews != null) ? arrayNews[3] : "";
-//            String url = (currentImgSrc.isEmpty()) ? "https://via.placeholder.com/250" : currentImgSrc;
+            String currentImgSrc = (arrayNews != null) ? arrayNews[3] : DEFAULT_IMAGE;
+            currentImgSrc = (currentImgSrc.equals("null")) ? DEFAULT_IMAGE : currentImgSrc;
             Picasso.get().load(currentImgSrc).into(ivNewsImage);
             ivNewsImage.setScaleType(ImageView.ScaleType.FIT_XY);
             ivNewsImage.getLayoutParams().height = ((getActivity().getResources().getDisplayMetrics().heightPixels) / 4);
             etNewsTitle.setText(currentTitle);
             etNewsContent.setText(currentDescription);
         }else {
-            Picasso.get().load("https://via.placeholder.com/250").into(ivNewsImage);
+            Picasso.get().load(DEFAULT_IMAGE).into(ivNewsImage);
         }
+
         String btnText = (bundle == null) ? "ADD NEWS" : "EDIT NEWS";
         btnAddNews.setText(btnText);
 
