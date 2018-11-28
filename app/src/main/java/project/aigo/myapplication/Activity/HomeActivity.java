@@ -1,5 +1,6 @@
 package project.aigo.myapplication.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,20 +13,27 @@ import android.widget.TextView;
 
 import project.aigo.myapplication.Adapter.ImageSliderAdapter;
 import project.aigo.myapplication.Adapter.NewsAdapter;
+import project.aigo.myapplication.Fragment.ViewNewsFragment;
 import project.aigo.myapplication.R;
 
 public class HomeActivity extends GlobalActivity {
     public static TextView tvDonationTitle;
 
+    private Bundle bundle;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        public boolean onNavigationItemSelected ( @NonNull MenuItem item ) {
+            Intent intent = new Intent();
             switch (item.getItemId()) {
                 case R.id.home_menu:
                     return true;
                 case R.id.news_menu:
+                    intent.setClass(HomeActivity.this , NewsActivity.class);
+                    startActivity(intent);
+                    finish();
                     return true;
                 case R.id.search_menu:
                     return true;
@@ -33,16 +41,17 @@ public class HomeActivity extends GlobalActivity {
                     return true;
                 case R.id.events_menu:
                     return true;
+                default:
+                    return true;
             }
-            return false;
         }
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        GlobalActivity globalActivity = new GlobalActivity();
         //chnage later get from DB
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -52,10 +61,9 @@ public class HomeActivity extends GlobalActivity {
         ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(this);
         viewPager.setAdapter(imageSliderAdapter);
 
-        RecyclerView recyclerView = findViewById(R.id.rcNews);
-//        NewsAdapter newsAdapter = new NewsAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        recyclerView.setAdapter(newsAdapter);
+        globalActivity.loadFragment(new ViewNewsFragment(),R.id.frameHome,this,null,null);
+
     }
+
 
 }

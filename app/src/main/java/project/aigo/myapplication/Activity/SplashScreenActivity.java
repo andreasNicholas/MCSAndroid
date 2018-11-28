@@ -28,7 +28,7 @@ public class SplashScreenActivity extends GlobalActivity {
 
                 } else {
                     toastShort(context, "Welcome, " + name);
-                    startActivity(new Intent(context , NewsActivity.class));
+                    startActivity(new Intent(context , HomeActivity.class));
                 }
                 finish();
             }

@@ -18,6 +18,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,13 +36,14 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
     EditText etNewsTitle, etNewsContent;
     ImageView ivNewsImage;
     Button btnAddNews;
-    String imageExtension= "";
+    String imageExtension = "";
     Bitmap bitmapContainer;
     Bundle bundle;
     Uri uri;
     String currentNewsID = "";
     View layoutView;
     String addorEdit;
+
     public AddNewsFragment () {
         // Required empty public constructor
     }
@@ -69,7 +71,7 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
             ivNewsImage.getLayoutParams().height = ((getActivity().getResources().getDisplayMetrics().heightPixels) / 4);
             etNewsTitle.setText(currentTitle);
             etNewsContent.setText(currentDescription);
-        }else {
+        } else {
             Picasso.get().load(DEFAULT_IMAGE).into(ivNewsImage);
         }
 
@@ -126,7 +128,7 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
         return Base64.encodeToString(b , Base64.DEFAULT);
     }
 
-    private void callApi(){
+    private void callApi () {
         final APIManager api = new APIManager();
 
         GlobalActivity globalActivity = new GlobalActivity();
@@ -146,13 +148,13 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
         params.put("description" , description);
         params.put("image_base64" , image_base64);
         params.put("image_ext" , imageExtension);
-        String titleAlert = addorEdit+" Confirmation";
-        String message = "Are you sure want to "+ addorEdit + " ?";
-        AlertDialog.Builder builder = globalActivity.createGlobalAlertDialog(getActivity(),titleAlert,message);
+        String titleAlert = addorEdit + " Confirmation";
+        String message = "Are you sure want to " + addorEdit + " ?";
+        AlertDialog.Builder builder = globalActivity.createGlobalAlertDialog(getActivity() , titleAlert , message);
         builder.setPositiveButton("Yes" , new DialogInterface.OnClickListener() {
             @Override
             public void onClick ( DialogInterface dialogInterface , int i ) {
-                api.updateOrCreateNews(getActivity() , layoutView , params, AddNewsFragment.this);
+                api.updateOrCreateNews(getActivity() , layoutView , params , AddNewsFragment.this);
 
             }
         });
