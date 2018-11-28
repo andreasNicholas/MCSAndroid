@@ -1,6 +1,16 @@
 package project.aigo.myapplication.Activity;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.FrameLayout;
+
+import project.aigo.myapplication.Fragment.ProfileSettingFragment;
+import project.aigo.myapplication.Fragment.ViewNewsFragment;
+import project.aigo.myapplication.R;
+
 import static project.aigo.myapplication.Activity.SplashScreenActivity.toastShort;
 
 public class Global extends AppCompatActivity {
@@ -20,5 +30,12 @@ public class Global extends AppCompatActivity {
         mBackPressed = System.currentTimeMillis();
     }
 
+    public static void loadFragment(Fragment fragment, int frameLayoutId, Activity activity, Bundle bundle){
+        if(!bundle.isEmpty()) fragment.setArguments(bundle);
 
+        FragmentManager fm = activity.getFragmentManager();
+        android.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(frameLayoutId, fragment, String.valueOf(fragment.getId()));
+        fragmentTransaction.commit();
+    }
 }
