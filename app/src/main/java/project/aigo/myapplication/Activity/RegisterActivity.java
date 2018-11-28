@@ -1,7 +1,9 @@
 package project.aigo.myapplication.Activity;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -121,18 +123,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             if (pbRegister.getProgress() == pbRegister.getMax()) {
 
-                Map<String, String> params = new HashMap<>();
-                params.put("name" , globalActivity.toStringTrim(etName));
-                params.put("email" , globalActivity.toStringTrim(etEmail));
-                params.put("password" , globalActivity.toStringTrim(etPassword));
-                params.put("password_confirmation" , globalActivity.toStringTrim(etRetypePassword));
-                params.put("gender" , pickedGender);
-                params.put("phone" , globalActivity.toStringTrim(etPhone));
-                params.put("birth_date" , globalActivity.toStringTrim(etBirthDate));
-                params.put("address" , globalActivity.toStringTrim(etAddress));
-
-                APIManager apiManager = new APIManager();
-                apiManager.postRegister(this , layoutView , params);
+                callApi();
             } else {
                 String message = "Please fill all field and check the agreement first!";
                 globalActivity.snackShort(layoutView , message);
@@ -177,4 +168,27 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    private void callApi () {
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("name" , globalActivity.toStringTrim(etName));
+        params.put("email" , globalActivity.toStringTrim(etEmail));
+        params.put("password" , globalActivity.toStringTrim(etPassword));
+        params.put("password_confirmation" , globalActivity.toStringTrim(etRetypePassword));
+        params.put("gender" , pickedGender);
+        params.put("phone" , globalActivity.toStringTrim(etPhone));
+        params.put("birth_date" , globalActivity.toStringTrim(etBirthDate));
+        params.put("address" , globalActivity.toStringTrim(etAddress));
+        String titleAlert = "Message Confirmation";
+        String message = "Are you sure want to register?";
+        final APIManager apiManager = new APIManager();
+        AlertDialog.Builder builder = globalActivity.createGlobalAlertDialog(this , titleAlert , message);
+        builder.setPositiveButton("Yes" , new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick ( DialogInterface dialogInterface , int i ) {
+                apiManager.postRegister(RegisterActivity.this , layoutView , params);
+            }
+        });
+        builder.show().create();
+    }
 }

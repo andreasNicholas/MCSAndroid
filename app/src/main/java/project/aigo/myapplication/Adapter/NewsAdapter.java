@@ -1,12 +1,12 @@
 package project.aigo.myapplication.Adapter;
 
-import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,10 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Fragment.AddNewsFragment;
@@ -65,15 +68,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
                 final String[] menu = {"Edit" , "Delete"};
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setItems(menu , new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick ( DialogInterface dialogInterface , int i ) {
-                        APIManager apiManager = new APIManager();
-                        String id;
                         switch (i) {
                             case 0:
-                                id = news.getId();
+                                String id = news.getId();
                                 String title = news.getTitle();
                                 String description = news.getDescription();
                                 String imageSrc = news.getImageSrc();
@@ -85,30 +86,19 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                                 AddNewsFragment fragment = new AddNewsFragment();
                                 fragment.setArguments(bundle);
                                 fragmentTransaction = fragmentManager.beginTransaction();
-                                fragmentTransaction.replace(R.id.newsActivity, fragment, String.valueOf(fragment.getId()));
+                                fragmentTransaction.replace(R.id.newsActivity , fragment , String.valueOf(fragment.getId()));
                                 fragmentTransaction.addToBackStack("editFragment");
                                 fragmentTransaction.commit();
                                 break;
                             case 1:
-
-                                GlobalActivity globalActivity = new GlobalActivity();
-                                String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(mContext);
-                                id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
-                                String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";
-
-                                Map<String, String> params = new HashMap<>();
-                                params.put("newsID" , news.getId());
-                                params.put("userID" , id);
-                                params.put("remember_token" , remember_token);
-
-                                apiManager.deleteNews(mContext , layoutView , params , NewsAdapter.this , position , getItemCount(), newsList);
+                                callApi(news.getId() , position);
                                 break;
                             default:
                                 break;
                         }
                     }
                 });
-                builder.show();
+                builder.show().create();
             }
         });
     }
@@ -132,5 +122,28 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     }
 
+    private void callApi ( final String newsID , final int position ) {
+        final APIManager apiManager = new APIManager();
+        final GlobalActivity globalActivity = new GlobalActivity();
+        String titleAlert = "Delete Confirmation";
+        String message = "Are you sure want to Delete?";
+        AlertDialog.Builder builder = globalActivity.createGlobalAlertDialog(mContext , titleAlert , message);
+        builder.setPositiveButton("Yes" , new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick ( DialogInterface dialogInterface , int i ) {
+                String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(mContext);
+                String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+                String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";
+
+                Map<String, String> params = new HashMap<>();
+                params.put("newsID" , newsID);
+                params.put("userID" , id);
+                params.put("remember_token" , remember_token);
+
+                apiManager.deleteNews(mContext , layoutView , params , NewsAdapter.this , position , getItemCount() , newsList);
+            }
+        });
+        builder.show().create();
+    }
 
 }

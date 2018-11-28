@@ -2,8 +2,10 @@ package project.aigo.myapplication.Activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
@@ -63,5 +65,19 @@ public class GlobalActivity extends AppCompatActivity {
 
 
         return progressDialog;
+    }
+
+    public AlertDialog.Builder createGlobalAlertDialog(Context context, String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setNegativeButton("No" , new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick ( DialogInterface dialogInterface , int i ) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        return builder;
     }
 }

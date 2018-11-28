@@ -1,11 +1,13 @@
 package project.aigo.myapplication.Fragment;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +41,7 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
     Uri uri;
     String currentNewsID = "";
     View layoutView;
-
+    String addorEdit;
     public AddNewsFragment () {
         // Required empty public constructor
     }
@@ -71,8 +73,9 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
             Picasso.get().load(DEFAULT_IMAGE).into(ivNewsImage);
         }
 
-        String btnText = (bundle == null) ? "ADD NEWS" : "EDIT NEWS";
-        btnAddNews.setText(btnText);
+        addorEdit = (bundle == null) ? "Add" : "Edit";
+        String btnNews = addorEdit.toUpperCase() + " NEWS";
+        btnAddNews.setText(btnNews);
 
         btnAddNews.setOnClickListener(this);
         ivNewsImage.setOnClickListener(this);
@@ -110,25 +113,7 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick ( View view ) {
         if (view == btnAddNews) {
-            APIManager api = new APIManager();
-
-            GlobalActivity globalActivity = new GlobalActivity();
-            String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(getActivity());
-            String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
-            String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";
-            String newsID = (currentNewsID.isEmpty()) ? "" : currentNewsID;
-            String title = globalActivity.toStringTrim(etNewsTitle);
-            String description = globalActivity.toStringTrim(etNewsContent);
-            String image_base64 = (bitmapContainer == null) ? "" : encodeTobase64(bitmapContainer);
-            Map<String, String> params = new HashMap<>();
-            params.put("userID" , id);
-            params.put("remember_token" , remember_token);
-            params.put("newsID" , newsID);
-            params.put("title" , title);
-            params.put("description" , description);
-            params.put("image_base64" , image_base64);
-            params.put("image_ext" , imageExtension);
-            api.updateOrCreateNews(getActivity() , layoutView , params, this);
+            callApi();
         } else if (view == ivNewsImage) {
             CropImage.activity().setAspectRatio(3 , 1).start(getActivity() , this);
         }
@@ -139,7 +124,39 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
         image.compress(Bitmap.CompressFormat.PNG , 100 , baos);
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b , Base64.DEFAULT);
+    }
 
+    private void callApi(){
+        final APIManager api = new APIManager();
+
+        GlobalActivity globalActivity = new GlobalActivity();
+        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(getActivity());
+        String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+        String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";
+        String newsID = (currentNewsID.isEmpty()) ? "" : currentNewsID;
+        String title = globalActivity.toStringTrim(etNewsTitle);
+        String description = globalActivity.toStringTrim(etNewsContent);
+        String image_base64 = (bitmapContainer == null) ? "" : encodeTobase64(bitmapContainer);
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("userID" , id);
+        params.put("remember_token" , remember_token);
+        params.put("newsID" , newsID);
+        params.put("title" , title);
+        params.put("description" , description);
+        params.put("image_base64" , image_base64);
+        params.put("image_ext" , imageExtension);
+        String titleAlert = addorEdit+" Confirmation";
+        String message = "Are you sure want to "+ addorEdit + " ?";
+        AlertDialog.Builder builder = globalActivity.createGlobalAlertDialog(getActivity(),titleAlert,message);
+        builder.setPositiveButton("Yes" , new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick ( DialogInterface dialogInterface , int i ) {
+                api.updateOrCreateNews(getActivity() , layoutView , params, AddNewsFragment.this);
+
+            }
+        });
+        builder.show().create();
     }
 
 }
