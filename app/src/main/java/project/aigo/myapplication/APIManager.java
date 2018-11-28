@@ -218,7 +218,7 @@ public class APIManager extends GlobalActivity {
         mRequestQueue.add(jsonArrayRequest);
     }
 
-    public void deleteNews ( final Context context , final View view , final Map<String, String> params , final RecyclerView.Adapter adapter , final int position , final List<News> newsList ) {
+    public void deleteNews ( final Context context , final View view , final Map<String, String> params , final RecyclerView.Adapter adapter , final int position , final int count , final List<News> newsList ) {
         final ProgressDialog progressDialog = showProgressDialog(context);
         progressDialog.show();
 
@@ -232,6 +232,7 @@ public class APIManager extends GlobalActivity {
 
                 newsList.remove(position);
                 adapter.notifyItemRemoved(position);
+                adapter.notifyItemRangeChanged(position , count);
                 snackShort(view , "Delete Success");
                 progressDialog.dismiss();
 
@@ -264,7 +265,7 @@ public class APIManager extends GlobalActivity {
 
     }
 
-    public void updateOrCreateNews ( final Context context , final View view , final Map<String, String> params, final Fragment fragment) {
+    public void updateOrCreateNews ( final Context context , final View view , final Map<String, String> params , final Fragment fragment ) {
         final ProgressDialog progressDialog = showProgressDialog(context);
         progressDialog.show();
 
@@ -276,7 +277,7 @@ public class APIManager extends GlobalActivity {
             @Override
             public void onResponse ( String response ) {
                 String message = (params.get("newsID").isEmpty()) ? "Add" : "Update";
-                snackShort(view , message+ " Success");
+                snackShort(view , message + " Success");
                 fragment.getFragmentManager().popBackStackImmediate();
                 progressDialog.dismiss();
 

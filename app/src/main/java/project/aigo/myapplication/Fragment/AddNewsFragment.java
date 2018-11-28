@@ -32,7 +32,7 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
     EditText etNewsTitle, etNewsContent;
     ImageView ivNewsImage;
     Button btnAddNews;
-    String imageExtension;
+    String imageExtension= "";
     Bitmap bitmapContainer;
     Bundle bundle;
     Uri uri;
@@ -60,14 +60,14 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
             String currentTitle = (arrayNews != null) ? arrayNews[1] : "";
             String currentDescription = (arrayNews != null) ? arrayNews[2] : "";
             String currentImgSrc = (arrayNews != null) ? arrayNews[3] : "";
-
-            String url = (currentImgSrc.isEmpty()) ? "https://via.placeholder.com/250" : currentImgSrc;
-
-            Picasso.get().load(url).into(ivNewsImage);
+//            String url = (currentImgSrc.isEmpty()) ? "https://via.placeholder.com/250" : currentImgSrc;
+            Picasso.get().load(currentImgSrc).into(ivNewsImage);
             ivNewsImage.setScaleType(ImageView.ScaleType.FIT_XY);
             ivNewsImage.getLayoutParams().height = ((getActivity().getResources().getDisplayMetrics().heightPixels) / 4);
             etNewsTitle.setText(currentTitle);
             etNewsContent.setText(currentDescription);
+        }else {
+            Picasso.get().load("https://via.placeholder.com/250").into(ivNewsImage);
         }
         String btnText = (bundle == null) ? "ADD NEWS" : "EDIT NEWS";
         btnAddNews.setText(btnText);
@@ -117,7 +117,7 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
             String newsID = (currentNewsID.isEmpty()) ? "" : currentNewsID;
             String title = globalActivity.toStringTrim(etNewsTitle);
             String description = globalActivity.toStringTrim(etNewsContent);
-            String image_base64 = encodeTobase64(bitmapContainer);
+            String image_base64 = (bitmapContainer == null) ? "" : encodeTobase64(bitmapContainer);
             Map<String, String> params = new HashMap<>();
             params.put("userID" , id);
             params.put("remember_token" , remember_token);

@@ -96,7 +96,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                                 params.put("userID" , id);
                                 params.put("remember_token" , remember_token);
 
-                                apiManager.deleteNews(mContext , layoutView , params , NewsAdapter.this , position , newsList);
+                                apiManager.deleteNews(mContext , layoutView , params , NewsAdapter.this , position , getItemCount(), newsList);
                                 break;
                             default:
                                 break;
