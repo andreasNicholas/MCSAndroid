@@ -10,15 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import project.aigo.myapplication.Adapter.ImageSliderAdapter;
-import project.aigo.myapplication.Adapter.NewsFeedAdapter;
-import project.aigo.myapplication.Object.Donation;
-import project.aigo.myapplication.Object.News;
+import project.aigo.myapplication.Adapter.NewsAdapter;
 import project.aigo.myapplication.R;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends GlobalActivity {
     public static TextView tvDonationTitle;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -57,9 +53,9 @@ public class HomeActivity extends AppCompatActivity {
         viewPager.setAdapter(imageSliderAdapter);
 
         RecyclerView recyclerView = findViewById(R.id.rcNews);
-        NewsFeedAdapter newsFeedAdapter = new NewsFeedAdapter(this);
+//        NewsAdapter newsAdapter = new NewsAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(newsFeedAdapter);
+//        recyclerView.setAdapter(newsAdapter);
     }
 
 }

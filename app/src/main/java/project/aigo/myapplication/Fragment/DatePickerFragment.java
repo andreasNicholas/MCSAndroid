@@ -3,9 +3,11 @@ package project.aigo.myapplication.Fragment;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+
 import java.util.Calendar;
 
-public class DatePickerFragment extends android.app.DialogFragment {
+public class DatePickerFragment extends DialogFragment {
 
     public DatePickerFragment () {
         // Required empty public constructor

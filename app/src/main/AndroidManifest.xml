@@ -3,8 +3,8 @@
     package="project.aigo.myapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -21,15 +21,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.RegisterActivity"
-            android:theme="@style/noActionBar" />
+            android:name=".Activity.RegisterActivity" />
         <activity android:name=".Activity.LoginActivity" />
+        <activity android:name=".Activity.GlobalActivity"
+                android:theme="@style/noActionBar"/>
         <activity
             android:name=".Activity.HomeActivity"
             android:label="@string/title_activity_home" />
-        <activity android:name=".Activity.NewsActivity"></activity>
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/> <!-- optional (needed if default theme has no action bar) -->
+        <activity android:name=".Activity.NewsActivity" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
     </application>
 
 </manifest>

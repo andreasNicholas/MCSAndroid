@@ -5,39 +5,62 @@ import android.graphics.Bitmap;
 import java.util.Vector;
 
 public class News {
-    public static Vector<News> newsList = new Vector<News>();
 
-    private String news_title;
-    private String news_content;
-    private Bitmap image_bitmap;
+    private String id;
+    private String title;
+    private String description;
+    private String imageSrc;
+    private String viewsCount;
 
-    public News(String news_title, String news_content, Bitmap image_bitmap) {
-        this.news_title = news_title;
-        this.news_content = news_content;
-        this.image_bitmap = image_bitmap;
+    public News () {
+
     }
 
-    public String getNews_title() {
-        return news_title;
+    public News ( String id , String title , String description , String imageSrc , String viewsCount ) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.imageSrc = imageSrc;
+        this.viewsCount = viewsCount;
     }
 
-    public void setNews_title(String news_title) {
-        this.news_title = news_title;
+    public String getId () {
+        return id;
     }
 
-    public String getNews_content() {
-        return news_content;
+    public void setId ( String id ) {
+        this.id = id;
     }
 
-    public void setNews_content(String news_content) {
-        this.news_content = news_content;
+    public String getTitle () {
+        return title;
     }
 
-    public Bitmap getImage_bitmap() {
-        return image_bitmap;
+    public void setTitle ( String title ) {
+        this.title = title;
     }
 
-    public void setImage_bitmap(Bitmap image_bitmap) {
-        this.image_bitmap = image_bitmap;
+    public String getDescription () {
+        return description;
+    }
+
+    public void setDescription ( String description ) {
+        this.description = description;
+    }
+
+    public String getImageSrc () {
+        return imageSrc;
+    }
+
+    public void setImageSrc ( String imageSrc ) {
+        this.imageSrc = imageSrc;
+    }
+
+    public String getViewsCount () {
+        return viewsCount;
+    }
+
+    public void setViewsCount ( String viewsCount ) {
+        this.viewsCount = viewsCount;
     }
 }
