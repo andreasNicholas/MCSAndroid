@@ -8,7 +8,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,7 +21,8 @@
                 android:id="@+id/textView20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=" Sports"
+                android:layout_marginTop="16dp"
+                android:text="Sports"
                 android:textAppearance="@android:style/TextAppearance.Material.Medium"
                 android:textColor="@color/colorBg"
                 android:textStyle="bold|italic" />
@@ -41,7 +44,7 @@
                 android:id="@+id/textView22"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=" Branch"
+                android:text="Branch"
                 android:textAppearance="@android:style/TextAppearance.Material.Medium"
                 android:textColor="@color/colorBg"
                 android:textStyle="bold|italic" />
@@ -63,7 +66,7 @@
                 android:id="@+id/textView24"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=" Recent Donation"
+                android:text="Recent Donation"
                 android:textAppearance="@android:style/TextAppearance.Material.Medium"
                 android:textColor="@color/colorBg"
                 android:textStyle="bold|italic" />

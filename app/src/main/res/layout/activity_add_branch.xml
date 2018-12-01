@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".Activity.AddBranchActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Add News"
+            android:text="Add Branch"
             android:textAppearance="@android:style/TextAppearance.Material.Medium"
             android:textColor="@color/colorBg"
             android:textStyle="bold|italic"
@@ -43,39 +43,43 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Sport"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+            <Spinner
+                android:id="@+id/spinSport2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <EditText
-                android:id="@+id/etNewsTitle"
+                android:id="@+id/etBranchName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Title"
+                android:hint="Branch Name"
                 android:inputType="textPersonName" />
 
-            <ImageView
-                android:id="@+id/ivNewsImage"
-                android:layout_width="match_parent"
-                android:layout_height="247dp"
-                app:srcCompat="@drawable/ic_launcher_background" />
-
-            <EditText
-                android:id="@+id/etNewsContent"
-                android:layout_width="match_parent"
-                android:layout_height="152dp"
-                android:background="#dcdcdc"
-                android:ems="10"
-                android:hint="Content"
-                android:inputType="textMultiLine"
-                android:lines="15"
-                android:maxLines="15" />
-
             <Button
-                android:id="@+id/btnAddNews"
+                android:id="@+id/btnAddBranch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:text="Button" />
+                android:text="Add Branch" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvBranch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>

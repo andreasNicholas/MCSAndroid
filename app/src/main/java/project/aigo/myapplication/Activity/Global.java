@@ -27,9 +27,7 @@ public class Global extends AppCompatActivity {
         mBackPressed = System.currentTimeMillis();
     }
 
-    public static void loadFragment(Fragment fragment, int frameLayoutId, Activity activity, Bundle bundle){
-        if(!bundle.isEmpty()) fragment.setArguments(bundle);
-
+    public static void loadFragment(Fragment fragment, int frameLayoutId, Activity activity){
         FragmentManager fm = activity.getFragmentManager();
         android.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(frameLayoutId, fragment, String.valueOf(fragment.getId()));

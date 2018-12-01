@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import project.aigo.myapplication.APIManager;
+import project.aigo.myapplication.Fragment.ProfileCompStatFragment;
 import project.aigo.myapplication.R;
 
 public class LoginActivity extends GlobalActivity implements View.OnClickListener {
@@ -40,15 +41,15 @@ public class LoginActivity extends GlobalActivity implements View.OnClickListene
     public void onClick ( View view ) {
         if (view == btnLogin) {
 
-            Map<String, String> params = new HashMap<>();
+            /*Map<String, String> params = new HashMap<>();
             params.put("email" , toStringTrim(etEmail));
             params.put("password" , toStringTrim(etPassword));
 
             APIManager api = new APIManager();
 
-            api.postLogin(this , layoutView , params, sharedPreferences);
-//            Intent intent = new Intent(this , NewsActivity.class);
-//            startActivity(intent);
+            api.postLogin(this , layoutView , params, sharedPreferences);*/
+            Intent intent = new Intent(this , ProfileActivity.class);
+            startActivity(intent);
         } else if (view == tvRegister) {
             Intent intent = new Intent(this , RegisterActivity.class);
             startActivity(intent);

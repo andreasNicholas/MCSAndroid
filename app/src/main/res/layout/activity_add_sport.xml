@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".Activity.AddSportActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Add News"
+            android:text="Add Sport"
             android:textAppearance="@android:style/TextAppearance.Material.Medium"
             android:textColor="@color/colorBg"
             android:textStyle="bold|italic"
@@ -44,38 +44,29 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/etNewsTitle"
+                android:id="@+id/etSportName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Title"
+                android:hint="Sport Name"
                 android:inputType="textPersonName" />
 
-            <ImageView
-                android:id="@+id/ivNewsImage"
-                android:layout_width="match_parent"
-                android:layout_height="247dp"
-                app:srcCompat="@drawable/ic_launcher_background" />
-
-            <EditText
-                android:id="@+id/etNewsContent"
-                android:layout_width="match_parent"
-                android:layout_height="152dp"
-                android:background="#dcdcdc"
-                android:ems="10"
-                android:hint="Content"
-                android:inputType="textMultiLine"
-                android:lines="15"
-                android:maxLines="15" />
-
             <Button
-                android:id="@+id/btnAddNews"
+                android:id="@+id/btnAddSport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:text="Button" />
+                android:text=" Add Sport" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvSport"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>

@@ -1,15 +1,25 @@
 package project.aigo.myapplication.Activity;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import project.aigo.myapplication.Adapter.ImageSliderAdapter;
+import project.aigo.myapplication.Adapter.ProfileCompetitionAdapter;
 import project.aigo.myapplication.Fragment.ProfileChatFragment;
 import project.aigo.myapplication.Fragment.ProfileCompStatFragment;
 import project.aigo.myapplication.Fragment.ProfileHomeFragment;
 import project.aigo.myapplication.Fragment.ProfileSettingFragment;
+import project.aigo.myapplication.Object.Achievement;
+import project.aigo.myapplication.Object.Branch;
+import project.aigo.myapplication.Object.News;
 import project.aigo.myapplication.R;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
@@ -36,18 +46,23 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         if(view == ivProfileHome){
-            Bundle bundle = new Bundle();
-            bundle.putString("name","testing");
-            Global.loadFragment(new ProfileHomeFragment(), flProfile.getId(), this, bundle);
+            //Bundle bundle = new Bundle();
+            //bundle.putString("name","testing");
+            Global.loadFragment(new ProfileHomeFragment(), flProfile.getId(), this);
         }
         else if(view == ivProfileCompStat){
-            Global.loadFragment(new ProfileCompStatFragment(), flProfile.getId(), this, null);
+            Global.loadFragment(new ProfileCompStatFragment(), flProfile.getId(), this);
         }
         else if(view == ivProfileChat){
-            Global.loadFragment(new ProfileChatFragment(), flProfile.getId(), this,null);
+            Global.loadFragment(new ProfileChatFragment(), flProfile.getId(), this);
         }
         else if(view == ivProfileSetting){
-            Global.loadFragment(new ProfileSettingFragment(), flProfile.getId(), this,null);
+
+            Branch branch = new Branch();
+            branch.setSportName("TEST");
+            branch.setBranchName("TEST2");
+            Branch.branchList.add(branch);
+            Global.loadFragment(new ProfileSettingFragment(), flProfile.getId(), this);
         }
     }
 }

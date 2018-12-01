@@ -26,6 +26,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:visibility="visible"
+        app:backgroundTint="@color/colorBg"
         app:srcCompat="@drawable/ic_add_black_24dp" />
 
 

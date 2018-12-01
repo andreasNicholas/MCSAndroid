@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import project.aigo.myapplication.Fragment.DatePickerFragment;
+
 public class GlobalActivity extends AppCompatActivity {
 
     public static final String DEFAULT_IMAGE = "https://via.placeholder.com/400x400";
@@ -99,5 +101,11 @@ public class GlobalActivity extends AppCompatActivity {
         });
 
         return builder;
+    }
+
+    public void showDatePickerDialog ( View v ) {
+        DatePickerFragment newFragment = new DatePickerFragment();
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        newFragment.show(fragmentManager , "datePicker");
     }
 }
