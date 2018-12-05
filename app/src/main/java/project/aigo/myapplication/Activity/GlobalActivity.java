@@ -1,20 +1,34 @@
 package project.aigo.myapplication.Activity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
 
 import project.aigo.myapplication.Fragment.DatePickerFragment;
 
@@ -103,9 +117,47 @@ public class GlobalActivity extends AppCompatActivity {
         return builder;
     }
 
-    public void showDatePickerDialog ( View v ) {
-        DatePickerFragment newFragment = new DatePickerFragment();
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        newFragment.show(fragmentManager , "datePicker");
+    public String encodeTobase64 ( Bitmap image ) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG , 100 , baos);
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b , Base64.DEFAULT);
     }
+
+    public DatePickerDialog createGlobalDatePickerDialog ( Context context, final String format, final EditText editText ){
+        final Calendar calendar = Calendar.getInstance();
+        return new DatePickerDialog(context , new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet ( DatePicker datePicker , int i , int i1 , int i2 ) {
+                calendar.set(Calendar.YEAR , i);
+                calendar.set(Calendar.MONTH , i1);
+                calendar.set(Calendar.DAY_OF_MONTH , i2);
+                SimpleDateFormat sdf = new SimpleDateFormat(format , Locale.US);
+                editText.setText(sdf.format(calendar.getTime()));
+            }
+        }, calendar
+                .get(Calendar.YEAR) , calendar.get(Calendar.MONTH) ,
+                calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    public TimePickerDialog createGlobalTimePickerDialog(Context context, final String format, final EditText editText){
+        final Calendar calendar = Calendar.getInstance();
+        return new TimePickerDialog(context , new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet ( TimePicker timePicker , int i , int i1 ) {
+                calendar.set(Calendar.HOUR_OF_DAY , i);
+                calendar.set(Calendar.MINUTE , i1);
+                SimpleDateFormat sdf = new SimpleDateFormat(format , Locale.US);
+                editText.setText(sdf.format(calendar.getTime()));
+            }
+        },calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+    }
+
+    public String getImageName ( Uri selectedImage ) {
+        String path = selectedImage.getPath();
+
+        return "." + path.substring(Objects.requireNonNull(path).lastIndexOf('.') + 1 , path.length());
+
+    }
+
 }

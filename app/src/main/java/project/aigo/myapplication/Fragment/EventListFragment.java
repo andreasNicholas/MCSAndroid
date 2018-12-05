@@ -1,6 +1,5 @@
 package project.aigo.myapplication.Fragment;
 
-
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
@@ -17,26 +16,26 @@ import java.util.List;
 import java.util.Map;
 
 import project.aigo.myapplication.APIManager;
+import project.aigo.myapplication.Activity.EventActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Activity.HomeActivity;
-import project.aigo.myapplication.Activity.NewsActivity;
-import project.aigo.myapplication.Adapter.NewsAdapter;
-import project.aigo.myapplication.Object.News;
+import project.aigo.myapplication.Adapter.EventAdapter;
+import project.aigo.myapplication.Object.Event;
 import project.aigo.myapplication.R;
 
-public class ViewNewsFragment extends Fragment implements View.OnClickListener {
+public class EventListFragment extends Fragment implements View.OnClickListener {
 
-    private List<News> newsList;
-    private NewsAdapter newsAdapter;
+    private List<Event> eventsList;
+    private EventAdapter eventAdapter;
     private Map<String, String> params;
     private View layoutView;
-    private FloatingActionButton fabAddNews;
+    private FloatingActionButton fabAddEvent;
     private SwipeRefreshLayout swipeRefreshLayout;
     private int layoutID;
     private String limit;
     GlobalActivity globalActivity;
 
-    public ViewNewsFragment () {
+    public EventListFragment () {
         // Required empty public constructor
     }
 
@@ -47,8 +46,8 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
         globalActivity = new GlobalActivity();
         final String role = globalActivity.getRole(getActivity());
 
-        View view = inflater.inflate(R.layout.fragment_news_view , parent , false);
-        RecyclerView recyclerView = view.findViewById(R.id.rcAdminNews);
+        View view = inflater.inflate(R.layout.fragment_event_list , parent , false);
+        RecyclerView recyclerView = view.findViewById(R.id.rcEventList);
         swipeRefreshLayout = view.findViewById(R.id.swipe);
         swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -57,30 +56,30 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
                 refresh();
             }
         });
-        fabAddNews = view.findViewById(R.id.fabAddNews);
-        fabAddNews.setOnClickListener(this);
+        fabAddEvent = view.findViewById(R.id.fabAddEvent);
+        fabAddEvent.setOnClickListener(this);
 
-        newsList = new ArrayList<>();
+        eventsList = new ArrayList<>();
         if (getActivity() instanceof HomeActivity) {
             layoutID = R.id.homeActivity;
             limit = "5";
 
-        } else if (getActivity() instanceof NewsActivity) {
-            layoutID = R.id.newsActivity;
+        } else if (getActivity() instanceof EventActivity) {
+            layoutID = R.id.eventActivity;
             limit = "";
         }
-
         layoutView = getActivity().findViewById(layoutID);
-        newsAdapter = new NewsAdapter(getActivity() , newsList , role , layoutView);
+
+        eventAdapter = new EventAdapter(getActivity() , eventsList , role , layoutView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setAdapter(newsAdapter);
+        recyclerView.setAdapter(eventAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled ( RecyclerView recyclerView , int dx , int dy ) {
-                if (dy > 0 || dy < 0 && fabAddNews.isShown())
-                    fabAddNews.hide();
+                if (dy > 0 || dy < 0 && fabAddEvent.isShown())
+                    fabAddEvent.hide();
             }
 
             @Override
@@ -88,17 +87,18 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     if ((role.equals("athlete")) || getActivity() instanceof HomeActivity)
-                        fabAddNews.setVisibility(View.INVISIBLE);
-                    else fabAddNews.show();
+                        fabAddEvent.setVisibility(View.INVISIBLE);
+                    else fabAddEvent.show();
 
                 }
                 super.onScrollStateChanged(recyclerView , newState);
             }
+
         });
         refresh();
 
         if (role.equals("athlete") || getActivity() instanceof HomeActivity)
-            fabAddNews.setVisibility(View.INVISIBLE);
+            fabAddEvent.setVisibility(View.INVISIBLE);
 
         return view;
     }
@@ -122,13 +122,14 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
 
     private void callApi () {
         APIManager apiManager = new APIManager();
-        apiManager.getNews(getActivity() , layoutView , params , newsAdapter , newsList , swipeRefreshLayout);
+        apiManager.getEvents(getActivity() , layoutView , params , eventAdapter , eventsList , swipeRefreshLayout);
     }
 
     @Override
     public void onClick ( View view ) {
-        if (view == fabAddNews)
-            globalActivity.loadFragment(new AddNewsFragment() , R.id.newsActivity , getActivity() , null , "addFragment");
+        if (view == fabAddEvent) {
+            globalActivity.loadFragment(new EventEditFragment() , R.id.eventActivity , getActivity() , null , "addFragment");
+        }
 
     }
 

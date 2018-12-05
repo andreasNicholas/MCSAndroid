@@ -27,9 +27,10 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.Map;
 
+import project.aigo.myapplication.Activity.EventActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
-import project.aigo.myapplication.Activity.HomeActivity;
 import project.aigo.myapplication.Activity.LoginActivity;
+import project.aigo.myapplication.Object.Event;
 import project.aigo.myapplication.Object.News;
 
 public class APIManager {
@@ -130,7 +131,7 @@ public class APIManager {
                     editor.putString("remember_token" , remember_token);
                     editor.apply();
 
-                    Intent intent = new Intent(context , HomeActivity.class);
+                    Intent intent = new Intent(context , EventActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(intent);
 
@@ -164,7 +165,7 @@ public class APIManager {
     }
 
     public void getNews ( final Context context , final View view , final Map<String, String> params ,
-                          final RecyclerView.Adapter adapter , final List<News> newsList, final SwipeRefreshLayout swipeRefreshLayout ) {
+                          final RecyclerView.Adapter adapter , final List<News> newsList , final SwipeRefreshLayout swipeRefreshLayout ) {
 
 
         String id = params.get("userID");
@@ -312,5 +313,154 @@ public class APIManager {
 
     }
 
+    public void getEvents ( final Context context , final View view , final Map<String, String> params ,
+                            final RecyclerView.Adapter adapter , final List<Event> eventsList , final SwipeRefreshLayout swipeRefreshLayout ) {
+
+
+        String id = params.get("userID");
+        String remember_token = params.get("remember_token");
+        String limit = (params.get("limit").isEmpty()) ? "" : "/" + params.get("limit");
+
+        String url = globalActivity.route("getEvents/" + id + "/" + remember_token + limit);
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url , new Response.Listener<JSONArray>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse ( JSONArray response ) {
+                eventsList.clear();
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        Event event = new Event();
+                        event.setId(jsonObject.getString("id"));
+                        event.setEvent_name(jsonObject.getString("event_name"));
+                        event.setEvent_start_datetime(jsonObject.getString("event_start_datetime"));
+                        event.setEvent_end_datetime(jsonObject.getString("event_end_datetime"));
+                        event.setEvent_description(jsonObject.getString("event_description"));
+                        event.setEvent_image_path(jsonObject.getString("event_image_path"));
+                        event.setViews_count(jsonObject.getString("views_count"));
+                        event.setCreated_by(jsonObject.getString("created_by"));
+                        eventsList.add(event);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        } , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse ( VolleyError error ) {
+                globalActivity.snackShort(view , error.getMessage());
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+
+        }) {
+            @Override
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+
+                return volleyError;
+            }
+        };
+
+        mRequestQueue.add(jsonArrayRequest);
+    }
+
+    public void deleteEvent ( final Context context , final View view , final Map<String, String> params , final RecyclerView.Adapter adapter , final int position , final int count , final List<Event> eventsList ) {
+        final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
+        progressDialog.show();
+
+        String url = globalActivity.route("deleteEvent");
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+
+        //String Request initialized
+        StringRequest mStringRequest = new StringRequest(Request.Method.POST , url , new Response.Listener<String>() {
+            @Override
+            public void onResponse ( String response ) {
+
+                eventsList.remove(position);
+                adapter.notifyItemRemoved(position);
+                adapter.notifyItemRangeChanged(position , count);
+                globalActivity.toastShort(context , "Delete Success");
+                progressDialog.dismiss();
+
+            }
+        } , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse ( VolleyError error ) {
+                globalActivity.snackShort(view , error.getMessage());
+                progressDialog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams () {
+
+                return params;
+            }
+
+            @Override
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+
+                return volleyError;
+            }
+        };
+
+        mRequestQueue.add(mStringRequest);
+    }
+
+    public void updateOrCreateEvent ( final Context context , final View view , final Map<String, String> params , final Fragment fragment ) {
+        final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
+        progressDialog.show();
+
+        String url = globalActivity.route("updateOrCreateEvent");
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+
+        //String Request initialized
+        StringRequest mStringRequest = new StringRequest(Request.Method.POST , url , new Response.Listener<String>() {
+            @Override
+            public void onResponse ( String response ) {
+                String message = (params.get("eventID").isEmpty()) ? "Add" : "Update";
+                globalActivity.toastShort(context , message + " Success");
+                fragment.getFragmentManager().popBackStackImmediate();
+                progressDialog.dismiss();
+
+            }
+        } , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse ( VolleyError error ) {
+                globalActivity.snackShort(view , error.getMessage());
+                progressDialog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams () {
+
+                return params;
+            }
+
+            @Override
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+
+                return volleyError;
+            }
+        };
+
+        mRequestQueue.add(mStringRequest);
+
+    }
 
 }

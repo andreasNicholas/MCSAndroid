@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/noActionBar">
+        android:theme="@style/AppTheme">
         <activity android:name=".Activity.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,8 +23,7 @@
         <activity android:name=".Activity.RegisterActivity" />
         <activity android:name=".Activity.LoginActivity" />
         <activity
-            android:name=".Activity.GlobalActivity"
-            android:theme="@style/noActionBar" />
+            android:name=".Activity.GlobalActivity" />
         <activity
             android:name=".Activity.HomeActivity"
             android:label="@string/title_activity_home" />
@@ -35,7 +34,9 @@
             android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
         <activity android:name=".Activity.AddAchievementActivity" />
         <activity android:name=".Activity.AddSportActivity" />
-        <activity android:name=".Activity.AddBranchActivity"></activity>
+        <activity android:name=".Activity.AddBranchActivity" />
+        <activity android:name=".Activity.EventActivity"
+            android:label="Event Activity"></activity>
     </application>
 
 </manifest>

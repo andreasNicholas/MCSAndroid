@@ -23,6 +23,7 @@ import java.util.Map;
 import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Fragment.AddNewsFragment;
+import project.aigo.myapplication.Fragment.DetailNewsFragment;
 import project.aigo.myapplication.Object.News;
 import project.aigo.myapplication.R;
 
@@ -118,6 +119,23 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             imageTitles = itemView.findViewById(R.id.tvNews);
             btnMenu = itemView.findViewById(R.id.btnMenu);
             swipeRefreshLayout = itemView.findViewById(R.id.swipe);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick ( View view ) {
+                    final int position = getAdapterPosition();
+                    final News news = newsList.get(position);
+
+                    String title = news.getTitle();
+                    String description = news.getDescription();
+                    String imageSrc = news.getImageSrc();
+
+                    String[] arrayEvent = {title , description , imageSrc };
+                    Bundle bundle = new Bundle();
+                    bundle.putStringArray("arrayNews" , arrayEvent);
+                    globalActivity.loadFragment(new DetailNewsFragment() , R.id.newsActivity , mContext , bundle , "detailFragment");
+                }
+            });
         }
 
     }

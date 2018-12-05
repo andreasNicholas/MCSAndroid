@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +18,9 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Activity.GlobalActivity;
@@ -43,6 +40,7 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
     String currentNewsID = "";
     View layoutView;
     String addorEdit;
+    GlobalActivity globalActivity;
 
     public AddNewsFragment () {
         // Required empty public constructor
@@ -85,14 +83,13 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-
     @Override
     public void onActivityResult ( int requestCode , int resultCode , Intent data ) {
         super.onActivityResult(requestCode , resultCode , data);
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             uri = result.getUri();
-            imageExtension = getImageName(uri);
+            imageExtension = globalActivity.getImageName(uri);
             try {
                 bitmapContainer = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver() , result.getUri());
 
@@ -104,14 +101,6 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private String getImageName ( Uri selectedImage ) {
-        String path = selectedImage.getPath();
-
-        return "." + path.substring(Objects.requireNonNull(path).lastIndexOf('.') + 1 , path.length());
-
-    }
-
-
     @Override
     public void onClick ( View view ) {
         if (view == btnAddNews) {
@@ -121,24 +110,17 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public String encodeTobase64 ( Bitmap image ) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG , 100 , baos);
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b , Base64.DEFAULT);
-    }
-
     private void callApi () {
         final APIManager api = new APIManager();
 
-        GlobalActivity globalActivity = new GlobalActivity();
+        globalActivity = new GlobalActivity();
         String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(getActivity());
         String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
         String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";
         String newsID = (currentNewsID.isEmpty()) ? "" : currentNewsID;
         String title = globalActivity.toStringTrim(etNewsTitle);
         String description = globalActivity.toStringTrim(etNewsContent);
-        String image_base64 = (bitmapContainer == null) ? "" : encodeTobase64(bitmapContainer);
+        String image_base64 = (bitmapContainer == null) ? "" : globalActivity.encodeTobase64(bitmapContainer);
 
         final Map<String, String> params = new HashMap<>();
         params.put("userID" , id);
