@@ -22,8 +22,7 @@
         </activity>
         <activity android:name=".Activity.RegisterActivity" />
         <activity android:name=".Activity.LoginActivity" />
-        <activity
-            android:name=".Activity.GlobalActivity" />
+        <activity android:name=".Activity.GlobalActivity" />
         <activity
             android:name=".Activity.HomeActivity"
             android:label="@string/title_activity_home" />
@@ -35,8 +34,12 @@
         <activity android:name=".Activity.AddAchievementActivity" />
         <activity android:name=".Activity.AddSportActivity" />
         <activity android:name=".Activity.AddBranchActivity" />
-        <activity android:name=".Activity.EventActivity"
-            android:label="Event Activity"></activity>
+        <activity
+            android:name=".Activity.EventActivity"
+            android:label="Event Activity" />
+        <activity android:name=".Activity.EventCalendarActivity" />
+        <activity android:name=".Activity.EventDetailActivity" />
+        <activity android:name=".Activity.DetailNewsActivity"></activity>
     </application>
 
 </manifest>

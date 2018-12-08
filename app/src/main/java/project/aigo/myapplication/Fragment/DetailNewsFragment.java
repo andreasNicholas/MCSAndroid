@@ -25,7 +25,6 @@ import static project.aigo.myapplication.Activity.GlobalActivity.DEFAULT_IMAGE;
 public class DetailNewsFragment extends Fragment {
     TextView tvName, tvDescription;
     ImageView ivImage;
-    View layoutView;
     Bitmap bitmapContainer;
     Bundle bundle;
     Uri uri;
@@ -39,9 +38,8 @@ public class DetailNewsFragment extends Fragment {
     public View onCreateView ( LayoutInflater inflater , ViewGroup container ,
                                Bundle savedInstanceState ) {
         // Inflate the layout for this fragment
-        layoutView = getActivity().findViewById(R.id.eventActivity);
 
-        View view = inflater.inflate(R.layout.fragment_event_detail , container , false);
+        View view = inflater.inflate(R.layout.fragment_detail_news , container , false);
 
         tvName = view.findViewById(R.id.tvName);
         tvDescription= view.findViewById(R.id.tvDescription);

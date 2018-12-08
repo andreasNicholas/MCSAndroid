@@ -17,9 +17,6 @@ import project.aigo.myapplication.Fragment.ViewNewsFragment;
 import project.aigo.myapplication.R;
 
 public class HomeActivity extends GlobalActivity {
-    public static TextView tvDonationTitle;
-
-    private Bundle bundle;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -33,17 +30,19 @@ public class HomeActivity extends GlobalActivity {
                 case R.id.news_menu:
                     intent.setClass(HomeActivity.this , NewsActivity.class);
                     startActivity(intent);
-                    finish();
                     return true;
                 case R.id.search_menu:
                     return true;
                 case R.id.donation_menu:
                     return true;
                 case R.id.events_menu:
+                    intent.setClass(HomeActivity.this , EventActivity.class);
+                    startActivity(intent);
                     return true;
                 default:
                     return true;
             }
+
         }
     };
 
@@ -52,7 +51,6 @@ public class HomeActivity extends GlobalActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         GlobalActivity globalActivity = new GlobalActivity();
-        //chnage later get from DB
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

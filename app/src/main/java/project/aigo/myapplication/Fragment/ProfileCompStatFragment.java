@@ -187,7 +187,7 @@ public class ProfileCompStatFragment extends Fragment {
             @Override public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
             }
             @Override public void onChartTranslate(MotionEvent me, float dX, float dY) {
-                onStop(chart);
+//                onStop(chart);
             }
         });
 

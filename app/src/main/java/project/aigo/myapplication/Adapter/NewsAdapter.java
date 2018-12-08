@@ -2,6 +2,7 @@ package project.aigo.myapplication.Adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,9 +22,10 @@ import java.util.List;
 import java.util.Map;
 
 import project.aigo.myapplication.APIManager;
+import project.aigo.myapplication.Activity.DetailNewsActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
+import project.aigo.myapplication.Activity.HomeActivity;
 import project.aigo.myapplication.Fragment.AddNewsFragment;
-import project.aigo.myapplication.Fragment.DetailNewsFragment;
 import project.aigo.myapplication.Object.News;
 import project.aigo.myapplication.R;
 
@@ -36,7 +38,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private View layoutView;
     private final GlobalActivity globalActivity = new GlobalActivity();
 
-    public NewsAdapter ( Context context , List<News> newsList , String role , View layoutView  ) {
+    public NewsAdapter ( Context context , List<News> newsList , String role , View layoutView ) {
         this.mContext = context;
         this.newsList = newsList;
         this.role = role;
@@ -65,7 +67,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         holder.imageNews.getLayoutParams().height = ((mContext.getResources().getDisplayMetrics().heightPixels) / 4);
         holder.imageTitles.setText(news.getTitle());
 
-        if (role.equals("admin")) {
+        if (role.equals("admin") && !(mContext instanceof HomeActivity)) {
             holder.btnMenu.setVisibility(View.VISIBLE);
             holder.btnMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -128,12 +130,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
                     String title = news.getTitle();
                     String description = news.getDescription();
-                    String imageSrc = news.getImageSrc();
+                    String imageSrc = (news.getImageSrc().equals("null")) ? DEFAULT_IMAGE : news.getImageSrc();
 
-                    String[] arrayEvent = {title , description , imageSrc };
-                    Bundle bundle = new Bundle();
-                    bundle.putStringArray("arrayNews" , arrayEvent);
-                    globalActivity.loadFragment(new DetailNewsFragment() , R.id.newsActivity , mContext , bundle , "detailFragment");
+                    Intent intent = new Intent(mContext , DetailNewsActivity.class);
+                    intent.putExtra("title" , title);
+                    intent.putExtra("description" , description);
+                    intent.putExtra("imageSrc" , imageSrc);
+
+                    mContext.startActivity(intent);
                 }
             });
         }

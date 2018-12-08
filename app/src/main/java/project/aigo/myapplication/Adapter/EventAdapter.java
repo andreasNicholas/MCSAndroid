@@ -2,6 +2,7 @@ package project.aigo.myapplication.Adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,8 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 import project.aigo.myapplication.APIManager;
+import project.aigo.myapplication.Activity.EventCalendarActivity;
+import project.aigo.myapplication.Activity.EventDetailActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
-import project.aigo.myapplication.Fragment.EventDetailFragment;
 import project.aigo.myapplication.Fragment.EventEditFragment;
 import project.aigo.myapplication.Object.Event;
 import project.aigo.myapplication.R;
@@ -59,18 +61,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         final Event events = eventList.get(position);
         String img = (events.getEvent_image_path().equals("null")) ? DEFAULT_IMAGE : events.getEvent_image_path();
 
+        holder.ivEventImage.setVisibility(View.VISIBLE);
         Picasso.get().load(img).into(holder.ivEventImage);
-
         holder.ivEventImage.setScaleType(ImageView.ScaleType.FIT_XY);
         holder.ivEventImage.getLayoutParams().height = ((mContext.getResources().getDisplayMetrics().heightPixels) / 4);
+
         holder.tvTitle.setText(events.getEvent_name());
         holder.tvDescription.setText(events.getEvent_description());
         holder.tvCountView.setText(events.getViews_count());
         holder.tvCreator.setText(events.getCreated_by());
         holder.tvtvDateTimeStartEnd.setText(String.format("%s - %s" , events.getEvent_start_datetime() , events.getEvent_end_datetime()));
 
-
-        if (role.equals("admin")) {
+        if (role.equals("admin") && !(mContext instanceof EventCalendarActivity)) {
             holder.btnMenu.setVisibility(View.VISIBLE);
             holder.btnMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -142,14 +144,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
                     String event_name = events.getEvent_name();
                     String event_description = events.getEvent_description();
-                    String imageSrc = events.getEvent_image_path();
+                    String imageSrc = (events.getEvent_image_path().equals("null")) ? DEFAULT_IMAGE : events.getEvent_image_path();
                     String event_start_datetime = events.getEvent_start_datetime();
                     String event_end_datetime = events.getEvent_end_datetime();
 
-                    String[] arrayEvent = {event_name , event_description , imageSrc , event_start_datetime , event_end_datetime};
-                    Bundle bundle = new Bundle();
-                    bundle.putStringArray("arrayEvent" , arrayEvent);
-                    globalActivity.loadFragment(new EventDetailFragment() , R.id.eventActivity , mContext , bundle , "detailFragment");
+                    Intent intent = new Intent(mContext, EventDetailActivity.class);
+                    intent.putExtra("event_name", event_name);
+                    intent.putExtra("event_description", event_description);
+                    intent.putExtra("imageSrc", imageSrc);
+                    intent.putExtra("event_start_datetime", event_start_datetime);
+                    intent.putExtra("event_end_datetime", event_end_datetime);
+                    mContext.startActivity(intent);
+
                 }
             });
         }
