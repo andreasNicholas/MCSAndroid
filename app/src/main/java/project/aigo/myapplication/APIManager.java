@@ -5,12 +5,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +28,17 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
@@ -33,6 +46,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,9 +60,17 @@ import project.aigo.myapplication.Activity.EventCalendarActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Activity.HomeActivity;
 import project.aigo.myapplication.Activity.LoginActivity;
+import project.aigo.myapplication.Activity.MainActivity;
+import project.aigo.myapplication.Adapter.BranchAdapter;
 import project.aigo.myapplication.Adapter.EventAdapter;
+import project.aigo.myapplication.Adapter.SportAdapter;
+import project.aigo.myapplication.Object.Achievement;
+import project.aigo.myapplication.Object.Branch;
+import project.aigo.myapplication.Object.Entries;
 import project.aigo.myapplication.Object.Event;
 import project.aigo.myapplication.Object.News;
+import project.aigo.myapplication.Object.ShownAchievement;
+import project.aigo.myapplication.Object.Sport;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -150,7 +172,7 @@ public class APIManager {
                     editor.putString("remember_token" , remember_token);
                     editor.apply();
 
-                    Intent intent = new Intent(context , HomeActivity.class);
+                    Intent intent = new Intent(context , MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(intent);
 
@@ -189,7 +211,7 @@ public class APIManager {
 
         String id = params.get("userID");
         String remember_token = params.get("remember_token");
-        String limit = (params.get("limit").isEmpty()) ? "" : "/" + params.get("limit");
+        String limit = (params.get("limit") == null) ? "" : "/" + params.get("limit");
 
         String url = globalActivity.route("getNews/" + id + "/" + remember_token + limit);
 
@@ -220,7 +242,6 @@ public class APIManager {
         } , new Response.ErrorListener() {
             @Override
             public void onErrorResponse ( VolleyError error ) {
-                globalActivity.snackShort(view , error.getMessage());
                 swipeRefreshLayout.setRefreshing(false);
 
             }
@@ -287,9 +308,9 @@ public class APIManager {
 
     }
 
-    public void updateOrCreateNews ( final Context context , final View view , final Map<String, String> params , final Fragment fragment ) {
-        final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
-        progressDialog.show();
+    public void updateOrCreateNews ( final Context context , final View view , final Map<String, String> params ) {
+        //final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
+        //progressDialog.show();
 
         String url = globalActivity.route("updateOrCreateNews");
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
@@ -300,15 +321,14 @@ public class APIManager {
             public void onResponse ( String response ) {
                 String message = (params.get("newsID").isEmpty()) ? "Add" : "Update";
                 globalActivity.toastShort(context , message + " Success");
-                fragment.getFragmentManager().popBackStackImmediate();
-                progressDialog.dismiss();
+                //progressDialog.dismiss();
 
             }
         } , new Response.ErrorListener() {
             @Override
             public void onErrorResponse ( VolleyError error ) {
                 globalActivity.snackShort(view , error.getMessage());
-                progressDialog.dismiss();
+                //progressDialog.dismiss();
             }
         }) {
             @Override
@@ -352,7 +372,7 @@ public class APIManager {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
                         Event event = new Event();
-                        event.setId(jsonObject.getString("id"));
+                        /*event.setId(jsonObject.getString("id"));
                         event.setEvent_name(jsonObject.getString("event_name"));
                         event.setEvent_start_datetime(jsonObject.getString("event_start_datetime"));
                         event.setEvent_end_datetime(jsonObject.getString("event_end_datetime"));
@@ -360,7 +380,7 @@ public class APIManager {
                         event.setEvent_image_path(jsonObject.getString("event_image_path"));
                         event.setViews_count(jsonObject.getString("views_count"));
                         event.setCreated_by(jsonObject.getString("created_by"));
-                        eventsList.add(event);
+                        eventsList.add(event);*/
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -370,14 +390,14 @@ public class APIManager {
                     Calendar calendar = Calendar.getInstance();
                     Map<Date, Drawable> hm = new HashMap();
                     for (int i = 0; i < eventsList.size(); i++) {
-                        int year = Integer.parseInt(eventsList.get(i).getEvent_start_datetime().substring(0 , 4));
+                        /*int year = Integer.parseInt(eventsList.get(i).getEvent_start_datetime().substring(0 , 4));
                         int month = Integer.parseInt(eventsList.get(i).getEvent_start_datetime().substring(5 , 7)) - 1;
                         int day = Integer.parseInt(eventsList.get(i).getEvent_start_datetime().substring(8 , 10));
                         calendar.set(Calendar.YEAR , year);
                         calendar.set(Calendar.MONTH , month);
                         calendar.set(Calendar.DAY_OF_MONTH , day);
                         Date date = calendar.getTime();
-                        hm.put(date , blue);
+                        hm.put(date , blue);*/
                     }
 
                     CalendarView eventCalendar = ((EventCalendarActivity) context).findViewById(R.id.eventCalendar);
@@ -392,7 +412,7 @@ public class APIManager {
 
                     caldroidFragment.setBackgroundDrawableForDates(hm);
 
-                    final CaldroidListener caldroidListener = new CaldroidListener() {
+                    /*final CaldroidListener caldroidListener = new CaldroidListener() {
                         @Override
                         public void onSelectDate ( Date date , View view ) {
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd" , Locale.US);
@@ -422,7 +442,7 @@ public class APIManager {
                     t.replace(R.id.eventCalendar , caldroidFragment);
                     t.commit();
 
-                    eventCalendar.setVisibility(View.VISIBLE);
+                    eventCalendar.setVisibility(View.VISIBLE);*/
 
                 } else {
                     adapter.notifyDataSetChanged();
@@ -545,4 +565,368 @@ public class APIManager {
 
     }
 
+    public void getAchievement(final Context context, final View view, final Map<String, String> params, final RecyclerView.Adapter adapter) {
+        Achievement.achievementList.clear();
+        ShownAchievement.shownAchievementList.clear();
+        String id = params.get("userID");
+        String remember_token = params.get("remember_token");
+        String year = params.get("year");
+
+
+        for(int i=1; i<13;i++) {
+            String url = globalActivity.route("getAchievementbyParam/" + id + "/" + remember_token + "/" + year + "/" + i);
+
+            RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+                @SuppressLint("DefaultLocale")
+                @Override
+                public void onResponse(JSONArray response) {
+                    for (int j = 0; j < response.length(); j++) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(j);
+
+                            Achievement achievement = new Achievement();
+                            achievement.setAchievementId(jsonObject.getInt("id"));
+                            achievement.setEventName(jsonObject.getString("event_name"));
+                            String startDate = jsonObject.getString("event_start_datetime");
+                            String endDate = jsonObject.getString("event_end_datetime");
+
+                            SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
+                            java.util.Date startDateObj = null;
+                            java.util.Date endDateObj = null;
+                            try {
+                                startDateObj = curFormater.parse(startDate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                endDateObj = curFormater.parse(endDate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            achievement.setEventStart(startDateObj);
+                            achievement.setEventEnd(endDateObj);
+                            achievement.setPosition(jsonObject.getInt("position"));
+                            achievement.setDesc(jsonObject.getString("description"));
+                            achievement.setBranch(jsonObject.getString("branch_name"));
+                            achievement.setSport(jsonObject.getString("sport_name"));
+                            Achievement.achievementList.add(achievement);
+                            adapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    globalActivity.snackShort(view, error.getMessage());
+                }
+
+            }) {
+                @Override
+                protected VolleyError parseNetworkError(VolleyError volleyError) {
+                    if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                        volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                    }
+                    return volleyError;
+                }
+            };
+            mRequestQueue.add(jsonArrayRequest);
+        }
+    }
+
+    public void getAchievementNoMonth(final Context context, final View view, final Map<String, String> params, final LineChart chart, final ArrayList<Entry> entriesChart, final int x) {
+        String id = params.get("userID");
+        String remember_token = params.get("remember_token");
+        String year = params.get("year");
+
+        String url = globalActivity.route("getAchievementbyParam/" + id + "/" + remember_token + "/" + year);
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse(JSONArray response) {
+                final String[] months = new String[12];
+                Entries.entryList.clear();
+                for (int i = 0; i < 12; i++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        entriesChart.add(new Entry((jsonObject.getInt("id"))-1, jsonObject.getInt("y")));
+                        months[i] = jsonObject.getString("month_name");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                LineDataSet dataSet = new LineDataSet(entriesChart, "Customized values");
+                LineData data = new LineData(dataSet);
+
+                IAxisValueFormatter formatter = new IAxisValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value, AxisBase axis) {
+                        return months[(int) value];
+                    }
+                };
+
+                dataSet.setColor(ContextCompat.getColor(view.getContext(), R.color.colorBg));
+                dataSet.setValueTextColor(ContextCompat.getColor(view.getContext(), R.color.colorBlack));
+                dataSet.setCircleColors(R.color.colorBlack);
+                dataSet.setValueTextSize(14);
+                data.setDrawValues(false);
+
+                XAxis xAxis = chart.getXAxis();
+                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+                xAxis.setValueFormatter(formatter);
+                xAxis.setTextSize(14);
+
+                Legend legend = chart.getLegend();
+                legend.setTextSize(14);
+                legend.setTextColor(R.color.colorBg);
+                legend.setEnabled(true);
+                ArrayList<LegendEntry> legendEntry = new ArrayList<>();
+                legendEntry.add(new LegendEntry("Position", Legend.LegendForm.CIRCLE, 15f, 10f, null, Color.RED));
+                legend.setCustom(legendEntry);
+
+                Description description = chart.getDescription();
+                description.setEnabled(false);
+
+                chart.invalidate();
+                chart.setData(data);
+
+                YAxis yAxisRight = chart.getAxisRight();
+                yAxisRight.setEnabled(false);
+                YAxis yAxisLeft = chart.getAxisLeft();
+                yAxisLeft.setGranularity(1f);
+                yAxisRight.setTextSize(14);
+                yAxisLeft.setTextSize(14);
+                chart.setVisibleXRangeMaximum(3); // allow 20 values to be displayed at once on the x-axis, not more
+                chart.moveViewToX(3);
+                chart.setPinchZoom(false);
+                chart.animateX(2500);
+                chart.moveViewToX(0);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                globalActivity.snackShort(view, error.getMessage());
+            }
+
+        }) {
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+
+                return volleyError;
+            }
+        };
+        mRequestQueue.add(jsonArrayRequest);
+    }
+
+    public void getSport(final Context context, final Map<String, String> params){
+        Sport.sportList.clear();
+        String id = params.get("userID");
+        String remember_token = params.get("remember_token");
+
+        String url = globalActivity.route("getSports/" + id + "/" + remember_token);
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int j = 0; j < response.length(); j++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(j);
+                        Sport sport = new Sport();
+                        sport.setSportId(jsonObject.getInt("id"));
+                        sport.setSportName(jsonObject.getString("sport_name"));
+
+                        Sport.sportList.add(sport);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+
+        }) {
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+                return volleyError;
+            }
+        };
+        mRequestQueue.add(jsonArrayRequest);
+    }
+
+    public void getBranch(final Context context, final Map<String, String> params){
+        Branch.branchList.clear();
+        String id = params.get("userID");
+        String remember_token = params.get("remember_token");
+
+        String url = globalActivity.route("getBranches/" + id + "/" + remember_token);
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int j = 0; j < response.length(); j++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(j);
+                        Branch branch = new Branch();
+                        branch.setBranchId(jsonObject.getInt("id"));
+                        branch.setBranchName(jsonObject.getString("branch_name"));
+                        branch.setSportId(jsonObject.getInt("sport_id"));
+                        branch.setSportName(jsonObject.getString("sport_name"));
+
+                        Branch.branchList.add(branch);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+
+        }) {
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+                return volleyError;
+            }
+        };
+        mRequestQueue.add(jsonArrayRequest);
+    }
+
+    public void getAllEvent(final Context context, final Map<String, String> params){
+        Event.eventList.clear();
+        String id = params.get("userID");
+        String remember_token = params.get("remember_token");
+
+        String url = globalActivity.route("getAllEvents/" + id + "/" + remember_token);
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int j = 0; j < response.length(); j++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(j);
+                        Event event = new Event();
+                        event.setId(String.valueOf(jsonObject.getInt("id")));
+                        event.setEvent_name(jsonObject.getString("event_name"));
+
+                        Event.eventList.add(event);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+
+        }) {
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+                return volleyError;
+            }
+        };
+        mRequestQueue.add(jsonArrayRequest);
+    }
+
+    public void addSport(final Context context, final HashMap<String, String> params, final SportAdapter adapter) {
+        String url = globalActivity.route("addSport");
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+
+        StringRequest mStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                adapter.notifyDataSetChanged();
+                globalActivity.toastShort(context, response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+
+                return params;
+            }
+
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+
+                return volleyError;
+            }
+        };
+
+        mRequestQueue.add(mStringRequest);
+    }
+
+    public void addBranch(final Context context, final HashMap<String, String> params, final BranchAdapter adapter) {
+        String url = globalActivity.route("addBranch");
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+
+        StringRequest mStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                adapter.notifyDataSetChanged();
+                globalActivity.toastShort(context, response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+
+                return params;
+            }
+
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+
+                return volleyError;
+            }
+        };
+
+        mRequestQueue.add(mStringRequest);
+    }
 }

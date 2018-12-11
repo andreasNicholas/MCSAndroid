@@ -1,16 +1,16 @@
-package project.aigo.myapplication.Fragment;
+package project.aigo.myapplication.Activity;
 
-import android.app.Fragment;
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,13 +23,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import project.aigo.myapplication.APIManager;
-import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.R;
 
-import static android.app.Activity.RESULT_OK;
 import static project.aigo.myapplication.Activity.GlobalActivity.DEFAULT_IMAGE;
 
-public class AddNewsFragment extends Fragment implements View.OnClickListener {
+public class AddNewsActivity extends AppCompatActivity implements View.OnClickListener {
     EditText etNewsTitle, etNewsContent;
     ImageView ivNewsImage;
     Button btnAddNews;
@@ -41,22 +39,19 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
     View layoutView;
     String addorEdit;
     GlobalActivity globalActivity;
-
-    public AddNewsFragment () {
-        // Required empty public constructor
-    }
+    Activity activity = this;
 
     @Override
-    public View onCreateView ( LayoutInflater inflater , ViewGroup parent , Bundle savedInstanceState ) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_news);
         // Inflate the layout for this fragment
-        layoutView = getActivity().findViewById(R.id.newsActivity);
-        View view = inflater.inflate(R.layout.fragment_news_add , parent , false);
-        etNewsTitle = view.findViewById(R.id.etNewsTitle);
-        etNewsContent = view.findViewById(R.id.etNewsContent);
-        btnAddNews = view.findViewById(R.id.btnAddNews);
-        ivNewsImage = view.findViewById(R.id.ivNewsImage);
+        etNewsTitle = findViewById(R.id.etNewsTitle);
+        etNewsContent = findViewById(R.id.etNewsContent);
+        btnAddNews = findViewById(R.id.btnAddNews);
+        ivNewsImage = findViewById(R.id.ivNewsImage);
 
-        bundle = getArguments();
+        bundle = getIntent().getExtras();
         if (bundle != null) {
             String[] arrayNews = bundle.getStringArray("arrayNews");
             currentNewsID = (arrayNews != null) ? arrayNews[0] : "";
@@ -66,11 +61,15 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
             currentImgSrc = (currentImgSrc.equals("null")) ? DEFAULT_IMAGE : currentImgSrc;
             Picasso.get().load(currentImgSrc).into(ivNewsImage);
             ivNewsImage.setScaleType(ImageView.ScaleType.FIT_XY);
-            ivNewsImage.getLayoutParams().height = ((getActivity().getResources().getDisplayMetrics().heightPixels) / 4);
+            ivNewsImage.getLayoutParams().height = ((this.getResources().getDisplayMetrics().heightPixels) / 4);
             etNewsTitle.setText(currentTitle);
             etNewsContent.setText(currentDescription);
+            GlobalActivity globalActivity = new GlobalActivity();
+            globalActivity.snackShort(this.ivNewsImage, "THIS IS EDIT");
         } else {
             Picasso.get().load(DEFAULT_IMAGE).into(ivNewsImage);
+            GlobalActivity globalActivity = new GlobalActivity();
+            globalActivity.toastShort(this.getBaseContext(), "THIS IS NOT EDIT");
         }
 
         addorEdit = (bundle == null) ? "Add" : "Edit";
@@ -79,8 +78,6 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
 
         btnAddNews.setOnClickListener(this);
         ivNewsImage.setOnClickListener(this);
-
-        return view;
     }
 
     @Override
@@ -91,7 +88,7 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
             uri = result.getUri();
             imageExtension = globalActivity.getImageName(uri);
             try {
-                bitmapContainer = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver() , result.getUri());
+                bitmapContainer = MediaStore.Images.Media.getBitmap(this.getContentResolver() , result.getUri());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -106,7 +103,7 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
         if (view == btnAddNews) {
             callApi();
         } else if (view == ivNewsImage) {
-            CropImage.activity().setAspectRatio(3 , 1).start(getActivity() , this);
+            CropImage.activity().setAspectRatio(3 , 1).start(this);
         }
     }
 
@@ -114,7 +111,7 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
         final APIManager api = new APIManager();
 
         globalActivity = new GlobalActivity();
-        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(getActivity());
+        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(this);
         String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
         String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";
         String newsID = (currentNewsID.isEmpty()) ? "" : currentNewsID;
@@ -132,11 +129,11 @@ public class AddNewsFragment extends Fragment implements View.OnClickListener {
         params.put("image_ext" , imageExtension);
         String titleAlert = addorEdit + " Confirmation";
         String message = "Are you sure want to " + addorEdit + " ?";
-        AlertDialog.Builder builder = globalActivity.createGlobalAlertDialog(getActivity() , titleAlert , message);
+        AlertDialog.Builder builder = globalActivity.createGlobalAlertDialog(this , titleAlert , message);
         builder.setPositiveButton("Yes" , new DialogInterface.OnClickListener() {
             @Override
             public void onClick ( DialogInterface dialogInterface , int i ) {
-                api.updateOrCreateNews(getActivity() , layoutView , params , AddNewsFragment.this);
+                api.updateOrCreateNews(activity, layoutView , params);
 
             }
         });

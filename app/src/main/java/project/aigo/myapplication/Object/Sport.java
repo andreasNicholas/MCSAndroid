@@ -8,6 +8,14 @@ public class Sport {
     private int sportId;
     private String sportName;
 
+    public Sport(String sportName) {
+        this.sportName = sportName;
+    }
+
+    public Sport() {
+
+    }
+
     public int getSportId() {
         return sportId;
     }

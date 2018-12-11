@@ -6,27 +6,27 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
-import project.aigo.myapplication.Object.Branch;
+import project.aigo.myapplication.Object.User;
 import project.aigo.myapplication.R;
 
-public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder> {
+public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHolder> {
     private Context mContext;
-    private List<Branch> branchList;
+    private List<User> userList;
     private View layoutView;
 
-    public BranchAdapter(Context context) {
+    public AthleteAdapter(Context context) {
         this.mContext = context;
-        this.branchList = branchList;
         this.layoutView = layoutView;
     }
 
     @NonNull
     @Override
-    public BranchAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AthleteAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.branch , parent , false);
 
@@ -34,24 +34,26 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BranchAdapter.ViewHolder holder, int position) {
-        final Branch branch = Branch.branchList.get(position);
-        holder.tvSport.setText(branch.getSportName());
-        holder.tvBranch.setText(branch.getBranchName());
+    public void onBindViewHolder(@NonNull AthleteAdapter.ViewHolder holder, int position) {
+        final User user = User.userList.get(position);
+        holder.tvAthleteName.setText(user.getName());
+        holder.tvAthleteGender.setText(user.getGender());
     }
 
     @Override
     public int getItemCount() {
-        return Branch.branchList.size();
+        return User.userList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvSport, tvBranch;
+        private TextView tvAthleteName, tvAthleteGender;
+        private ImageView ivAthletePP;
 
         private ViewHolder ( View itemView ) {
             super(itemView);
-            tvSport = itemView.findViewById(R.id.tvAthleteName);
-            tvBranch = itemView.findViewById(R.id.tvAthleteGender);
+            tvAthleteName = itemView.findViewById(R.id.tvAthleteName);
+            tvAthleteGender = itemView.findViewById(R.id.tvAthleteGender);
+            ivAthletePP = itemView.findViewById(R.id.ivAthletePP);
         }
     }
 }

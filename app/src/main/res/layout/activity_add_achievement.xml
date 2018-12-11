@@ -43,31 +43,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/etEventName"
+            <TextView
+                android:id="@+id/tvEvent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Event"
-                android:inputType="textPersonName" />
+                android:layout_marginLeft="5dp"
+                android:text="Event"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
-            <EditText
-                android:id="@+id/etEventStartDate"
+            <Spinner
+                android:id="@+id/spinEvent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:focusable="false"
-                android:hint="Start Date"
-                android:inputType="textPersonName" />
+                android:layout_height="wrap_content" />
 
-            <EditText
-                android:id="@+id/etEventEndDate"
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:focusable="false"
-                android:hint="End Date"
-                android:inputType="textPersonName" />
+                android:layout_height="15dp" />
 
             <TextView
                 android:id="@+id/textView10"
@@ -82,6 +73,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
             <TextView
                 android:id="@+id/textView13"
                 android:layout_width="match_parent"
@@ -94,6 +89,10 @@
                 android:id="@+id/spinBranch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
 
             <EditText
                 android:id="@+id/etEventDescription"

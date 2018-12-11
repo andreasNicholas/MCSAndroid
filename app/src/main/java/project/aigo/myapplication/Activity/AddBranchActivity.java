@@ -13,7 +13,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Adapter.BranchAdapter;
 import project.aigo.myapplication.Adapter.SportAdapter;
 import project.aigo.myapplication.Fragment.DatePickerFragment;
@@ -27,6 +29,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
     private BranchAdapter branchAdapter;
     private RecyclerView recyclerView;
     private Spinner spinSport2;
+    private HashMap<String, String> paramsForAddBranch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,36 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
             branch1.setBranchName(etBranchName.getText().toString());
             Branch.branchList.add(branch1);
             branchAdapter.notifyDataSetChanged();
+            mapParams();
+            callApi();
         }
+    }
+
+    private void mapParams () {
+        GlobalActivity globalActivity = new GlobalActivity();
+        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(this);
+        String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+        String sportName = spinSport2.getSelectedItem().toString();
+        int sportId=0;
+        for(int i=0; i<Sport.sportList.size();i++){
+            if(Sport.sportList.get(i).getSportName().equals(sportName)) {
+                sportId = Sport.sportList.get(i).getSportId();
+                break;
+            }
+            else continue;
+        }
+        String branchName = etBranchName.getText().toString();
+        String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : null;
+        paramsForAddBranch = new HashMap<>();
+
+        paramsForAddBranch.put("userID", id);
+        paramsForAddBranch.put("remember_token" , remember_token);
+        paramsForAddBranch.put("sport_id" , String.valueOf(sportId));
+        paramsForAddBranch.put("branch_name" , branchName);
+    }
+
+    private void callApi() {
+        APIManager apiManageraddBranch = new APIManager();
+        apiManageraddBranch.addBranch(this, paramsForAddBranch, branchAdapter);
     }
 }

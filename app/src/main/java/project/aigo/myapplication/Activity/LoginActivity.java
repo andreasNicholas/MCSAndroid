@@ -48,8 +48,8 @@ public class LoginActivity extends GlobalActivity implements View.OnClickListene
             APIManager api = new APIManager();
 
             api.postLogin(this , layoutView , params, sharedPreferences);
-//            Intent intent = new Intent(this , EventActivity.class);
-//            startActivity(intent);
+            //Intent intent = new Intent(this , EventActivity.class);
+            //startActivity(intent);
         } else if (view == tvRegister) {
             Intent intent = new Intent(this , RegisterActivity.class);
             startActivity(intent);

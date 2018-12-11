@@ -1,8 +1,10 @@
 package project.aigo.myapplication.Object;
 
 import java.util.Date;
+import java.util.Vector;
 
 public class User {
+    public static Vector<User> userList = new Vector<>();
 
     private String name;
     private String email;
@@ -11,6 +13,8 @@ public class User {
     private Date birthDate;
     private String address;
     private String gender;
+    private int user_id;
+    private String[] user_branch;
 
     public User ( String name , String email , String password , String phone , Date birthDate , String address , String gender ) {
         this.name = name;

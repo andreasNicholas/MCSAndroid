@@ -39,7 +39,11 @@
             android:label="Event Activity" />
         <activity android:name=".Activity.EventCalendarActivity" />
         <activity android:name=".Activity.EventDetailActivity" />
-        <activity android:name=".Activity.DetailNewsActivity"></activity>
+        <activity android:name=".Activity.DetailNewsActivity" />
+        <activity
+            android:name=".Activity.MainActivity"
+            android:label="@string/title_activity_main" />
+        <activity android:name=".Activity.AddNewsActivity"></activity>
     </application>
 
 </manifest>

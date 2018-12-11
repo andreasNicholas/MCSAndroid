@@ -1,9 +1,11 @@
 package project.aigo.myapplication.Fragment;
 
 
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;;
 import android.app.Fragment;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,8 +19,10 @@ import java.util.List;
 import java.util.Map;
 
 import project.aigo.myapplication.APIManager;
+import project.aigo.myapplication.Activity.AddNewsActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Activity.HomeActivity;
+import project.aigo.myapplication.Activity.MainActivity;
 import project.aigo.myapplication.Activity.NewsActivity;
 import project.aigo.myapplication.Adapter.NewsAdapter;
 import project.aigo.myapplication.Object.News;
@@ -61,8 +65,10 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
         fabAddNews.setOnClickListener(this);
 
         newsList = new ArrayList<>();
-        if (getActivity() instanceof HomeActivity) {
-            layoutID = R.id.homeActivity;
+        //HomeActivity
+        //R.id.homeActivity
+        if (getActivity() instanceof MainActivity) {
+            layoutID = R.id.mainActivity;
             limit = "5";
 
         } else if (getActivity() instanceof NewsActivity) {
@@ -70,8 +76,8 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
             limit = "";
         }
 
-        layoutView = getActivity().findViewById(layoutID);
-        newsAdapter = new NewsAdapter(getActivity() , newsList , role , layoutView);
+        layoutView = view.findViewById(layoutID);
+        newsAdapter = new NewsAdapter(this.getActivity(), getActivity() , newsList , role , layoutView );
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setAdapter(newsAdapter);
@@ -87,7 +93,7 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
             public void onScrollStateChanged ( RecyclerView recyclerView , int newState ) {
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if ((role.equals("athlete")) || getActivity() instanceof HomeActivity)
+                    if ((role.equals("athlete")) || getActivity() instanceof MainActivity)
                         fabAddNews.setVisibility(View.INVISIBLE);
                     else fabAddNews.show();
 
@@ -127,9 +133,10 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick ( View view ) {
-        if (view == fabAddNews)
-            globalActivity.loadFragment(new AddNewsFragment() , R.id.newsActivity , getActivity() , null , "addFragment");
-
+        if (view == fabAddNews){}
+            //globalActivity.loadFragment(new AddNewsFragment() , R.id.mainActivity , getActivity() , null , "addFragment");
+            Intent intent = new Intent(getActivity(), AddNewsActivity.class);
+            startActivity(intent);
     }
 
 }

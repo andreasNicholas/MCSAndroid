@@ -59,7 +59,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         final int position = holder.getAdapterPosition();
         final Event events = eventList.get(position);
-        String img = (events.getEvent_image_path().equals("null")) ? DEFAULT_IMAGE : events.getEvent_image_path();
+        /*String img = (events.getEvent_image_path().equals("null")) ? DEFAULT_IMAGE : events.getEvent_image_path();
 
         holder.ivEventImage.setVisibility(View.VISIBLE);
         Picasso.get().load(img).into(holder.ivEventImage);
@@ -110,7 +110,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     builder.show().create();
                 }
             });
-        }
+        }*/
     }
 
 
@@ -143,17 +143,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     final Event events = eventList.get(position);
 
                     String event_name = events.getEvent_name();
-                    String event_description = events.getEvent_description();
+                    /*String event_description = events.getEvent_description();
                     String imageSrc = (events.getEvent_image_path().equals("null")) ? DEFAULT_IMAGE : events.getEvent_image_path();
                     String event_start_datetime = events.getEvent_start_datetime();
                     String event_end_datetime = events.getEvent_end_datetime();
 
-                    Intent intent = new Intent(mContext, EventDetailActivity.class);
                     intent.putExtra("event_name", event_name);
                     intent.putExtra("event_description", event_description);
                     intent.putExtra("imageSrc", imageSrc);
                     intent.putExtra("event_start_datetime", event_start_datetime);
-                    intent.putExtra("event_end_datetime", event_end_datetime);
+                    intent.putExtra("event_end_datetime", event_end_datetime);*/
+                    Intent intent = new Intent(mContext, EventDetailActivity.class);
                     mContext.startActivity(intent);
 
                 }
