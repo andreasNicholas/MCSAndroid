@@ -1,10 +1,9 @@
 package project.aigo.myapplication.Fragment;
 
 
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;;
+import android.support.design.widget.FloatingActionButton;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -64,8 +63,6 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
         fabAddNews.setOnClickListener(this);
 
         newsList = new ArrayList<>();
-        //HomeActivity
-        //R.id.homeActivity
         if (getActivity() instanceof MainActivity) {
             layoutID = R.id.mainActivity;
             limit = "5";
@@ -75,8 +72,8 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
             limit = "";
         }
 
-        layoutView = view.findViewById(layoutID);
-        newsAdapter = new NewsAdapter(this.getActivity(), getActivity() , newsList , role , layoutView );
+        layoutView = getActivity().findViewById(layoutID);
+        newsAdapter = new NewsAdapter(getActivity() , newsList , role , layoutView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setAdapter(newsAdapter);
@@ -132,10 +129,11 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick ( View view ) {
-        if (view == fabAddNews){}
+        if (view == fabAddNews) {
             //globalActivity.loadFragment(new AddNewsFragment() , R.id.mainActivity , getActivity() , null , "addFragment");
-            Intent intent = new Intent(getActivity(), AddNewsActivity.class);
+            Intent intent = new Intent(getActivity() , AddNewsActivity.class);
             startActivity(intent);
+        }
     }
 
 }

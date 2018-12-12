@@ -1,10 +1,8 @@
 package project.aigo.myapplication.Object;
 
 import java.util.Date;
-import java.util.Vector;
 
 public class Achievement {
-    public static Vector<Achievement> achievementList = new Vector<Achievement>();
 
     private int achievementId;
     private String eventName;

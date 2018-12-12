@@ -18,7 +18,7 @@ import java.util.Map;
 import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Activity.EventActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
-import project.aigo.myapplication.Activity.HomeActivity;
+import project.aigo.myapplication.Activity.MainActivity;
 import project.aigo.myapplication.Adapter.EventAdapter;
 import project.aigo.myapplication.Object.Event;
 import project.aigo.myapplication.R;
@@ -60,8 +60,8 @@ public class EventListFragment extends Fragment implements View.OnClickListener 
         fabAddEvent.setOnClickListener(this);
 
         eventsList = new ArrayList<>();
-        if (getActivity() instanceof HomeActivity) {
-            layoutID = R.id.homeActivity;
+        if (getActivity() instanceof MainActivity) {
+            layoutID = R.id.mainActivity;
             limit = "5";
 
         } else if (getActivity() instanceof EventActivity) {
@@ -86,7 +86,7 @@ public class EventListFragment extends Fragment implements View.OnClickListener 
             public void onScrollStateChanged ( RecyclerView recyclerView , int newState ) {
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if ((role.equals("athlete")) || getActivity() instanceof HomeActivity)
+                    if ((role.equals("athlete")) || getActivity() instanceof MainActivity)
                         fabAddEvent.setVisibility(View.INVISIBLE);
                     else fabAddEvent.show();
 
@@ -97,7 +97,7 @@ public class EventListFragment extends Fragment implements View.OnClickListener 
         });
         refresh();
 
-        if (role.equals("athlete") || getActivity() instanceof HomeActivity)
+        if (role.equals("athlete") || getActivity() instanceof MainActivity)
             fabAddEvent.setVisibility(View.INVISIBLE);
 
         return view;

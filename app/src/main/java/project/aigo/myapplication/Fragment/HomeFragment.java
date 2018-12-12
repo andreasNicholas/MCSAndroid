@@ -1,11 +1,7 @@
 package project.aigo.myapplication.Fragment;
 
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -23,15 +19,10 @@ public class HomeFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView( @NonNull LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState) {
         // Inflate the layout for this fragmentv
-        View view = (View) inflater.inflate(R.layout.fragment_home,
-                container, false);
-        //ViewNewsFragment viewNewsFragment = new ViewNewsFragment();
-        //android.support.v4.app.FragmentTransaction transaction = new F
-        //transaction.add(viewNewsFragment, "view news fragment").commit();
-
+        View view =  inflater.inflate(R.layout.fragment_home, container, false);
 
         GlobalActivity globalActivity = new GlobalActivity();
 
@@ -39,7 +30,7 @@ public class HomeFragment extends Fragment {
         ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(view.getContext());
         viewPager.setAdapter(imageSliderAdapter);
 
-        globalActivity.loadFragment(this.getActivity(), new ViewNewsFragment(),R.id.frameHome, getActivity().getBaseContext(),null,null);
+        globalActivity.loadFragment(new ViewNewsFragment(),R.id.frameHome, getActivity(),null,null);
 
         return view;
     }

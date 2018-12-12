@@ -10,43 +10,46 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
-import project.aigo.myapplication.Object.ShownAchievement;
+import project.aigo.myapplication.Object.Achievement;
 import project.aigo.myapplication.R;
 
 public class ProfileCompetitionAdapter extends RecyclerView.Adapter<ProfileCompetitionAdapter.ViewHolder> {
     private Context mContext;
-    private View layoutView;
-
-    public ProfileCompetitionAdapter (Context context, View layoutView) {
+    private List<Achievement> achievementList;
+    public ProfileCompetitionAdapter (Context context, List<Achievement> achievementList) {
         this.mContext = context;
-        this.layoutView = layoutView;
+        this.achievementList = achievementList;
     }
 
     @NonNull
     @Override
     public ProfileCompetitionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.achievement , parent , false);
+        View v = Objects.requireNonNull(inflater).inflate(R.layout.achievement , parent , false);
 
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProfileCompetitionAdapter.ViewHolder holder, int position) {
-            if(!ShownAchievement.shownAchievementList.isEmpty()) {
+            if(!achievementList.isEmpty()) {
 
-                Date endDate = ShownAchievement.shownAchievementList.get(position).getEventStart();
-                SimpleDateFormat formatter = new SimpleDateFormat("EEE dd MM yyyy");//formating according to my need
+                Date endDate = achievementList.get(position).getEventStart();
+                SimpleDateFormat formatter = new SimpleDateFormat("EEE dd MM yyyy", Locale.US);
 
                 holder.tvDate.setText(formatter.format(endDate));
-                holder.tvAchievement.setText(ShownAchievement.shownAchievementList.get(position).getEventName()+" Position "+ShownAchievement.shownAchievementList.get(position).getPosition());
+                String achievement = String.format("%s Position %s",achievementList.get(position).getEventName(),achievementList.get(position).getPosition());
+                holder.tvAchievement.setText(achievement);
             }
     }
 
     @Override
     public int getItemCount() {
-        return ShownAchievement.shownAchievementList.size();
+        return (achievementList == null) ? 0 : achievementList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

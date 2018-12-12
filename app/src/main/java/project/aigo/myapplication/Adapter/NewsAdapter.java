@@ -1,6 +1,5 @@
 package project.aigo.myapplication.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +25,6 @@ import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Activity.AddNewsActivity;
 import project.aigo.myapplication.Activity.DetailNewsActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
-import project.aigo.myapplication.Activity.HomeActivity;
 import project.aigo.myapplication.Activity.MainActivity;
 import project.aigo.myapplication.Object.News;
 import project.aigo.myapplication.R;
@@ -39,14 +37,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private String role;
     private View layoutView;
     private final GlobalActivity globalActivity = new GlobalActivity();
-    private Activity activity = null;
 
-    public NewsAdapter ( Activity activity1, Context context , List<News> newsList , String role , View layoutView ) {
+    public NewsAdapter (  Context context , List<News> newsList , String role , View layoutView ) {
         this.mContext = context;
         this.newsList = newsList;
         this.role = role;
         this.layoutView = layoutView;
-        activity = activity1;
     }
 
     @NonNull
@@ -95,7 +91,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                                     //globalActivity.loadFragment(new AddNewsFragment() , R.id.newsActivity , mContext , bundle , "editFragment");
                                     Intent intent = new Intent(holder.itemView.getContext(), AddNewsActivity.class);
                                     intent.putExtras(bundle);
-                                    activity.startActivity(intent);
+                                    mContext.startActivity(intent);
                                     break;
                                 case 1:
                                     callApi(news.getId() , position);

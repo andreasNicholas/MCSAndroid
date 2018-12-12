@@ -18,7 +18,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CalendarView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -58,7 +57,6 @@ import java.util.Map;
 
 import project.aigo.myapplication.Activity.EventCalendarActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
-import project.aigo.myapplication.Activity.HomeActivity;
 import project.aigo.myapplication.Activity.LoginActivity;
 import project.aigo.myapplication.Activity.MainActivity;
 import project.aigo.myapplication.Adapter.BranchAdapter;
@@ -66,10 +64,8 @@ import project.aigo.myapplication.Adapter.EventAdapter;
 import project.aigo.myapplication.Adapter.SportAdapter;
 import project.aigo.myapplication.Object.Achievement;
 import project.aigo.myapplication.Object.Branch;
-import project.aigo.myapplication.Object.Entries;
 import project.aigo.myapplication.Object.Event;
 import project.aigo.myapplication.Object.News;
-import project.aigo.myapplication.Object.ShownAchievement;
 import project.aigo.myapplication.Object.Sport;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -242,6 +238,7 @@ public class APIManager {
         } , new Response.ErrorListener() {
             @Override
             public void onErrorResponse ( VolleyError error ) {
+                globalActivity.snackShort(view, error.getMessage());
                 swipeRefreshLayout.setRefreshing(false);
 
             }
@@ -386,9 +383,9 @@ public class APIManager {
                     }
                 }
                 if (context instanceof EventCalendarActivity) {
-                    ColorDrawable blue = new ColorDrawable(context.getResources().getColor(R.color.caldroid_sky_blue));
+                    ColorDrawable blue = new ColorDrawable(context.getResources().getColor(R.color.caldroid_sky_blue, null));
                     Calendar calendar = Calendar.getInstance();
-                    Map<Date, Drawable> hm = new HashMap();
+                    Map<Date, Drawable> hm = new HashMap<>();
                     for (int i = 0; i < eventsList.size(); i++) {
                         int year = Integer.parseInt(eventsList.get(i).getEvent_start_datetime().substring(0 , 4));
                         int month = Integer.parseInt(eventsList.get(i).getEvent_start_datetime().substring(5 , 7)) - 1;
@@ -432,7 +429,6 @@ public class APIManager {
                             rvEvent.setLayoutManager(new LinearLayoutManager(context));
                             rvEvent.setAdapter(eventAdapter);
                             eventAdapter.notifyDataSetChanged();
-                            Toast.makeText(context , sdf.format(date) , Toast.LENGTH_SHORT).show();
                         }
                     };
 
@@ -565,13 +561,11 @@ public class APIManager {
 
     }
 
-    public void getAchievement ( final Context context , final View view , final Map<String, String> params , final RecyclerView.Adapter adapter ) {
-        Achievement.achievementList.clear();
-        ShownAchievement.shownAchievementList.clear();
+    public void getAchievement ( final Context context , final View view , final Map<String, String> params , final RecyclerView.Adapter adapter, final List<Achievement> achievementList, final List<Achievement> detailAchievementList ) {
+        achievementList.clear();
         String id = params.get("userID");
         String remember_token = params.get("remember_token");
         String year = params.get("year");
-
 
         String url = globalActivity.route("getAchievementbyParam/" + id + "/" + remember_token + "/" + year + "/*");
 
@@ -590,7 +584,7 @@ public class APIManager {
                         String startDate = jsonObject.getString("event_start_datetime");
                         String endDate = jsonObject.getString("event_end_datetime");
 
-                        SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                         java.util.Date startDateObj = null;
                         java.util.Date endDateObj = null;
                         try {
@@ -610,12 +604,25 @@ public class APIManager {
                         achievement.setDesc(jsonObject.getString("description"));
                         achievement.setBranch(jsonObject.getString("branch_name"));
                         achievement.setSport(jsonObject.getString("sport_name"));
-                        Achievement.achievementList.add(achievement);
-                        adapter.notifyDataSetChanged();
+                        achievementList.add(achievement);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                detailAchievementList.clear();
+                int min = 1;
+                int max = 4;
+
+                for (Achievement achievement : achievementList) {
+                    Date startDate = achievement.getEventStart();
+                    SimpleDateFormat formatter = new SimpleDateFormat("MM", Locale.US);//formating according to my need
+                    int tempMonth = Integer.parseInt(formatter.format(startDate));
+                    if (tempMonth >= min && tempMonth <= max) {
+                        detailAchievementList.add(achievement);
+                    }
+                }
+                adapter.notifyDataSetChanged();
             }
 
         } , new Response.ErrorListener() {
@@ -636,7 +643,7 @@ public class APIManager {
         mRequestQueue.add(jsonArrayRequest);
     }
 
-    public void getAchievementNoMonth ( final Context context , final View view , final Map<String, String> params , final LineChart chart , final ArrayList<Entry> entriesChart , final int x ) {
+    public void getAchievementNoMonth ( final Context context , final View view , final Map<String, String> params , final LineChart chart   ) {
         String id = params.get("userID");
         String remember_token = params.get("remember_token");
         String year = params.get("year");
@@ -649,17 +656,18 @@ public class APIManager {
             @Override
             public void onResponse ( JSONArray response ) {
                 final String[] months = new String[12];
-                Entries.entryList.clear();
+                List<Entry> entryList = new ArrayList<>();
+
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
-                        entriesChart.add(new Entry((jsonObject.getInt("id")) - 1 , jsonObject.getInt("y")));
+                        entryList.add(new Entry((jsonObject.getInt("id")) - 1 , jsonObject.getInt("y")));
                         months[i] = jsonObject.getString("month_name");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                LineDataSet dataSet = new LineDataSet(entriesChart , "Customized values");
+                LineDataSet dataSet = new LineDataSet(entryList , "Customized values");
                 LineData data = new LineData(dataSet);
 
                 IAxisValueFormatter formatter = new IAxisValueFormatter() {
@@ -669,8 +677,8 @@ public class APIManager {
                     }
                 };
 
-                dataSet.setColor(ContextCompat.getColor(view.getContext() , R.color.colorBg));
-                dataSet.setValueTextColor(ContextCompat.getColor(view.getContext() , R.color.colorBlack));
+                dataSet.setColor(ContextCompat.getColor(context , R.color.colorBg));
+                dataSet.setValueTextColor(ContextCompat.getColor(context , R.color.colorBlack));
                 dataSet.setCircleColors(R.color.colorBlack);
                 dataSet.setValueTextSize(14);
                 data.setDrawValues(false);

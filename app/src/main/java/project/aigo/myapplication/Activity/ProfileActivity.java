@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Adapter.TabAdapter;
@@ -16,9 +17,7 @@ import project.aigo.myapplication.Fragment.ProfileSettingFragment;
 import project.aigo.myapplication.R;
 
 public class ProfileActivity extends AppCompatActivity {
-    private TabAdapter adapter;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
     private Map<String, String> paramsForSport, paramsForBranch, paramsForEvent;
     private int[] tabIcons = {
             R.drawable.ic_dehaze_white_24dp,
@@ -32,9 +31,9 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        adapter = new TabAdapter(getSupportFragmentManager());
+        ViewPager viewPager = findViewById(R.id.viewPager);
+        tabLayout =  findViewById(R.id.tabLayout);
+        TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
         adapter.addFragment(new ProfileHomeFragment(), "Overview");
         adapter.addFragment(new ProfileCompStatFragment(), "Statistics");
         adapter.addFragment(new ProfileChatFragment(), "Chat");
@@ -47,10 +46,10 @@ public class ProfileActivity extends AppCompatActivity {
         callApi();
     }
     private void setupTabIcons() {
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
-        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
-        tabLayout.getTabAt(3).setIcon(tabIcons[3]);
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(tabIcons[0]);
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(tabIcons[1]);
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(tabIcons[2]);
+        Objects.requireNonNull(tabLayout.getTabAt(3)).setIcon(tabIcons[3]);
     }
 
     private void mapParams () {
@@ -80,22 +79,5 @@ public class ProfileActivity extends AppCompatActivity {
         APIManager apiManagerBranch = new APIManager();
         apiManagerBranch.getBranch(this, paramsForBranch);
     }
-/*
-    @Override
-    public void onClick(View view) {
-        if(view == ivProfileHome){
-            //Bundle bundle = new Bundle();
-            //bundle.putString("name","testing");
-            Global.loadFragment(new ProfileHomeFragment(), flProfile.getId(), this);
-        }
-        else if(view == ivProfileCompStat){
-            Global.loadFragment(new ProfileCompStatFragment(), flProfile.getId(), this);
-        }
-        else if(view == ivProfileChat){
-            Global.loadFragment(new ProfileChatFragment(), flProfile.getId(), this);
-        }
-        else if(view == ivProfileSetting){
-            Global.loadFragment(new ProfileSettingFragment(), flProfile.getId(), this);
-        }
-    }*/
+
 }

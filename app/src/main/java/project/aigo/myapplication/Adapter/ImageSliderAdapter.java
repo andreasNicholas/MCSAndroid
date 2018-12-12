@@ -3,8 +3,6 @@ package project.aigo.myapplication.Adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +10,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import project.aigo.myapplication.Activity.HomeActivity;
-import project.aigo.myapplication.Activity.LoginActivity;
+import java.util.Objects;
+
 import project.aigo.myapplication.Object.Donation;
-import project.aigo.myapplication.Object.News;
 import project.aigo.myapplication.R;
 
 public class ImageSliderAdapter extends PagerAdapter {
     private Context mContext;
     private int[] mImageIds;
     private String[] mImageTitles;
-    LayoutInflater layoutInflater;
 
     public ImageSliderAdapter(Context context){
         mContext = context;
@@ -49,8 +45,8 @@ public class ImageSliderAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        layoutInflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.slide, container, false);
+        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = Objects.requireNonNull(layoutInflater).inflate(R.layout.slide, container, false);
 
         ImageView imageSlide = view.findViewById(R.id.ivSlide);
         TextView titleSlide = view.findViewById(R.id.tvSlide);

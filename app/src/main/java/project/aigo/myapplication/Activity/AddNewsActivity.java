@@ -1,7 +1,6 @@
 package project.aigo.myapplication.Activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -64,12 +63,8 @@ public class AddNewsActivity extends AppCompatActivity implements View.OnClickLi
             ivNewsImage.getLayoutParams().height = ((this.getResources().getDisplayMetrics().heightPixels) / 4);
             etNewsTitle.setText(currentTitle);
             etNewsContent.setText(currentDescription);
-            GlobalActivity globalActivity = new GlobalActivity();
-            globalActivity.snackShort(this.ivNewsImage, "THIS IS EDIT");
         } else {
             Picasso.get().load(DEFAULT_IMAGE).into(ivNewsImage);
-            GlobalActivity globalActivity = new GlobalActivity();
-            globalActivity.toastShort(this.getBaseContext(), "THIS IS NOT EDIT");
         }
 
         addorEdit = (bundle == null) ? "Add" : "Edit";

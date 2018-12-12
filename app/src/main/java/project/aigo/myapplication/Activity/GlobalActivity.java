@@ -1,6 +1,5 @@
 package project.aigo.myapplication.Activity;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -24,18 +23,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-
-import project.aigo.myapplication.Fragment.DatePickerFragment;
-import project.aigo.myapplication.Fragment.ViewNewsFragment;
-import project.aigo.myapplication.R;
 
 public class GlobalActivity extends AppCompatActivity {
 
@@ -75,16 +66,6 @@ public class GlobalActivity extends AppCompatActivity {
         if (bundle != null) fragment.setArguments(bundle);
 
         FragmentManager fm = ((AppCompatActivity)context).getFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(view, fragment, String.valueOf(fragment.getId()));
-        if (backStack != null) fragmentTransaction.addToBackStack(backStack);
-        fragmentTransaction.commit();
-    }
-
-    public void loadFragment(Activity activity, Fragment fragment , int view , Context context , Bundle bundle , String backStack ) {
-        if (bundle != null) fragment.setArguments(bundle);
-
-        FragmentManager fm = activity.getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(view, fragment, String.valueOf(fragment.getId()));
         if (backStack != null) fragmentTransaction.addToBackStack(backStack);
