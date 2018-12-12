@@ -130,12 +130,6 @@ public class ProfileCompStatFragment extends Fragment {
         return view;
     }
 
-    //BUGGY, SEARCH FOR OTHER ALTERNATIVE WHY JSON ARRAY OBJECT IS NULL WHEN ON CREATE
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
     private void mapParams () {
         GlobalActivity globalActivity = new GlobalActivity();
         String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(getActivity());
@@ -212,10 +206,10 @@ public class ProfileCompStatFragment extends Fragment {
     private void generateFilter(View view) {
         ArrayList<String> years = new ArrayList<String>();
         int thisYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = thisYear; i >= 1900; i--) {
+        for (int i = thisYear; i >= 2000; i--) {
             years.add(Integer.toString(i));
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, years);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.select_dialog_item, years);
 
         spinYear.setAdapter(adapter);
     }

@@ -4,9 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +19,6 @@ public class ProfileActivity extends AppCompatActivity {
     private TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    FrameLayout flProfile;
-    ImageView ivProfileHome, ivProfileCompStat,ivProfileChat, ivProfileSetting;
     private Map<String, String> paramsForSport, paramsForBranch, paramsForEvent;
     private int[] tabIcons = {
             R.drawable.ic_dehaze_white_24dp,

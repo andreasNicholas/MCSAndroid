@@ -372,7 +372,7 @@ public class APIManager {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
                         Event event = new Event();
-                        /*event.setId(jsonObject.getString("id"));
+                        event.setId(jsonObject.getString("id"));
                         event.setEvent_name(jsonObject.getString("event_name"));
                         event.setEvent_start_datetime(jsonObject.getString("event_start_datetime"));
                         event.setEvent_end_datetime(jsonObject.getString("event_end_datetime"));
@@ -380,7 +380,7 @@ public class APIManager {
                         event.setEvent_image_path(jsonObject.getString("event_image_path"));
                         event.setViews_count(jsonObject.getString("views_count"));
                         event.setCreated_by(jsonObject.getString("created_by"));
-                        eventsList.add(event);*/
+                        eventsList.add(event);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -390,14 +390,14 @@ public class APIManager {
                     Calendar calendar = Calendar.getInstance();
                     Map<Date, Drawable> hm = new HashMap();
                     for (int i = 0; i < eventsList.size(); i++) {
-                        /*int year = Integer.parseInt(eventsList.get(i).getEvent_start_datetime().substring(0 , 4));
+                        int year = Integer.parseInt(eventsList.get(i).getEvent_start_datetime().substring(0 , 4));
                         int month = Integer.parseInt(eventsList.get(i).getEvent_start_datetime().substring(5 , 7)) - 1;
                         int day = Integer.parseInt(eventsList.get(i).getEvent_start_datetime().substring(8 , 10));
                         calendar.set(Calendar.YEAR , year);
                         calendar.set(Calendar.MONTH , month);
                         calendar.set(Calendar.DAY_OF_MONTH , day);
                         Date date = calendar.getTime();
-                        hm.put(date , blue);*/
+                        hm.put(date , blue);
                     }
 
                     CalendarView eventCalendar = ((EventCalendarActivity) context).findViewById(R.id.eventCalendar);
@@ -412,7 +412,7 @@ public class APIManager {
 
                     caldroidFragment.setBackgroundDrawableForDates(hm);
 
-                    /*final CaldroidListener caldroidListener = new CaldroidListener() {
+                    final CaldroidListener caldroidListener = new CaldroidListener() {
                         @Override
                         public void onSelectDate ( Date date , View view ) {
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd" , Locale.US);
@@ -442,7 +442,7 @@ public class APIManager {
                     t.replace(R.id.eventCalendar , caldroidFragment);
                     t.commit();
 
-                    eventCalendar.setVisibility(View.VISIBLE);*/
+                    eventCalendar.setVisibility(View.VISIBLE);
 
                 } else {
                     adapter.notifyDataSetChanged();
@@ -565,7 +565,7 @@ public class APIManager {
 
     }
 
-    public void getAchievement(final Context context, final View view, final Map<String, String> params, final RecyclerView.Adapter adapter) {
+    public void getAchievement ( final Context context , final View view , final Map<String, String> params , final RecyclerView.Adapter adapter ) {
         Achievement.achievementList.clear();
         ShownAchievement.shownAchievementList.clear();
         String id = params.get("userID");
@@ -573,72 +573,70 @@ public class APIManager {
         String year = params.get("year");
 
 
-        for(int i=1; i<13;i++) {
-            String url = globalActivity.route("getAchievementbyParam/" + id + "/" + remember_token + "/" + year + "/" + i);
+        String url = globalActivity.route("getAchievementbyParam/" + id + "/" + remember_token + "/" + year + "/*");
 
-            RequestQueue mRequestQueue = Volley.newRequestQueue(context);
-            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
-                @SuppressLint("DefaultLocale")
-                @Override
-                public void onResponse(JSONArray response) {
-                    for (int j = 0; j < response.length(); j++) {
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url , new Response.Listener<JSONArray>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse ( JSONArray response ) {
+                for (int j = 0; j < response.length(); j++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(j);
+
+                        Achievement achievement = new Achievement();
+                        achievement.setAchievementId(jsonObject.getInt("id"));
+                        achievement.setEventName(jsonObject.getString("event_name"));
+                        String startDate = jsonObject.getString("event_start_datetime");
+                        String endDate = jsonObject.getString("event_end_datetime");
+
+                        SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
+                        java.util.Date startDateObj = null;
+                        java.util.Date endDateObj = null;
                         try {
-                            JSONObject jsonObject = response.getJSONObject(j);
-
-                            Achievement achievement = new Achievement();
-                            achievement.setAchievementId(jsonObject.getInt("id"));
-                            achievement.setEventName(jsonObject.getString("event_name"));
-                            String startDate = jsonObject.getString("event_start_datetime");
-                            String endDate = jsonObject.getString("event_end_datetime");
-
-                            SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
-                            java.util.Date startDateObj = null;
-                            java.util.Date endDateObj = null;
-                            try {
-                                startDateObj = curFormater.parse(startDate);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            try {
-                                endDateObj = curFormater.parse(endDate);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-
-                            achievement.setEventStart(startDateObj);
-                            achievement.setEventEnd(endDateObj);
-                            achievement.setPosition(jsonObject.getInt("position"));
-                            achievement.setDesc(jsonObject.getString("description"));
-                            achievement.setBranch(jsonObject.getString("branch_name"));
-                            achievement.setSport(jsonObject.getString("sport_name"));
-                            Achievement.achievementList.add(achievement);
-                            adapter.notifyDataSetChanged();
-                        } catch (JSONException e) {
+                            startDateObj = curFormater.parse(startDate);
+                        } catch (ParseException e) {
                             e.printStackTrace();
                         }
+                        try {
+                            endDateObj = curFormater.parse(endDate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        achievement.setEventStart(startDateObj);
+                        achievement.setEventEnd(endDateObj);
+                        achievement.setPosition(jsonObject.getInt("position"));
+                        achievement.setDesc(jsonObject.getString("description"));
+                        achievement.setBranch(jsonObject.getString("branch_name"));
+                        achievement.setSport(jsonObject.getString("sport_name"));
+                        Achievement.achievementList.add(achievement);
+                        adapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
+            }
 
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    globalActivity.snackShort(view, error.getMessage());
-                }
+        } , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse ( VolleyError error ) {
+                globalActivity.snackShort(view , error.getMessage());
+            }
 
-            }) {
-                @Override
-                protected VolleyError parseNetworkError(VolleyError volleyError) {
-                    if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
-                        volleyError = new VolleyError(new String(volleyError.networkResponse.data));
-                    }
-                    return volleyError;
+        }) {
+            @Override
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
                 }
-            };
-            mRequestQueue.add(jsonArrayRequest);
-        }
+                return volleyError;
+            }
+        };
+        mRequestQueue.add(jsonArrayRequest);
     }
 
-    public void getAchievementNoMonth(final Context context, final View view, final Map<String, String> params, final LineChart chart, final ArrayList<Entry> entriesChart, final int x) {
+    public void getAchievementNoMonth ( final Context context , final View view , final Map<String, String> params , final LineChart chart , final ArrayList<Entry> entriesChart , final int x ) {
         String id = params.get("userID");
         String remember_token = params.get("remember_token");
         String year = params.get("year");
@@ -646,33 +644,33 @@ public class APIManager {
         String url = globalActivity.route("getAchievementbyParam/" + id + "/" + remember_token + "/" + year);
 
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url , new Response.Listener<JSONArray>() {
             @SuppressLint("DefaultLocale")
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse ( JSONArray response ) {
                 final String[] months = new String[12];
                 Entries.entryList.clear();
-                for (int i = 0; i < 12; i++) {
+                for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
-                        entriesChart.add(new Entry((jsonObject.getInt("id"))-1, jsonObject.getInt("y")));
+                        entriesChart.add(new Entry((jsonObject.getInt("id")) - 1 , jsonObject.getInt("y")));
                         months[i] = jsonObject.getString("month_name");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                LineDataSet dataSet = new LineDataSet(entriesChart, "Customized values");
+                LineDataSet dataSet = new LineDataSet(entriesChart , "Customized values");
                 LineData data = new LineData(dataSet);
 
                 IAxisValueFormatter formatter = new IAxisValueFormatter() {
                     @Override
-                    public String getFormattedValue(float value, AxisBase axis) {
+                    public String getFormattedValue ( float value , AxisBase axis ) {
                         return months[(int) value];
                     }
                 };
 
-                dataSet.setColor(ContextCompat.getColor(view.getContext(), R.color.colorBg));
-                dataSet.setValueTextColor(ContextCompat.getColor(view.getContext(), R.color.colorBlack));
+                dataSet.setColor(ContextCompat.getColor(view.getContext() , R.color.colorBg));
+                dataSet.setValueTextColor(ContextCompat.getColor(view.getContext() , R.color.colorBlack));
                 dataSet.setCircleColors(R.color.colorBlack);
                 dataSet.setValueTextSize(14);
                 data.setDrawValues(false);
@@ -688,7 +686,7 @@ public class APIManager {
                 legend.setTextColor(R.color.colorBg);
                 legend.setEnabled(true);
                 ArrayList<LegendEntry> legendEntry = new ArrayList<>();
-                legendEntry.add(new LegendEntry("Position", Legend.LegendForm.CIRCLE, 15f, 10f, null, Color.RED));
+                legendEntry.add(new LegendEntry("Position" , Legend.LegendForm.CIRCLE , 15f , 10f , null , Color.RED));
                 legend.setCustom(legendEntry);
 
                 Description description = chart.getDescription();
@@ -709,15 +707,15 @@ public class APIManager {
                 chart.animateX(2500);
                 chart.moveViewToX(0);
             }
-        }, new Response.ErrorListener() {
+        } , new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                globalActivity.snackShort(view, error.getMessage());
+            public void onErrorResponse ( VolleyError error ) {
+                globalActivity.snackShort(view , error.getMessage());
             }
 
         }) {
             @Override
-            protected VolleyError parseNetworkError(VolleyError volleyError) {
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
 
                     volleyError = new VolleyError(new String(volleyError.networkResponse.data));
@@ -729,7 +727,7 @@ public class APIManager {
         mRequestQueue.add(jsonArrayRequest);
     }
 
-    public void getSport(final Context context, final Map<String, String> params){
+    public void getSport ( final Context context , final Map<String, String> params ) {
         Sport.sportList.clear();
         String id = params.get("userID");
         String remember_token = params.get("remember_token");
@@ -737,10 +735,10 @@ public class APIManager {
         String url = globalActivity.route("getSports/" + id + "/" + remember_token);
 
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url , new Response.Listener<JSONArray>() {
             @SuppressLint("DefaultLocale")
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse ( JSONArray response ) {
                 for (int j = 0; j < response.length(); j++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(j);
@@ -755,14 +753,14 @@ public class APIManager {
                 }
             }
 
-        }, new Response.ErrorListener() {
+        } , new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onErrorResponse ( VolleyError error ) {
             }
 
         }) {
             @Override
-            protected VolleyError parseNetworkError(VolleyError volleyError) {
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     volleyError = new VolleyError(new String(volleyError.networkResponse.data));
                 }
@@ -772,7 +770,7 @@ public class APIManager {
         mRequestQueue.add(jsonArrayRequest);
     }
 
-    public void getBranch(final Context context, final Map<String, String> params){
+    public void getBranch ( final Context context , final Map<String, String> params ) {
         Branch.branchList.clear();
         String id = params.get("userID");
         String remember_token = params.get("remember_token");
@@ -780,10 +778,10 @@ public class APIManager {
         String url = globalActivity.route("getBranches/" + id + "/" + remember_token);
 
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url , new Response.Listener<JSONArray>() {
             @SuppressLint("DefaultLocale")
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse ( JSONArray response ) {
                 for (int j = 0; j < response.length(); j++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(j);
@@ -800,14 +798,14 @@ public class APIManager {
                 }
             }
 
-        }, new Response.ErrorListener() {
+        } , new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onErrorResponse ( VolleyError error ) {
             }
 
         }) {
             @Override
-            protected VolleyError parseNetworkError(VolleyError volleyError) {
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     volleyError = new VolleyError(new String(volleyError.networkResponse.data));
                 }
@@ -817,7 +815,7 @@ public class APIManager {
         mRequestQueue.add(jsonArrayRequest);
     }
 
-    public void getAllEvent(final Context context, final Map<String, String> params){
+    public void getAllEvent ( final Context context , final Map<String, String> params ) {
         Event.eventList.clear();
         String id = params.get("userID");
         String remember_token = params.get("remember_token");
@@ -825,10 +823,10 @@ public class APIManager {
         String url = globalActivity.route("getAllEvents/" + id + "/" + remember_token);
 
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url , new Response.Listener<JSONArray>() {
             @SuppressLint("DefaultLocale")
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse ( JSONArray response ) {
                 for (int j = 0; j < response.length(); j++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(j);
@@ -843,14 +841,14 @@ public class APIManager {
                 }
             }
 
-        }, new Response.ErrorListener() {
+        } , new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onErrorResponse ( VolleyError error ) {
             }
 
         }) {
             @Override
-            protected VolleyError parseNetworkError(VolleyError volleyError) {
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     volleyError = new VolleyError(new String(volleyError.networkResponse.data));
                 }
@@ -860,29 +858,29 @@ public class APIManager {
         mRequestQueue.add(jsonArrayRequest);
     }
 
-    public void addSport(final Context context, final HashMap<String, String> params, final SportAdapter adapter) {
+    public void addSport ( final Context context , final HashMap<String, String> params , final SportAdapter adapter ) {
         String url = globalActivity.route("addSport");
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
 
-        StringRequest mStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        StringRequest mStringRequest = new StringRequest(Request.Method.POST , url , new Response.Listener<String>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse ( String response ) {
                 adapter.notifyDataSetChanged();
-                globalActivity.toastShort(context, response);
+                globalActivity.toastShort(context , response);
             }
-        }, new Response.ErrorListener() {
+        } , new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onErrorResponse ( VolleyError error ) {
             }
         }) {
             @Override
-            protected Map<String, String> getParams() {
+            protected Map<String, String> getParams () {
 
                 return params;
             }
 
             @Override
-            protected VolleyError parseNetworkError(VolleyError volleyError) {
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
 
                     volleyError = new VolleyError(new String(volleyError.networkResponse.data));
@@ -895,29 +893,29 @@ public class APIManager {
         mRequestQueue.add(mStringRequest);
     }
 
-    public void addBranch(final Context context, final HashMap<String, String> params, final BranchAdapter adapter) {
+    public void addBranch ( final Context context , final HashMap<String, String> params , final BranchAdapter adapter ) {
         String url = globalActivity.route("addBranch");
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
 
-        StringRequest mStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        StringRequest mStringRequest = new StringRequest(Request.Method.POST , url , new Response.Listener<String>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse ( String response ) {
                 adapter.notifyDataSetChanged();
-                globalActivity.toastShort(context, response);
+                globalActivity.toastShort(context , response);
             }
-        }, new Response.ErrorListener() {
+        } , new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onErrorResponse ( VolleyError error ) {
             }
         }) {
             @Override
-            protected Map<String, String> getParams() {
+            protected Map<String, String> getParams () {
 
                 return params;
             }
 
             @Override
-            protected VolleyError parseNetworkError(VolleyError volleyError) {
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
 
                     volleyError = new VolleyError(new String(volleyError.networkResponse.data));

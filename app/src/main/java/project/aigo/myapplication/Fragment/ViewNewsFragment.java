@@ -21,7 +21,6 @@ import java.util.Map;
 import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Activity.AddNewsActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
-import project.aigo.myapplication.Activity.HomeActivity;
 import project.aigo.myapplication.Activity.MainActivity;
 import project.aigo.myapplication.Activity.NewsActivity;
 import project.aigo.myapplication.Adapter.NewsAdapter;
@@ -103,7 +102,7 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
         });
         refresh();
 
-        if (role.equals("athlete") || getActivity() instanceof HomeActivity)
+        if (role.equals("athlete") || getActivity() instanceof MainActivity)
             fabAddNews.setVisibility(View.INVISIBLE);
 
         return view;
