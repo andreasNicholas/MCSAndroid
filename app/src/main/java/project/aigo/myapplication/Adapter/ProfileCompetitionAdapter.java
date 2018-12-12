@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import project.aigo.myapplication.Object.Achievement;
 import project.aigo.myapplication.R;
@@ -28,8 +27,7 @@ public class ProfileCompetitionAdapter extends RecyclerView.Adapter<ProfileCompe
     @NonNull
     @Override
     public ProfileCompetitionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = Objects.requireNonNull(inflater).inflate(R.layout.achievement , parent , false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.achievement , parent , false);
 
         return new ViewHolder(v);
     }

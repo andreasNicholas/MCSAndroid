@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.Objects;
-
 import project.aigo.myapplication.Object.Donation;
 import project.aigo.myapplication.R;
 
@@ -45,8 +42,7 @@ public class ImageSliderAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = Objects.requireNonNull(layoutInflater).inflate(R.layout.slide, container, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.slide, container, false);
 
         ImageView imageSlide = view.findViewById(R.id.ivSlide);
         TextView titleSlide = view.findViewById(R.id.tvSlide);
