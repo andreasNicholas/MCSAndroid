@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "692063649955",
+    "firebase_url": "https://mcsaigo-3ae65.firebaseio.com",
+    "project_id": "mcsaigo-3ae65",
+    "storage_bucket": "mcsaigo-3ae65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:692063649955:android:0a520f01fdbd59d8",
+        "android_client_info": {
+          "package_name": "project.aigo.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "692063649955-gav4te7mnpb7apta7mvfbphfsoj8itji.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0Oa1Mm4xX0_vmu-ZemyHfB7KXo3JIisk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

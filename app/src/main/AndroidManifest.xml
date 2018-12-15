@@ -40,7 +40,8 @@
         <activity
             android:name=".Activity.MainActivity"
             android:label="@string/title_activity_main" />
-        <activity android:name=".Activity.AddNewsActivity"></activity>
+        <activity android:name=".Activity.AddNewsActivity" />
+        <activity android:name=".Activity.ChatActivity"></activity>
     </application>
 
 </manifest>

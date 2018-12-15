@@ -7,12 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import project.aigo.myapplication.APIManager;
-import project.aigo.myapplication.Fragment.ProfileCompStatFragment;
 import project.aigo.myapplication.R;
 
 public class LoginActivity extends GlobalActivity implements View.OnClickListener {
@@ -35,10 +33,13 @@ public class LoginActivity extends GlobalActivity implements View.OnClickListene
         tvRegister = findViewById(R.id.tvRegister);
         btnLogin.setOnClickListener(this);
         tvRegister.setOnClickListener(this);
+
+
     }
 
     @Override
     public void onClick ( View view ) {
+
         if (view == btnLogin) {
 
             Map<String, String> params = new HashMap<>();

@@ -16,9 +16,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.CalendarView;
-
+import android.widget.EditText;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -38,6 +40,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
@@ -59,6 +63,7 @@ import project.aigo.myapplication.Activity.EventCalendarActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Activity.LoginActivity;
 import project.aigo.myapplication.Activity.MainActivity;
+import project.aigo.myapplication.Adapter.AthleteAdapter;
 import project.aigo.myapplication.Adapter.BranchAdapter;
 import project.aigo.myapplication.Adapter.EventAdapter;
 import project.aigo.myapplication.Adapter.SportAdapter;
@@ -67,6 +72,7 @@ import project.aigo.myapplication.Object.Branch;
 import project.aigo.myapplication.Object.Event;
 import project.aigo.myapplication.Object.News;
 import project.aigo.myapplication.Object.Sport;
+import project.aigo.myapplication.Object.User;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -86,10 +92,17 @@ public class APIManager {
         StringRequest mStringRequest = new StringRequest(Request.Method.POST , url , new Response.Listener<String>() {
             @Override
             public void onResponse ( String response ) {
-                globalActivity.toastShort(context , response);
+                final String[] split = response.split(";");
+
+                globalActivity.toastShort(context , split[1]);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run () {
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference myRef = database.getReference();
+                        myRef.child("users").child(split[0]).setValue(params);
+                        myRef.push();
+
                         Intent intent = new Intent(context , LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         context.startActivity(intent);
@@ -238,7 +251,7 @@ public class APIManager {
         } , new Response.ErrorListener() {
             @Override
             public void onErrorResponse ( VolleyError error ) {
-                globalActivity.snackShort(view, error.getMessage());
+                globalActivity.snackShort(view , error.getMessage());
                 swipeRefreshLayout.setRefreshing(false);
 
             }
@@ -383,7 +396,7 @@ public class APIManager {
                     }
                 }
                 if (context instanceof EventCalendarActivity) {
-                    ColorDrawable blue = new ColorDrawable(context.getResources().getColor(R.color.caldroid_sky_blue, null));
+                    ColorDrawable blue = new ColorDrawable(context.getResources().getColor(R.color.caldroid_sky_blue , null));
                     Calendar calendar = Calendar.getInstance();
                     Map<Date, Drawable> hm = new HashMap<>();
                     for (int i = 0; i < eventsList.size(); i++) {
@@ -424,7 +437,7 @@ public class APIManager {
 
                             SharedPreferences sp = context.getSharedPreferences("spLogin" , MODE_PRIVATE);
 
-                            EventAdapter eventAdapter = new EventAdapter(context,eventArrayList,sp.getString("role",""), view);
+                            EventAdapter eventAdapter = new EventAdapter(context , eventArrayList , sp.getString("role" , "") , view);
                             RecyclerView rvEvent = ((EventCalendarActivity) context).findViewById(R.id.rvEventCalendar);
                             rvEvent.setLayoutManager(new LinearLayoutManager(context));
                             rvEvent.setAdapter(eventAdapter);
@@ -561,7 +574,7 @@ public class APIManager {
 
     }
 
-    public void getAchievement ( final Context context , final View view , final Map<String, String> params , final RecyclerView.Adapter adapter, final List<Achievement> achievementList, final List<Achievement> detailAchievementList ) {
+    public void getAchievement ( final Context context , final View view , final Map<String, String> params , final RecyclerView.Adapter adapter , final List<Achievement> achievementList , final List<Achievement> detailAchievementList ) {
         achievementList.clear();
         String id = params.get("userID");
         String remember_token = params.get("remember_token");
@@ -584,7 +597,7 @@ public class APIManager {
                         String startDate = jsonObject.getString("event_start_datetime");
                         String endDate = jsonObject.getString("event_end_datetime");
 
-                        SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                        SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd" , Locale.US);
                         java.util.Date startDateObj = null;
                         java.util.Date endDateObj = null;
                         try {
@@ -616,7 +629,7 @@ public class APIManager {
 
                 for (Achievement achievement : achievementList) {
                     Date startDate = achievement.getEventStart();
-                    SimpleDateFormat formatter = new SimpleDateFormat("MM", Locale.US);//formating according to my need
+                    SimpleDateFormat formatter = new SimpleDateFormat("MM" , Locale.US);//formating according to my need
                     int tempMonth = Integer.parseInt(formatter.format(startDate));
                     if (tempMonth >= min && tempMonth <= max) {
                         detailAchievementList.add(achievement);
@@ -643,7 +656,7 @@ public class APIManager {
         mRequestQueue.add(jsonArrayRequest);
     }
 
-    public void getAchievementNoMonth ( final Context context , final View view , final Map<String, String> params , final LineChart chart   ) {
+    public void getAchievementNoMonth ( final Context context , final View view , final Map<String, String> params , final LineChart chart ) {
         String id = params.get("userID");
         String remember_token = params.get("remember_token");
         String year = params.get("year");
@@ -935,4 +948,122 @@ public class APIManager {
 
         mRequestQueue.add(mStringRequest);
     }
+
+    public void getAthlete ( final Context context , final View view , final Map<String, String> params , final AthleteAdapter adapter , final List<User> userList , final SwipeRefreshLayout swipeRefreshLayout , final EditText editText ) {
+        String id = params.get("userID");
+        String remember_token = params.get("remember_token");
+        String athleteID = params.get("athleteID");
+
+        String url = globalActivity.route("getAthlete/" + id + "/" + remember_token + athleteID);
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url , new Response.Listener<JSONArray>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse ( JSONArray response ) {
+                final List<User> tempList = new ArrayList<>();
+                userList.clear();
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+
+                        String id = jsonObject.getString("id");
+                        String name = jsonObject.getString("name");
+                        String email = jsonObject.getString("email");
+                        String photo = jsonObject.getString("photo");
+                        String phone = jsonObject.getString("phone");
+                        String birthDate = jsonObject.getString("birthdate");
+                        String address = jsonObject.getString("address");
+                        String gender = jsonObject.getString("gender");
+                        StringBuilder builder = new StringBuilder();
+                        JSONArray jsonArray = jsonObject.getJSONArray("branches");
+
+                        for (int j = 0; j < jsonArray.length(); j++) {
+                            JSONObject object = jsonArray.getJSONObject(j);
+                            String sport_name = object.getJSONObject("sports").getString("sport_name");
+                            String branch_name = object.getString("branch_name");
+                            String sport_branch = String.format("%s - %s \n" , sport_name , branch_name);
+                            builder.append(sport_branch);
+                        }
+
+                        User user = new User(id , name , email , photo , phone , birthDate , address , gender , builder.toString());
+                        tempList.add(user);
+
+                    } catch (JSONException e) {
+                        globalActivity.toastShort(context , e.toString());
+                    }
+                }
+
+                if (!globalActivity.toStringTrim(editText).isEmpty()) {
+
+                    String query = globalActivity.toStringTrim(editText);
+
+                    for (User user : tempList) {
+                        if (user.getName().contains(query)) {
+                            userList.add(user);
+                        }
+                    }
+                } else {
+                    userList.addAll(tempList);
+                }
+                adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged ( CharSequence charSequence , int i , int i1 , int i2 ) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged ( Editable editable ) {
+                        userList.clear();
+
+                        if (!globalActivity.toStringTrim(editText).isEmpty()) {
+
+                            String query = globalActivity.toStringTrim(editText);
+
+                            for (User user : tempList) {
+                                if (user.getName().contains(query)) {
+                                    userList.add(user);
+                                }
+                            }
+                        } else {
+                            userList.addAll(tempList);
+                        }
+                        adapter.notifyDataSetChanged();
+
+                    }
+
+                });
+
+            }
+        } , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse ( VolleyError error ) {
+                globalActivity.snackShort(view , error.getMessage());
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+
+        }) {
+            @Override
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+
+                return volleyError;
+            }
+        };
+        mRequestQueue.add(jsonArrayRequest);
+    }
+
+
 }

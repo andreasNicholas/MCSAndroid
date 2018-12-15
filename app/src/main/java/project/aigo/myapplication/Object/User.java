@@ -1,29 +1,36 @@
 package project.aigo.myapplication.Object;
 
-import java.util.Date;
-import java.util.Vector;
-
 public class User {
-    public static Vector<User> userList = new Vector<>();
 
+    private String userID;
     private String name;
     private String email;
     private String password;
+    private String photo;
     private String phone;
-    private Date birthDate;
+    private String birthDate;
     private String address;
     private String gender;
-    private int user_id;
-    private String[] user_branch;
+    private String sport_branch;
 
-    public User ( String name , String email , String password , String phone , Date birthDate , String address , String gender ) {
+    public User ( String userID , String name , String email , String photo , String phone , String birthDate , String address , String gender , String sport_branch ) {
+        this.userID = userID;
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.photo = photo;
         this.phone = phone;
         this.birthDate = birthDate;
         this.address = address;
         this.gender = gender;
+        this.sport_branch = sport_branch;
+    }
+
+    public String getUserID () {
+        return userID;
+    }
+
+    public void setUserID ( String userID ) {
+        this.userID = userID;
     }
 
     public String getName () {
@@ -50,6 +57,14 @@ public class User {
         this.password = password;
     }
 
+    public String getPhoto () {
+        return photo;
+    }
+
+    public void setPhoto ( String photo ) {
+        this.photo = photo;
+    }
+
     public String getPhone () {
         return phone;
     }
@@ -58,11 +73,11 @@ public class User {
         this.phone = phone;
     }
 
-    public Date getBirthDate () {
+    public String getBirthDate () {
         return birthDate;
     }
 
-    public void setBirthDate ( Date birthDate ) {
+    public void setBirthDate ( String birthDate ) {
         this.birthDate = birthDate;
     }
 
@@ -82,4 +97,11 @@ public class User {
         this.gender = gender;
     }
 
+    public String getSport_branch () {
+        return sport_branch;
+    }
+
+    public void setSport_branch ( String sport_branch ) {
+        this.sport_branch = sport_branch;
+    }
 }

@@ -32,7 +32,7 @@ public class MainActivity extends GlobalActivity {
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
         adapter.addFragment(new HomeFragment(), "Home");
         adapter.addFragment(new SearchAthleteFragment(), "Athletes");
-        adapter.addFragment(new ProfileChatFragment(), "Events");
+        adapter.addFragment(new ProfileChatFragment(), "Chat");
         adapter.addFragment(new ProfileSettingFragment(), "My Profile");
 
         viewPager.setAdapter(adapter);
