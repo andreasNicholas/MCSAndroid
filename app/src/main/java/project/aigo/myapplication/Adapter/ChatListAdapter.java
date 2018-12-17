@@ -10,21 +10,29 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.util.Date;
 import java.util.List;
 
 import project.aigo.myapplication.Activity.ChatActivity;
+import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Object.ChatList;
 import project.aigo.myapplication.R;
+
+import static project.aigo.myapplication.Activity.GlobalActivity.DEFAULT_IMAGE;
 
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHolder> {
 
     private Context mContext;
     private List<ChatList> chatLists;
+    private String sender;
 
-    public ChatListAdapter ( Context context , List<ChatList> chatLists ) {
+    public ChatListAdapter ( Context context , List<ChatList> chatLists, String sender ) {
         this.mContext = context;
         this.chatLists = chatLists;
+        this.sender = sender;
     }
 
     @NonNull
@@ -38,10 +46,23 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     @Override
     public void onBindViewHolder ( @NonNull ViewHolder holder , int i ) {
 
+        GlobalActivity globalActivity = new GlobalActivity();
         final int position = holder.getAdapterPosition();
         final ChatList chatList = chatLists.get(position);
 
-        holder.tvName.setText(chatList.getId());
+        if (!chatList.getLastTimeChat().isEmpty()){
+            long lastTimeChat = Long.parseLong(chatList.getLastTimeChat());
+            String date = globalActivity.getFriendlyTime(new Date(lastTimeChat));
+            holder.tvLastTime.setText(date);
+        }
+
+
+
+        holder.tvName.setText(chatList.getName());
+        holder.tvLastChat.setText(chatList.getLastChat());
+        String img = (chatList.getPhoto().equals("null")) ? DEFAULT_IMAGE : chatList.getPhoto();
+        Picasso.get().load(img).into(holder.ivPhoto);
+
 
     }
 
@@ -52,20 +73,27 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivPhoto;
-        TextView tvName, tvLastDate, tvLastChat;
+        TextView tvName, tvLastTime, tvLastChat;
 
         private ViewHolder ( View itemView ) {
             super(itemView);
 
             ivPhoto = itemView.findViewById(R.id.ivPhoto);
             tvName = itemView.findViewById(R.id.tvName);
-            tvLastDate = itemView.findViewById(R.id.tvLastDate);
+            tvLastTime = itemView.findViewById(R.id.tvLastTime);
             tvLastChat = itemView.findViewById(R.id.tvLastChat);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick ( View view ) {
-                    mContext.startActivity(new Intent(mContext, ChatActivity.class));
+                    int position = getAdapterPosition();
+                    ChatList chatList = chatLists.get(position);
+
+                    Intent intent = new Intent(mContext, ChatActivity.class);
+                    intent.putExtra("roomKey", chatList.getId());
+                    intent.putExtra("sender",sender);
+                    mContext.startActivity(intent);
+
                 }
             });
 

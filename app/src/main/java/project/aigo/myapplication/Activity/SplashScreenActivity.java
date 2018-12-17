@@ -59,7 +59,7 @@ public class SplashScreenActivity extends GlobalActivity {
                     athlete2Dummy.put("birth_date" , "2018-01-01");
                     athlete2Dummy.put("email" , "athlete2@athlete.com");
                     athlete2Dummy.put("gender" , "Male");
-                    athlete2Dummy.put("name" , "athlete");
+                    athlete2Dummy.put("name" , "athlete2");
                     athlete2Dummy.put("password" , "athlete2");
                     athlete2Dummy.put("password_confirmation" , "athlete2");
                     athlete2Dummy.put("phone" , "0000");

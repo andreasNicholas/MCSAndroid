@@ -25,6 +25,7 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -50,17 +51,17 @@ public class GlobalActivity extends AppCompatActivity {
         return "https://mobileapi.bslc.or.id/" + uri;
     }
 
-    @Override
-    public void onBackPressed () {
-        if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
-            super.onBackPressed();
-            return;
-        } else {
-            toastShort(getBaseContext() , "Tap back button in order to exit");
-        }
-
-        mBackPressed = System.currentTimeMillis();
-    }
+//    @Override
+//    public void onBackPressed () {
+//        if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
+//            super.onBackPressed();
+//            return;
+//        } else {
+//            toastShort(getBaseContext() , "Tap back button in order to exit");
+//        }
+//
+//        mBackPressed = System.currentTimeMillis();
+//    }
 
     public void loadFragment (Fragment fragment , int view , Context context , Bundle bundle , String backStack ) {
         if (bundle != null) fragment.setArguments(bundle);
@@ -155,5 +156,87 @@ public class GlobalActivity extends AppCompatActivity {
 
         return "." + path.substring(Objects.requireNonNull(path).lastIndexOf('.') + 1 , path.length());
 
+    }
+
+    public String getFriendlyTime(Date dateTime) {
+        StringBuilder sb = new StringBuilder();
+        Date current = Calendar.getInstance().getTime();
+        long diffInSeconds = (current.getTime() - dateTime.getTime()) / 1000;
+
+        long sec = (diffInSeconds >= 60 ? diffInSeconds % 60 : diffInSeconds);
+        long min = (diffInSeconds = (diffInSeconds / 60)) >= 60 ? diffInSeconds % 60 : diffInSeconds;
+        long hrs = (diffInSeconds = (diffInSeconds / 60)) >= 24 ? diffInSeconds % 24 : diffInSeconds;
+        long days = (diffInSeconds = (diffInSeconds / 24)) >= 30 ? diffInSeconds % 30 : diffInSeconds;
+        long months = (diffInSeconds = (diffInSeconds / 30)) >= 12 ? diffInSeconds % 12 : diffInSeconds;
+        long years = (diffInSeconds = (diffInSeconds / 12));
+
+        if (years > 0) {
+            if (years == 1) {
+                sb.append("a year");
+            } else {
+                sb.append(years + " years");
+            }
+            if (years <= 6 && months > 0) {
+                if (months == 1) {
+                    sb.append(" and a month");
+                } else {
+                    sb.append(" and " + months + " months");
+                }
+            }
+        } else if (months > 0) {
+            if (months == 1) {
+                sb.append("a month");
+            } else {
+                sb.append(months + " months");
+            }
+            if (months <= 6 && days > 0) {
+                if (days == 1) {
+                    sb.append(" and a day");
+                } else {
+                    sb.append(" and " + days + " days");
+                }
+            }
+        } else if (days > 0) {
+            if (days == 1) {
+                sb.append("a day");
+            } else {
+                sb.append(days + " days");
+            }
+            if (days <= 3 && hrs > 0) {
+                if (hrs == 1) {
+                    sb.append(" and an hour");
+                } else {
+                    sb.append(" and " + hrs + " hours");
+                }
+            }
+        } else if (hrs > 0) {
+            if (hrs == 1) {
+                sb.append("an hour");
+            } else {
+                sb.append(hrs + " hours");
+            }
+            if (min > 1) {
+                sb.append(" and " + min + " minutes");
+            }
+        } else if (min > 0) {
+            if (min == 1) {
+                sb.append("a minute");
+            } else {
+                sb.append(min + " minutes");
+            }
+            if (sec > 1) {
+                sb.append(" and " + sec + " seconds");
+            }
+        } else {
+            if (sec <= 1) {
+                sb.append("about a second");
+            } else {
+                sb.append("about " + sec + " seconds");
+            }
+        }
+
+        sb.append(" ago");
+
+        return sb.toString();
     }
 }

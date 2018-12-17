@@ -29,48 +29,58 @@ import project.aigo.myapplication.R;
 
 public class ProfileChatFragment extends Fragment {
 
-    List<ChatList> chatHistoryList;
-    FirebaseDatabase database;
-    DatabaseReference myRef;
-    ChatListAdapter adapter;
+    private List<ChatList> chatHistoryList;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+    private ChatListAdapter adapter;
+    private String id;
+
     @Override
-    public View onCreateView( @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView ( @NonNull LayoutInflater inflater , ViewGroup container , Bundle savedInstanceState ) {
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
-        View view = inflater.inflate(R.layout.fragment_profile_chat, container, false);
+
+        GlobalActivity globalActivity = new GlobalActivity();
+        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(getActivity());
+        id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+        View view = inflater.inflate(R.layout.fragment_profile_chat , container , false);
         chatHistoryList = new ArrayList<>();
-        adapter = new ChatListAdapter(getActivity(), chatHistoryList);
+        adapter = new ChatListAdapter(getActivity() , chatHistoryList, id);
         RecyclerView recyclerView = view.findViewById(R.id.rvChatHistory);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getActivity()) ,DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getActivity()) , DividerItemDecoration.VERTICAL));
 
         getChatList();
-        
+
         return view;
 
 
     }
 
     private void getChatList () {
-        GlobalActivity globalActivity = new GlobalActivity();
-        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(getActivity());
-        String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
-        DatabaseReference ref = myRef.child("users").child(id).child("chat");
-
-        ref.addValueEventListener(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange ( @NonNull DataSnapshot dataSnapshot ) {
                 chatHistoryList.clear();
-                if (dataSnapshot.exists()){
-                    for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()){
-                        ChatList chatList = new ChatList(childDataSnapshot.getKey());
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot childDataSnapShot : dataSnapshot.child("users").child(id).child("chat").getChildren()) {
+                        String keyRoom = childDataSnapShot.getKey();
+                        String with = (String) childDataSnapShot.child("with").getValue();
+                        DataSnapshot room = dataSnapshot.child("chats").child(Objects.requireNonNull(keyRoom));
+                        DataSnapshot user = dataSnapshot.child("users").child(Objects.requireNonNull(with));
+                        String name = (String) user.child("name").getValue();
+                        String photo = (String) user.child("photo").getValue();
+                        String lastTimeChat = (String) room.child("lastTimeChat").getValue();
+                        String lastChat = (String) room.child("lastChat").getValue();
+                        ChatList chatList = new ChatList(keyRoom, name, lastTimeChat, lastChat, photo);
                         chatHistoryList.add(chatList);
                         adapter.notifyDataSetChanged();
                     }
+
                 }
             }
 
