@@ -1,8 +1,9 @@
 package project.aigo.myapplication.Activity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,15 +13,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import hirondelle.date4j.DateTime;
 import project.aigo.myapplication.Adapter.ChatAdapter;
 import project.aigo.myapplication.Object.Chat;
 import project.aigo.myapplication.R;
@@ -44,6 +44,8 @@ public class ChatActivity extends GlobalActivity implements TextWatcher, View.On
     DatabaseReference myRef;
     String roomKey;
     String sender;
+    LinearLayoutManager linearLayoutManager;
+    FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
@@ -59,18 +61,61 @@ public class ChatActivity extends GlobalActivity implements TextWatcher, View.On
 
         chatList = new ArrayList<>();
 
-        adapter = new ChatAdapter(this , chatList);
-
+        adapter = new ChatAdapter(this , chatList , sender);
+        floatingActionButton = findViewById(R.id.fabScroll);
         rvChat = findViewById(R.id.rvChat);
-        rvChat.setLayoutManager(new LinearLayoutManager(this));
+        linearLayoutManager = new LinearLayoutManager(this);
+        rvChat.setLayoutManager(linearLayoutManager);
         rvChat.setNestedScrollingEnabled(false);
         rvChat.setAdapter(adapter);
         rvChat.setItemAnimator(new DefaultItemAnimator());
+        rvChat.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled ( RecyclerView recyclerView , int dx , int dy ) {
+                if (dy > 0) floatingActionButton.setVisibility(View.INVISIBLE);
+                else floatingActionButton.setVisibility(View.VISIBLE);
+
+            }
+        });
         etMessage = findViewById(R.id.etMessage);
         btnSend = findViewById(R.id.btnSend);
 
         etMessage.addTextChangedListener(this);
         btnSend.setOnClickListener(this);
+        floatingActionButton.setOnClickListener(this);
+
+        getChatMessage();
+    }
+
+    private void getChatMessage () {
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange ( @NonNull DataSnapshot dataSnapshot ) {
+                chatList.clear();
+
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.child("chats").child(roomKey).getChildren()) {
+                        if (Objects.requireNonNull(snapshot.getKey()).equals("lastChat")) break;
+                        String message = Objects.requireNonNull(snapshot.child("message").getValue()).toString();
+                        String creatorID = Objects.requireNonNull(snapshot.child("user_creator").getValue()).toString();
+                        String name = Objects.requireNonNull(dataSnapshot.child("users").child(creatorID).child("name").getValue()).toString();
+                        String photo = Objects.requireNonNull(dataSnapshot.child("users").child(creatorID).child("photo").getValue()).toString();
+                        DateFormat dateFormat = new SimpleDateFormat("HH:mm" , Locale.US);
+                        Date date = new Date();
+                        String time = dateFormat.format(date);
+                        Chat chat = new Chat(creatorID , message , time , name , photo);
+                        chatList.add(chat);
+                        adapter.notifyDataSetChanged();
+                        rvChat.smoothScrollToPosition(adapter.getItemCount() - 1);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled ( @NonNull DatabaseError databaseError ) {
+
+            }
+        });
     }
 
     @Override
@@ -105,8 +150,8 @@ public class ChatActivity extends GlobalActivity implements TextWatcher, View.On
             myRef.push();
 
             etMessage.setText("");
-
-
+        } else if (view == floatingActionButton) {
+            rvChat.smoothScrollToPosition(adapter.getItemCount() - 1);
         }
     }
 }

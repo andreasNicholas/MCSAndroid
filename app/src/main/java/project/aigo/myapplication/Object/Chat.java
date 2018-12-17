@@ -6,13 +6,14 @@ public class Chat {
     private String message;
     private String timeSent;
     private String name;
+    private String photo;
 
-
-    public Chat ( String userID , String message , String timeSent , String name ) {
+    public Chat ( String userID , String message , String timeSent , String name , String photo ) {
         this.userID = userID;
         this.message = message;
         this.timeSent = timeSent;
         this.name = name;
+        this.photo = photo;
     }
 
     public String getUserID () {
@@ -45,5 +46,13 @@ public class Chat {
 
     public void setName ( String name ) {
         this.name = name;
+    }
+
+    public String getPhoto () {
+        return photo;
+    }
+
+    public void setPhoto ( String photo ) {
+        this.photo = photo;
     }
 }

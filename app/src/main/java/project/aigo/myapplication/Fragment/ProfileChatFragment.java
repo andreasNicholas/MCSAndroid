@@ -34,7 +34,8 @@ public class ProfileChatFragment extends Fragment {
     private DatabaseReference myRef;
     private ChatListAdapter adapter;
     private String id;
-
+    private LinearLayoutManager linearLayoutManager;
+    private RecyclerView recyclerView;
     @Override
     public View onCreateView ( @NonNull LayoutInflater inflater , ViewGroup container , Bundle savedInstanceState ) {
 
@@ -46,9 +47,10 @@ public class ProfileChatFragment extends Fragment {
         id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
         View view = inflater.inflate(R.layout.fragment_profile_chat , container , false);
         chatHistoryList = new ArrayList<>();
-        adapter = new ChatListAdapter(getActivity() , chatHistoryList, id);
-        RecyclerView recyclerView = view.findViewById(R.id.rvChatHistory);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new ChatListAdapter(getActivity() , chatHistoryList , id);
+        recyclerView = view.findViewById(R.id.rvChatHistory);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -57,8 +59,6 @@ public class ProfileChatFragment extends Fragment {
         getChatList();
 
         return view;
-
-
     }
 
     private void getChatList () {
@@ -76,10 +76,15 @@ public class ProfileChatFragment extends Fragment {
                         String photo = (String) user.child("photo").getValue();
                         String lastTimeChat = (String) room.child("lastTimeChat").getValue();
                         String lastChat = (String) room.child("lastChat").getValue();
-                        ChatList chatList = new ChatList(keyRoom, name, lastTimeChat, lastChat, photo);
+                        ChatList chatList = new ChatList(keyRoom , name , lastTimeChat , lastChat , photo);
                         chatHistoryList.add(chatList);
                         adapter.notifyDataSetChanged();
+                        recyclerView.scrollToPosition(chatHistoryList.size()-1);
                     }
+//                    recyclerView.getLayoutManager().scrollToPosition(0);
+//                    linearLayoutManager.scrollToPosition(chatHistoryList.size()-1);
+
+
 
                 }
             }
