@@ -34,18 +34,7 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
     private Context mContext;
     private List<User> userList;
     private String sender;
-
     private String notificationKey;
-
-    private String getNotificationKey () {
-        return notificationKey;
-    }
-
-    private void setNotificationKey ( String notificationKey ) {
-        this.notificationKey = notificationKey;
-    }
-
-
 
     public AthleteAdapter ( Context context , List<User> userList , String sender ) {
         this.mContext = context;
@@ -133,7 +122,7 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
 
                                             String notifKey = (String) dataSnapshot.child("users").child(receiver).child("notificationKey").getValue();
 
-                                            if (getNotificationKey() == null) setNotificationKey(notifKey);
+                                            notificationKey = (notificationKey == null) ? notifKey : "";
 
                                             boolean exists = false;
                                             for (DataSnapshot snapshot : dataSnapshot.child("users").child(sender).child("chat").getChildren()) {
@@ -162,7 +151,7 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
                                     intent.putExtra("roomKey" , key);
                                     intent.putExtra("sender" , sender);
                                     intent.putExtra("name" , user.getName());
-                                    intent.putExtra("notificationKey", notificationKey);
+                                    intent.putExtra("notificationKey" , notificationKey);
                                     mContext.startActivity(intent);
 
 
