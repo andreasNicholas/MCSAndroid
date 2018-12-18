@@ -35,6 +35,18 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
     private List<User> userList;
     private String sender;
 
+    private String notificationKey;
+
+    private String getNotificationKey () {
+        return notificationKey;
+    }
+
+    private void setNotificationKey ( String notificationKey ) {
+        this.notificationKey = notificationKey;
+    }
+
+
+
     public AthleteAdapter ( Context context , List<User> userList , String sender ) {
         this.mContext = context;
         this.userList = userList;
@@ -98,7 +110,7 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
                                     break;
                                 case 1:
 
-                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
                                     final DatabaseReference myRef = database.getReference();
                                     final String key = myRef.child("chats").push().getKey();
                                     final String receiver = user.getUserID();
@@ -115,14 +127,13 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
                                     receiverRoom.put("status" , true);
                                     receiverRoom.put("with" , sender);
 
-                                    Intent intent = new Intent(mContext , ChatActivity.class);
-                                    intent.putExtra("roomKey" , key);
-                                    intent.putExtra("sender" , sender);
-                                    mContext.startActivity(intent);
-
                                     myRef.addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange ( @NonNull DataSnapshot dataSnapshot ) {
+
+                                            String notifKey = (String) dataSnapshot.child("users").child(receiver).child("notificationKey").getValue();
+
+                                            if (getNotificationKey() == null) setNotificationKey(notifKey);
 
                                             boolean exists = false;
                                             for (DataSnapshot snapshot : dataSnapshot.child("users").child(sender).child("chat").getChildren()) {
@@ -145,6 +156,14 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
 
                                         }
                                     });
+
+
+                                    Intent intent = new Intent(mContext , ChatActivity.class);
+                                    intent.putExtra("roomKey" , key);
+                                    intent.putExtra("sender" , sender);
+                                    intent.putExtra("name" , user.getName());
+                                    intent.putExtra("notificationKey", notificationKey);
+                                    mContext.startActivity(intent);
 
 
                                     break;

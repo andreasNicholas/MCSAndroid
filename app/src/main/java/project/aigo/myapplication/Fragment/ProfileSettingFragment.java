@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.onesignal.OneSignal;
+
 import project.aigo.myapplication.Activity.AddBranchActivity;
 import project.aigo.myapplication.Activity.AddSportActivity;
 import project.aigo.myapplication.Activity.LoginActivity;
@@ -43,9 +45,11 @@ public class ProfileSettingFragment extends Fragment implements View.OnClickList
     @Override
     public void onClick(View view) {
         if(view == ivLogout || view == tvLogout){
+            OneSignal.setSubscription(false);
             Intent intent = new Intent(getActivity() , LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            getActivity().finish();
         }
         else if(view == ivAddBranch || view == tvAddBranch) {
             Intent intent = new Intent(getActivity() , AddBranchActivity.class);

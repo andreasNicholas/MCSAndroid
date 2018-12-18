@@ -29,7 +29,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     private List<ChatList> chatLists;
     private String sender;
 
-    public ChatListAdapter ( Context context , List<ChatList> chatLists, String sender ) {
+    public ChatListAdapter ( Context context , List<ChatList> chatLists , String sender ) {
         this.mContext = context;
         this.chatLists = chatLists;
         this.sender = sender;
@@ -50,12 +50,11 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         final int position = holder.getAdapterPosition();
         final ChatList chatList = chatLists.get(position);
 
-        if (!chatList.getLastTimeChat().isEmpty()){
+        if (!chatList.getLastTimeChat().isEmpty()) {
             long lastTimeChat = Long.parseLong(chatList.getLastTimeChat());
             String date = globalActivity.getFriendlyTime(new Date(lastTimeChat));
             holder.tvLastTime.setText(date);
         }
-
 
 
         holder.tvName.setText(chatList.getName());
@@ -88,10 +87,12 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                 public void onClick ( View view ) {
                     int position = getAdapterPosition();
                     ChatList chatList = chatLists.get(position);
-
-                    Intent intent = new Intent(mContext, ChatActivity.class);
-                    intent.putExtra("roomKey", chatList.getId());
-                    intent.putExtra("sender",sender);
+                    String receiver = chatList.getId();
+                    Intent intent = new Intent(mContext , ChatActivity.class);
+                    intent.putExtra("roomKey" , chatList.getId());
+                    intent.putExtra("sender" , sender);
+                    intent.putExtra("name" , chatList.getName());
+                    intent.putExtra("notificationKey", chatList.getNotificationKey());
                     mContext.startActivity(intent);
 
                 }

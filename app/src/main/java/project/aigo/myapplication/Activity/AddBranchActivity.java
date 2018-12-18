@@ -1,12 +1,10 @@
 package project.aigo.myapplication.Activity;
 
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,8 +15,6 @@ import java.util.HashMap;
 
 import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Adapter.BranchAdapter;
-import project.aigo.myapplication.Adapter.SportAdapter;
-import project.aigo.myapplication.Fragment.DatePickerFragment;
 import project.aigo.myapplication.Object.Branch;
 import project.aigo.myapplication.Object.Sport;
 import project.aigo.myapplication.R;
@@ -27,7 +23,6 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
     private EditText etBranchName;
     private Button btnAddBranch;
     private BranchAdapter branchAdapter;
-    private RecyclerView recyclerView;
     private Spinner spinSport2;
     private HashMap<String, String> paramsForAddBranch;
 
@@ -42,7 +37,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 
         btnAddBranch.setOnClickListener(this);
 
-        recyclerView = findViewById(R.id.rvBranch);
+        RecyclerView recyclerView = findViewById(R.id.rvBranch);
         branchAdapter = new BranchAdapter(this.getBaseContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(branchAdapter);

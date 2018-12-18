@@ -74,15 +74,14 @@ public class ProfileChatFragment extends Fragment {
                         DataSnapshot user = dataSnapshot.child("users").child(Objects.requireNonNull(with));
                         String name = (String) user.child("name").getValue();
                         String photo = (String) user.child("photo").getValue();
+                        String notificationKey = (String) user.child("notificationKey").getValue();
                         String lastTimeChat = (String) room.child("lastTimeChat").getValue();
                         String lastChat = (String) room.child("lastChat").getValue();
-                        ChatList chatList = new ChatList(keyRoom , name , lastTimeChat , lastChat , photo);
+                        ChatList chatList = new ChatList(keyRoom , name , lastTimeChat , lastChat , photo, notificationKey);
                         chatHistoryList.add(chatList);
                         adapter.notifyDataSetChanged();
-                        recyclerView.scrollToPosition(chatHistoryList.size()-1);
                     }
-//                    recyclerView.getLayoutManager().scrollToPosition(0);
-//                    linearLayoutManager.scrollToPosition(chatHistoryList.size()-1);
+
 
 
 

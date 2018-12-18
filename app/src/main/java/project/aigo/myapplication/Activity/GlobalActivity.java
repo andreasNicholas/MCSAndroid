@@ -22,6 +22,11 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.onesignal.OneSignal;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -63,12 +68,12 @@ public class GlobalActivity extends AppCompatActivity {
 //        mBackPressed = System.currentTimeMillis();
 //    }
 
-    public void loadFragment (Fragment fragment , int view , Context context , Bundle bundle , String backStack ) {
+    public void loadFragment ( Fragment fragment , int view , Context context , Bundle bundle , String backStack ) {
         if (bundle != null) fragment.setArguments(bundle);
 
-        FragmentManager fm = ((AppCompatActivity)context).getFragmentManager();
+        FragmentManager fm = ((AppCompatActivity) context).getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(view, fragment, String.valueOf(fragment.getId()));
+        fragmentTransaction.replace(view , fragment , String.valueOf(fragment.getId()));
         if (backStack != null) fragmentTransaction.addToBackStack(backStack);
         fragmentTransaction.commit();
     }
@@ -122,7 +127,7 @@ public class GlobalActivity extends AppCompatActivity {
         return Base64.encodeToString(b , Base64.DEFAULT);
     }
 
-    public DatePickerDialog createGlobalDatePickerDialog ( Context context, final String format, final EditText editText ){
+    public DatePickerDialog createGlobalDatePickerDialog ( Context context , final String format , final EditText editText ) {
         final Calendar calendar = Calendar.getInstance();
         return new DatePickerDialog(context , new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -133,12 +138,12 @@ public class GlobalActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat(format , Locale.US);
                 editText.setText(sdf.format(calendar.getTime()));
             }
-        }, calendar
+        } , calendar
                 .get(Calendar.YEAR) , calendar.get(Calendar.MONTH) ,
                 calendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    public TimePickerDialog createGlobalTimePickerDialog(Context context, final String format, final EditText editText){
+    public TimePickerDialog createGlobalTimePickerDialog ( Context context , final String format , final EditText editText ) {
         final Calendar calendar = Calendar.getInstance();
         return new TimePickerDialog(context , new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -148,7 +153,7 @@ public class GlobalActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat(format , Locale.US);
                 editText.setText(sdf.format(calendar.getTime()));
             }
-        },calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+        } , calendar.get(Calendar.HOUR_OF_DAY) , calendar.get(Calendar.MINUTE) , true);
     }
 
     public String getImageName ( Uri selectedImage ) {
@@ -158,7 +163,7 @@ public class GlobalActivity extends AppCompatActivity {
 
     }
 
-    public String getFriendlyTime(Date dateTime) {
+    public String getFriendlyTime ( Date dateTime ) {
         StringBuilder sb = new StringBuilder();
         Date current = Calendar.getInstance().getTime();
         long diffInSeconds = (current.getTime() - dateTime.getTime()) / 1000;
@@ -238,5 +243,19 @@ public class GlobalActivity extends AppCompatActivity {
         sb.append(" ago");
 
         return sb.toString();
+    }
+
+    public void sendNotification ( String message , String heading , String notificationKey ) {
+
+        try {
+            JSONObject notification = new JSONObject(
+                            "{'contents' : {'en':'" + message + "'}," +
+                            "'include_player_ids' :['" + notificationKey + "'], " +
+                            "'headings' : {'en': '" + heading + "'}}");
+            OneSignal.postNotification(notification, null);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 }

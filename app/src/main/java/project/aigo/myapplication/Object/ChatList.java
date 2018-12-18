@@ -7,13 +7,15 @@ public class ChatList {
     private String lastTimeChat;
     private String lastChat;
     private String photo;
+    private String notificationKey;
 
-    public ChatList ( String id , String name , String lastTimeChat , String lastChat , String photo ) {
+    public ChatList ( String id , String name , String lastTimeChat , String lastChat , String photo , String notificationKey ) {
         this.id = id;
         this.name = name;
         this.lastTimeChat = lastTimeChat;
         this.lastChat = lastChat;
         this.photo = photo;
+        this.notificationKey = notificationKey;
     }
 
     public String getId () {
@@ -54,5 +56,13 @@ public class ChatList {
 
     public void setPhoto ( String photo ) {
         this.photo = photo;
+    }
+
+    public String getNotificationKey () {
+        return notificationKey;
+    }
+
+    public void setNotificationKey ( String notificationKey ) {
+        this.notificationKey = notificationKey;
     }
 }

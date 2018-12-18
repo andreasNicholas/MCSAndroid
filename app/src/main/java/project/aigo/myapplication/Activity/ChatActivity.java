@@ -35,36 +35,37 @@ import project.aigo.myapplication.R;
 
 public class ChatActivity extends GlobalActivity implements TextWatcher, View.OnClickListener {
 
-    RecyclerView rvChat;
-    EditText etMessage;
-    ImageButton btnSend;
-    ChatAdapter adapter;
-    List<Chat> chatList;
-    FirebaseDatabase database;
-    DatabaseReference myRef;
-    String roomKey;
-    String sender;
-    LinearLayoutManager linearLayoutManager;
-    FloatingActionButton floatingActionButton;
+    private RecyclerView rvChat;
+    private EditText etMessage;
+    private ImageButton btnSend;
+    private ChatAdapter adapter;
+    private List<Chat> chatList;
+    private DatabaseReference myRef;
+    private String roomKey;
+    private String sender;
+    private String name;
+    private String notificationKey;
+    private FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
         Intent intent = getIntent();
         roomKey = intent.getStringExtra("roomKey");
         sender = intent.getStringExtra("sender");
-
+        name = intent.getStringExtra("name");
+        notificationKey = intent.getStringExtra("notificationKey");
         chatList = new ArrayList<>();
 
         adapter = new ChatAdapter(this , chatList , sender);
         floatingActionButton = findViewById(R.id.fabScroll);
         rvChat = findViewById(R.id.rvChat);
-        linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvChat.setLayoutManager(linearLayoutManager);
         rvChat.setNestedScrollingEnabled(false);
         rvChat.setAdapter(adapter);
@@ -139,15 +140,19 @@ public class ChatActivity extends GlobalActivity implements TextWatcher, View.On
         if (view == btnSend) {
             String message = toStringTrim(etMessage);
             String millis = String.valueOf(System.currentTimeMillis());
+
             Map<String, String> chat = new HashMap<>();
             chat.put("user_creator" , sender);
             chat.put("message" , message);
             String key = myRef.child("chats").child(roomKey).push().getKey();
+
             DatabaseReference chatRef = myRef.child("chats").child(roomKey);
             chatRef.child("lastChat").setValue(message);
             chatRef.child("lastTimeChat").setValue(millis);
             chatRef.child(Objects.requireNonNull(key)).setValue(chat);
             myRef.push();
+
+            sendNotification(message, name, notificationKey);
 
             etMessage.setText("");
         } else if (view == floatingActionButton) {
