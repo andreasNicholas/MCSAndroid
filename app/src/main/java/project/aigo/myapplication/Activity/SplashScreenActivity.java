@@ -26,7 +26,9 @@ public class SplashScreenActivity extends GlobalActivity {
         setContentView(R.layout.activity_splashscreen);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database.setPersistenceEnabled(true);
         final DatabaseReference myRef = database.getReference();
+        myRef.keepSynced(true);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange ( @NonNull DataSnapshot dataSnapshot ) {

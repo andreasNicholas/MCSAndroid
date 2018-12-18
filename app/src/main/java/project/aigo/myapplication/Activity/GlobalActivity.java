@@ -256,6 +256,6 @@ public class GlobalActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
+
 }

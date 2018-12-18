@@ -30,16 +30,14 @@ import project.aigo.myapplication.R;
 public class ProfileChatFragment extends Fragment {
 
     private List<ChatList> chatHistoryList;
-    private FirebaseDatabase database;
     private DatabaseReference myRef;
     private ChatListAdapter adapter;
     private String id;
-    private LinearLayoutManager linearLayoutManager;
-    private RecyclerView recyclerView;
+
     @Override
     public View onCreateView ( @NonNull LayoutInflater inflater , ViewGroup container , Bundle savedInstanceState ) {
 
-        database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
         GlobalActivity globalActivity = new GlobalActivity();
@@ -48,8 +46,8 @@ public class ProfileChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile_chat , container , false);
         chatHistoryList = new ArrayList<>();
         adapter = new ChatListAdapter(getActivity() , chatHistoryList , id);
-        recyclerView = view.findViewById(R.id.rvChatHistory);
-        linearLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView recyclerView = view.findViewById(R.id.rvChatHistory);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setAdapter(adapter);
@@ -81,10 +79,6 @@ public class ProfileChatFragment extends Fragment {
                         chatHistoryList.add(chatList);
                         adapter.notifyDataSetChanged();
                     }
-
-
-
-
                 }
             }
 

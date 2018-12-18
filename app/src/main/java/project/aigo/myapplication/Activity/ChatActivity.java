@@ -99,11 +99,9 @@ public class ChatActivity extends GlobalActivity implements TextWatcher, View.On
                         if (Objects.requireNonNull(snapshot.getKey()).equals("lastChat")) break;
                         String message = Objects.requireNonNull(snapshot.child("message").getValue()).toString();
                         String creatorID = Objects.requireNonNull(snapshot.child("user_creator").getValue()).toString();
+                        String time = Objects.requireNonNull(snapshot.child("time").getValue()).toString();
                         String name = Objects.requireNonNull(dataSnapshot.child("users").child(creatorID).child("name").getValue()).toString();
                         String photo = Objects.requireNonNull(dataSnapshot.child("users").child(creatorID).child("photo").getValue()).toString();
-                        DateFormat dateFormat = new SimpleDateFormat("HH:mm" , Locale.US);
-                        Date date = new Date();
-                        String time = dateFormat.format(date);
                         Chat chat = new Chat(creatorID , message , time , name , photo);
                         chatList.add(chat);
                         adapter.notifyDataSetChanged();
@@ -140,10 +138,14 @@ public class ChatActivity extends GlobalActivity implements TextWatcher, View.On
         if (view == btnSend) {
             String message = toStringTrim(etMessage);
             String millis = String.valueOf(System.currentTimeMillis());
+            DateFormat dateFormat = new SimpleDateFormat("HH:mm" , Locale.US);
+            Date date = new Date();
+            String time = dateFormat.format(date);
 
             Map<String, String> chat = new HashMap<>();
             chat.put("user_creator" , sender);
             chat.put("message" , message);
+            chat.put("time" , time);
             String key = myRef.child("chats").child(roomKey).push().getKey();
 
             DatabaseReference chatRef = myRef.child("chats").child(roomKey);
@@ -152,7 +154,7 @@ public class ChatActivity extends GlobalActivity implements TextWatcher, View.On
             chatRef.child(Objects.requireNonNull(key)).setValue(chat);
             myRef.push();
 
-            sendNotification(message, name, notificationKey);
+            sendNotification(message , name , notificationKey);
 
             etMessage.setText("");
         } else if (view == floatingActionButton) {

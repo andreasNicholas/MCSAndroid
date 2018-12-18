@@ -87,7 +87,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                 public void onClick ( View view ) {
                     int position = getAdapterPosition();
                     ChatList chatList = chatLists.get(position);
-                    String receiver = chatList.getId();
                     Intent intent = new Intent(mContext , ChatActivity.class);
                     intent.putExtra("roomKey" , chatList.getId());
                     intent.putExtra("sender" , sender);

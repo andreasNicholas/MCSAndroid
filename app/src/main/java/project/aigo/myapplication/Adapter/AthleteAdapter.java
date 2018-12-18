@@ -92,7 +92,7 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
                         @Override
                         public void onClick ( DialogInterface dialogInterface , final int i ) {
                             int position = getAdapterPosition();
-                            User user = userList.get(position);
+                            final User user = userList.get(position);
 
                             switch (i) {
                                 case 0:
@@ -101,6 +101,7 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
 
                                     final FirebaseDatabase database = FirebaseDatabase.getInstance();
                                     final DatabaseReference myRef = database.getReference();
+
                                     final String key = myRef.child("chats").push().getKey();
                                     final String receiver = user.getUserID();
 
@@ -116,10 +117,10 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
                                     receiverRoom.put("status" , true);
                                     receiverRoom.put("with" , sender);
 
-                                    myRef.addValueEventListener(new ValueEventListener() {
+                                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange ( @NonNull DataSnapshot dataSnapshot ) {
-
+                                            String currentRoomKey = "";
                                             String notifKey = (String) dataSnapshot.child("users").child(receiver).child("notificationKey").getValue();
 
                                             notificationKey = (notificationKey == null) ? notifKey : "";
@@ -128,6 +129,7 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
                                             for (DataSnapshot snapshot : dataSnapshot.child("users").child(sender).child("chat").getChildren()) {
                                                 if (Objects.requireNonNull(snapshot.child("with").getValue()).toString().equals(receiver)) {
                                                     exists = true;
+                                                    currentRoomKey = snapshot.getKey();
                                                     break;
                                                 }
                                             }
@@ -138,6 +140,15 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
                                                 myRef.child("users").child(receiver).child("chat").child(key).setValue(receiverRoom);
                                                 myRef.push();
                                             }
+
+                                            String keyRoom = (Objects.requireNonNull(currentRoomKey).isEmpty()) ? key : currentRoomKey;
+
+                                            Intent intent = new Intent(mContext , ChatActivity.class);
+                                            intent.putExtra("roomKey" , keyRoom);
+                                            intent.putExtra("sender" , sender);
+                                            intent.putExtra("name" , user.getName());
+                                            intent.putExtra("notificationKey" , notificationKey);
+                                            mContext.startActivity(intent);
                                         }
 
                                         @Override
@@ -145,16 +156,6 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
 
                                         }
                                     });
-
-
-                                    Intent intent = new Intent(mContext , ChatActivity.class);
-                                    intent.putExtra("roomKey" , key);
-                                    intent.putExtra("sender" , sender);
-                                    intent.putExtra("name" , user.getName());
-                                    intent.putExtra("notificationKey" , notificationKey);
-                                    mContext.startActivity(intent);
-
-
                                     break;
                             }
                         }
