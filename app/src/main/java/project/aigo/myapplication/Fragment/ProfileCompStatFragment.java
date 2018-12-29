@@ -52,7 +52,7 @@ public class ProfileCompStatFragment extends Fragment {
     public View onCreateView ( @NonNull LayoutInflater inflater , ViewGroup container , Bundle savedInstanceState ) {
         View view = inflater.inflate(R.layout.fragment_profile_comp_stat , container , false);
         fabAchievement = view.findViewById(R.id.fabAddAchievement);
-        layoutView = view.findViewById(R.id.profileActivity);
+        layoutView = view;
         profileCompetitionAdapter = new ProfileCompetitionAdapter(getActivity()  , detailAchievementList);
         chart = view.findViewById(R.id.chart);
         spinYear = view.findViewById(R.id.spinYear);
@@ -62,22 +62,8 @@ public class ProfileCompStatFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.rvAchievement);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(profileCompetitionAdapter);
-        fabAchievement.show();
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled ( RecyclerView recyclerView , int dx , int dy ) {
-                if(dy >0)
-                    fabAchievement.hide();
-            }
 
-            @Override
-            public void onScrollStateChanged ( RecyclerView recyclerView , int newState ) {
-                super.onScrollStateChanged(recyclerView , newState);
-                fabAchievement.show();
-
-            }
-
-        });
+        checkFabAuth();
 
         fabAchievement.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +137,24 @@ public class ProfileCompStatFragment extends Fragment {
         });
         return view;
     }
+
+    private void checkFabAuth() {
+        GlobalActivity globalActivity = new GlobalActivity();
+        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(getActivity());
+        String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+
+            try {
+                if (!ProfileActivity.athleteBundle.isEmpty()) {
+                    if (id.equals(ProfileActivity.athleteBundle.getString("athleteID")))
+                        fabAchievement.show();
+                    else
+                        fabAchievement.hide();
+                }
+            }
+            catch (Exception e){
+                fabAchievement.show();
+            }
+        }
 
     private void mapParams () {
         GlobalActivity globalActivity = new GlobalActivity();

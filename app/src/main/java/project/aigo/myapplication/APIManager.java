@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -60,6 +61,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import project.aigo.myapplication.Activity.AddUserBranchActivity;
 import project.aigo.myapplication.Activity.EventCalendarActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Activity.LoginActivity;
@@ -321,8 +323,8 @@ public class APIManager {
     }
 
     public void updateOrCreateNews ( final Context context , final View view , final Map<String, String> params ) {
-        final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
-        progressDialog.show();
+        //final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
+        //progressDialog.show();
 
         String url = globalActivity.route("updateOrCreateNews");
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
@@ -333,14 +335,14 @@ public class APIManager {
             public void onResponse ( String response ) {
                 String message = (params.get("newsID").isEmpty()) ? "Add" : "Update";
                 globalActivity.toastShort(context , message + " Success");
-                progressDialog.dismiss();
+                //progressDialog.dismiss();
 
             }
         } , new Response.ErrorListener() {
             @Override
             public void onErrorResponse ( VolleyError error ) {
                 globalActivity.snackShort(view , error.getMessage());
-                progressDialog.dismiss();
+                //progressDialog.dismiss();
             }
         }) {
             @Override
@@ -531,7 +533,7 @@ public class APIManager {
         mRequestQueue.add(mStringRequest);
     }
 
-    public void updateOrCreateEvent ( final Context context , final View view , final Map<String, String> params ) {
+    public void updateOrCreateEvent ( final Context context , final View view , final Map<String, String> params , final Fragment fragment ) {
         final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
         progressDialog.show();
 
@@ -544,7 +546,8 @@ public class APIManager {
             public void onResponse ( String response ) {
                 String message = (params.get("eventID").isEmpty()) ? "Add" : "Update";
                 globalActivity.toastShort(context , message + " Success");
-                progressDialog.dismiss();
+                //fragment.getFragmentManager().popBackStackImmediate();
+                //progressDialog.dismiss();
 
             }
         } , new Response.ErrorListener() {
@@ -793,7 +796,7 @@ public class APIManager {
         };
         mRequestQueue.add(jsonArrayRequest);
         if(layoutId!=0 || spinnerItem!=null || arrayAdapter!=null){
-            arrayAdapter = new ArrayAdapter<>(context, R.layout.spinner_item, spinnerItem);
+            arrayAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item, spinnerItem);
             arrayAdapter.notifyDataSetChanged();
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(arrayAdapter);
@@ -918,7 +921,7 @@ public class APIManager {
                         branch.setSportName(jsonObject.getString("sport_name"));
 
                         Branch.branchList.add(branch);
-                        if(spinnerItem!=null)spinnerItem.add(Branch.branchList.get(j).getBranchName());
+                        if(spinnerItem==null)spinnerItem.add(Branch.branchList.get(j).getBranchName());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -953,7 +956,7 @@ public class APIManager {
         String id = params.get("userID");
         String remember_token = params.get("remember_token");
 
-        String url = globalActivity.route("getEvents/" + id + "/" + remember_token);
+        String url = globalActivity.route("getAllEvents/" + id + "/" + remember_token);
 
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url , new Response.Listener<JSONArray>() {
@@ -1177,7 +1180,6 @@ public class APIManager {
         mRequestQueue.add(jsonArrayRequest);
     }
 
-
     public void getBranchBySportGender(final Context context , final Map<String, String> params, final ArrayList<String> spinnerItem, ArrayAdapter<String> arrayAdapter, final int layoutId, final Spinner spinner) {
         Branch.branchList.clear();
         if(spinnerItem!=null) spinnerItem.clear();
@@ -1245,6 +1247,140 @@ public class APIManager {
         } , new Response.ErrorListener() {
             @Override
             public void onErrorResponse ( VolleyError error ) {
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams () {
+
+                return params;
+            }
+
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                return null;
+            }
+        };
+
+        mRequestQueue.add(mStringRequest);
+    }
+
+    public void getEventsForSpinner(Context baseContext, Map<String,String> params, final ArrayList<String> eventSpinnerItem, ArrayAdapter arrayAdapter, int layoutId, Spinner spinner) {
+        Event.eventList.clear();
+        if (eventSpinnerItem != null) eventSpinnerItem.clear();
+        String id = params.get("userID");
+        String remember_token = params.get("remember_token");
+
+        String url = globalActivity.route("getEvents/" + id + "/" + remember_token);
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(baseContext);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int j = 0; j < response.length(); j++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(j);
+                        Event event = new Event();
+                        event.setId(jsonObject.getString("id"));
+                        event.setEvent_name(jsonObject.getString("event_name"));
+
+                        Event.eventList.add(event);
+                        if (eventSpinnerItem != null)
+                            eventSpinnerItem.add(Event.eventList.get(j).getEvent_name());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+
+        }) {
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+                return volleyError;
+            }
+        };
+        mRequestQueue.add(jsonArrayRequest);
+        if (layoutId != 0 || eventSpinnerItem != null || arrayAdapter != null) {
+            arrayAdapter = new ArrayAdapter<String>(baseContext, R.layout.spinner_item, eventSpinnerItem);
+            arrayAdapter.notifyDataSetChanged();
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(arrayAdapter);
+        }
+    }
+
+    public void getBranchForSpinner(Context baseContext, HashMap<String,String> params, final ArrayList<String> branchSpinnerItem, ArrayAdapter<String> arrayAdapter, int layoutId, Spinner spinner) {
+        Branch.branchList.clear();
+        if (branchSpinnerItem != null) branchSpinnerItem.clear();
+        String id = params.get("userID");
+        String remember_token = params.get("remember_token");
+        String sportName = params.get("sportName");
+
+        String url = globalActivity.route("getBranchesBySportGender/" + id + "/" +sportName +"/" + remember_token);
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(baseContext);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int j = 0; j < response.length(); j++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(j);
+                        Branch branch = new Branch();
+                        branch.setBranchName(jsonObject.getString("branch_name"));
+
+                        Branch.branchList.add(branch);
+                        if (branchSpinnerItem != null)
+                            branchSpinnerItem.add(Branch.branchList.get(j).getBranchName());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+
+        }) {
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+                return volleyError;
+            }
+        };
+        mRequestQueue.add(jsonArrayRequest);
+        if (layoutId != 0 || branchSpinnerItem != null || arrayAdapter != null) {
+            arrayAdapter = new ArrayAdapter<String>(baseContext, R.layout.spinner_item, branchSpinnerItem);
+            arrayAdapter.notifyDataSetChanged();
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(arrayAdapter);
+        }
+    }
+
+    public void addAchievement(final Context context , final Map<String, String> params){
+        String url = globalActivity.route("addAchievement");
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+
+        StringRequest mStringRequest = new StringRequest(Request.Method.POST , url , new Response.Listener<String>() {
+            @Override
+            public void onResponse ( String response ) {
+                globalActivity.toastShort(context , response);
+            }
+        } , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse ( VolleyError error ) {
+                globalActivity.toastShort(context , error.toString());
             }
         }) {
             @Override

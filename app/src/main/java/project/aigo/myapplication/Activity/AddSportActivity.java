@@ -53,6 +53,7 @@ public class AddSportActivity extends AppCompatActivity implements View.OnClickL
             Sport newSport = new Sport();
             newSport.setSportName(etSportName.getText().toString());
             Sport.sportList.add(newSport);
+            sportAdapter.notifyDataSetChanged();
             mapParams();
             callApi();
         }

@@ -49,30 +49,13 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        //KALO ADA INTENT(SEARCH ATHLETE)
         try
         {
             if(getIntent().getExtras()!=null){
                 athleteBundle = this.getIntent().getExtras();
                 athleteId = athleteBundle.getString("athleteID", athleteId);
-                //GET PROFILE
-                //GET SPORTBRANCH
-                //GET ACHIEVEMENT belom
-                //mapParamsAthleteProfile();
-                //mapParamsAthleteSportBranch();
-                //callApiGetCompleteAthleteProfile();
-                //mapParamsAthleteBranch();
-                //callApiGetBranch();
-            }
-            else
-            //NO INTENT(MY OWN PROFILE)
-            {
-                //mapParamsMyProfile();
-                //callApiGetMyProfile();
             }
         }catch (Exception e){
-            //mapParamsMyProfile();
-            //callApiGetMyProfile();
         }
 
         ViewPager viewPager = findViewById(R.id.viewPager);
@@ -82,7 +65,6 @@ public class ProfileActivity extends AppCompatActivity {
         bundle.putString("athleteID", athleteId);
         adapter.addFragment(new ProfileHomeFragment(), bundle, "Overview");
         adapter.addFragment(new ProfileCompStatFragment(), null,"Statistics");
-        //adapter.addFragment(new ProfileChatFragment(), "Chat");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -92,6 +74,5 @@ public class ProfileActivity extends AppCompatActivity {
     private void setupTabIcons() {
         Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(tabIcons[0]);
         Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(tabIcons[1]);
-        //Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(tabIcons[2]);
     }
 }

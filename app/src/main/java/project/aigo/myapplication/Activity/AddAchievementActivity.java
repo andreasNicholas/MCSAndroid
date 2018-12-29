@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import project.aigo.myapplication.APIManager;
+import project.aigo.myapplication.Adapter.EventAdapter;
 import project.aigo.myapplication.Fragment.DatePickerFragment;
 import project.aigo.myapplication.Fragment.ProfileCompStatFragment;
 import project.aigo.myapplication.Object.Achievement;
@@ -33,19 +34,22 @@ import project.aigo.myapplication.Object.Sport;
 import project.aigo.myapplication.R;
 
 public class AddAchievementActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
-    private EditText etEventDescription;
+    private EditText etAchievementDesc;
     private Spinner spinBranch, spinSport, spinEvent;
     private RadioButton rbPos1, rbPos2, rbPos3;
     private Button btnAdd;
     private ArrayList<String> sportSpinnerItem = new ArrayList<String>();
     private ArrayList<String> eventSpinnerItem = new ArrayList<String>();
     private ArrayList<String> branchSpinnerItem = new ArrayList<String>();
+    private ArrayAdapter<String> adapterBranch, adapterSport, adapter;
+    private Map<String, String> params;
+    private HashMap<String, String> paramsForAthleteSport, paramsForAthleteBranch, paramsForAddAchievement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_achievement);
-        etEventDescription = findViewById(R.id.etEventDescription);
+        etAchievementDesc = findViewById(R.id.etAchievementDesc);
         spinEvent = findViewById(R.id.spinEvent);
         spinBranch = findViewById(R.id.spinBranch);
         spinSport = findViewById(R.id.spinSport);
@@ -54,48 +58,95 @@ public class AddAchievementActivity extends AppCompatActivity implements View.On
         rbPos3 = findViewById(R.id.rbPos3);
         btnAdd = findViewById(R.id.btnAddAchievement);
 
+        mapParams();
+        callApi();
+
+        mapParamsAthleteSport();
+        callApiGetSport();
+
         btnAdd.setOnClickListener(this);
 
-        populateSpinnerEvent(spinEvent);
-        populateSpinnerSport(spinSport);
+        initSpinner();
         spinSport.setOnItemSelectedListener(this);
+    }
+
+    private void initSpinner() {
+        eventSpinnerItem.add("--Choose--");
+        adapter = new ArrayAdapter<String>(this.getBaseContext(), android.R.layout.simple_spinner_dropdown_item, eventSpinnerItem);
+        adapter.notifyDataSetChanged();
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinEvent.setAdapter(adapter);
+
+        sportSpinnerItem.add("--Choose--");
+        adapterSport = new ArrayAdapter<String>(this.getBaseContext(), android.R.layout.simple_spinner_dropdown_item, sportSpinnerItem);
+        adapterSport.notifyDataSetChanged();
+        adapterSport.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinSport.setAdapter(adapterSport);
+
+        branchSpinnerItem.add("--Choose--");
+        spinBranch.setSelection(0);
+        adapterBranch = new ArrayAdapter<String>(this.getBaseContext(), android.R.layout.simple_spinner_dropdown_item, branchSpinnerItem);
+        adapterBranch.notifyDataSetChanged();
+        adapterBranch.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinBranch.setAdapter(adapterBranch);
     }
 
     @Override
     public void onClick(View view) {
         if(view == btnAdd){
-            Intent intent = new Intent(this, RegisterActivity.class);
-            startActivity(intent);
-
-
-            /*Achievement achievement = new Achievement();
-                achievement.setEventName(spinEvent.getSelectedItem().toString());
-                //achievement.setEventStart(Date.valueOf(etEventStartDate.getText().toString()));
-                //achievement.setEventEnd(Date.valueOf(etEventEndDate.getText().toString()));
-                achievement.setSport(spinSport.getSelectedItem().toString());
-                achievement.setBranch(spinBranch.getSelectedItem().toString());
-                achievement.setDesc(etEventDescription.getText().toString());
-                if(rbPos1.isChecked()) achievement.setPosition(1);
-                else if(rbPos2.isChecked()) achievement.setPosition(2);
-                else if(rbPos3.isChecked()) achievement.setPosition(3);
-            Achievement.achievementList.add(achievement);*/
+            mapParamsAddAchievement();
+            callApiAddAchievement();
         }
     }
 
-    private void populateSpinnerEvent(Spinner spinner) {
-        for(int i = 0; i< Event.eventList.size(); i++){
-            eventSpinnerItem.add(Event.eventList.get(i).getEvent_name());
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getBaseContext(), android.R.layout.simple_spinner_item, eventSpinnerItem);
-        spinner.setAdapter(adapter);
+    private void mapParams () {
+        GlobalActivity globalActivity = new GlobalActivity();
+        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(this);
+        String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+        String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";
+        params = new HashMap<>();
+
+        params.put("userID" , id);
+        params.put("remember_token" , remember_token);
     }
 
-    public void populateSpinnerSport(Spinner spinner){
-        for(int i=0; i< Sport.sportList.size(); i++){
-            sportSpinnerItem.add(Sport.sportList.get(i).getSportName());
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getBaseContext(), android.R.layout.simple_spinner_item, sportSpinnerItem);
-        spinner.setAdapter(adapter);
+    private void callApi () {
+        APIManager apiManager = new APIManager();
+        apiManager.getEventsForSpinner(this.getBaseContext(), params , eventSpinnerItem, adapter , android.R.layout.simple_spinner_item , spinEvent);
+    }
+
+    private void mapParamsAthleteSport(){
+        GlobalActivity globalActivity = new GlobalActivity();
+        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(this);
+        String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+        String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : null;
+        paramsForAthleteSport = new HashMap<>();
+
+        paramsForAthleteSport.put("userID" , id);
+        paramsForAthleteSport.put("remember_token" , remember_token);
+    }
+
+    private void callApiGetSport() {
+        APIManager apiManagerSport = new APIManager();
+        apiManagerSport.getSport(this.getBaseContext(), paramsForAthleteSport, sportSpinnerItem, adapterSport, android.R.layout.simple_spinner_dropdown_item , spinSport);
+    }
+
+    private void mapParamsAthleteBranch(){
+        GlobalActivity globalActivity = new GlobalActivity();
+        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(this);
+        String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+        String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : null;
+        String sportName = spinSport.getSelectedItem().toString();
+        paramsForAthleteBranch = new HashMap<>();
+
+        paramsForAthleteBranch.put("userID" , id);
+        paramsForAthleteBranch.put("sportName" , sportName);
+        paramsForAthleteBranch.put("remember_token" , remember_token);
+    }
+
+    private void callApiGetBranch() {
+        APIManager apiManagerBranch = new APIManager();
+        apiManagerBranch.getBranchForSpinner(this.getBaseContext(), paramsForAthleteBranch, branchSpinnerItem, adapterBranch, android.R.layout.simple_spinner_dropdown_item , spinBranch);
     }
 
     @Override
@@ -110,19 +161,50 @@ public class AddAchievementActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        branchSpinnerItem.clear();
-        for(int k=0; k< Branch.branchList.size(); k++){
-            if(Branch.branchList.get(k).getSportName().equals(sportSpinnerItem.get(i)))
-            {
-                branchSpinnerItem.add(Branch.branchList.get(k).getBranchName());
-            }
+        if(!spinSport.getSelectedItem().equals("--Choose--")){
+            mapParamsAthleteBranch();
+            callApiGetBranch();
+
+            branchSpinnerItem.add("--Choose--");
+            adapterBranch = new ArrayAdapter<String>(this.getBaseContext(), android.R.layout.simple_spinner_dropdown_item, branchSpinnerItem);
+            adapterBranch.notifyDataSetChanged();
+            adapterBranch.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinBranch.setAdapter(adapterBranch);
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getBaseContext(), android.R.layout.simple_spinner_item, branchSpinnerItem);
-        spinBranch.setAdapter(adapter);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    private void mapParamsAddAchievement() {
+        GlobalActivity globalActivity = new GlobalActivity();
+        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(this);
+        String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+        String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : null;
+        String sportName = spinSport.getSelectedItem().toString();
+        String eventName = spinEvent.getSelectedItem().toString();
+        String branchName = spinBranch.getSelectedItem().toString();
+        String desc = etAchievementDesc.getText().toString();
+        String position = null;
+        if(rbPos1.isChecked()) position = "1";
+        else if(rbPos2.isChecked()) position = "2";
+        else if(rbPos3.isChecked()) position = "3";
+
+        paramsForAddAchievement = new HashMap<>();
+
+        paramsForAddAchievement.put("userID" , id);
+        paramsForAddAchievement.put("sportName" , sportName);
+        paramsForAddAchievement.put("eventName" , eventName);
+        paramsForAddAchievement.put("branchName" , branchName);
+        paramsForAddAchievement.put("desc" , desc);
+        paramsForAddAchievement.put("position" , position);
+        paramsForAddAchievement.put("remember_token" , remember_token);
+    }
+
+    private void callApiAddAchievement() {
+        APIManager apiManagerAddAchievement = new APIManager();
+        apiManagerAddAchievement.addAchievement(this.getBaseContext(), paramsForAddAchievement);
     }
 }

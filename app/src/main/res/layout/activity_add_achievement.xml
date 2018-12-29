@@ -95,7 +95,7 @@
                 android:layout_height="15dp" />
 
             <EditText
-                android:id="@+id/etEventDescription"
+                android:id="@+id/etAchievementDesc"
                 android:layout_width="match_parent"
                 android:layout_height="155dp"
                 android:ems="10"
