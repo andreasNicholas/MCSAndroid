@@ -11,6 +11,7 @@ import com.onesignal.OneSignal;
 import java.util.Objects;
 
 import project.aigo.myapplication.Adapter.TabAdapter;
+import project.aigo.myapplication.Fragment.EventListFragment;
 import project.aigo.myapplication.Fragment.HomeFragment;
 import project.aigo.myapplication.Fragment.ProfileChatFragment;
 import project.aigo.myapplication.Fragment.ProfileSettingFragment;
@@ -23,6 +24,7 @@ public class MainActivity extends GlobalActivity {
             R.drawable.ic_home_black_24dp ,
             R.drawable.ic_search_white_24dp ,
             R.drawable.ic_forum_black_24dp ,
+            R.drawable.ic_insert_invitation_black_24dp,
             R.drawable.ic_settings_black_24dp
     };
     private String id;
@@ -51,13 +53,15 @@ public class MainActivity extends GlobalActivity {
 
         OneSignal.setInFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification);
 
+
         ViewPager viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HomeFragment() , "Home");
-        adapter.addFragment(new SearchAthleteFragment() , "Athletes");
-        adapter.addFragment(new ProfileChatFragment() , "Chat");
-        adapter.addFragment(new ProfileSettingFragment() , "My Profile");
+        adapter.addFragment(new HomeFragment(), null, "Home");
+        adapter.addFragment(new SearchAthleteFragment(), null, "Athletes");
+        adapter.addFragment(new ProfileChatFragment(), null, "Chat");
+        adapter.addFragment(new EventListFragment(), null, "Events");
+        adapter.addFragment(new ProfileSettingFragment(), null, "My Profile");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -69,6 +73,7 @@ public class MainActivity extends GlobalActivity {
         Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(tabIcons[1]);
         Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(tabIcons[2]);
         Objects.requireNonNull(tabLayout.getTabAt(3)).setIcon(tabIcons[3]);
+        Objects.requireNonNull(tabLayout.getTabAt(4)).setIcon(tabIcons[4]);
     }
 
 

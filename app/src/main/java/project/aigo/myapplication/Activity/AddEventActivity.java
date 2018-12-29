@@ -1,78 +1,76 @@
-package project.aigo.myapplication.Fragment;
+package project.aigo.myapplication.Activity;
 
-import android.app.Fragment;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import project.aigo.myapplication.APIManager;
-import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.R;
 
-import static android.app.Activity.RESULT_OK;
 import static project.aigo.myapplication.Activity.GlobalActivity.DEFAULT_IMAGE;
 
-public class EventEditFragment extends Fragment implements View.OnClickListener {
-    EditText etEventName, etEventDescription, etEventStartDate, etEventStartTime, etEventEndDate, etEventEndTime;
-    ImageView ivEventImage;
-    Button btnEditEvent;
-    String imageExtension = "";
-    Bitmap bitmapContainer;
-    Bundle bundle;
-    Uri uri;
-    String currentEventID = "";
-    View layoutView;
-    String addorEdit;
-    GlobalActivity globalActivity;
-
-    public EventEditFragment () {
-        // Required empty public constructor
-    }
+public class AddEventActivity extends AppCompatActivity implements View.OnClickListener {
+    private EditText etEventName, etEventDescription, etEventStartDate, etEventStartTime, etEventEndDate, etEventEndTime;
+    private ImageView ivEventImage;
+    private Button btnEditEvent;
+    private String imageExtension = "";
+    private Bitmap bitmapContainer;
+    private Bundle bundle;
+    private Uri uri;
+    private String currentEventID = "";
+    private View layoutView;
+    private String addorEdit;
+    private GlobalActivity globalActivity;
+    private Activity activity = this;
 
     @Override
-    public View onCreateView ( LayoutInflater inflater , ViewGroup parent , Bundle savedInstanceState ) {
-        // Inflate the layout for this fragment
-        globalActivity = new GlobalActivity();
-        layoutView = getActivity().findViewById(R.id.eventActivity);
-        View view = inflater.inflate(R.layout.fragment_event_edit , parent , false);
-        etEventName = view.findViewById(R.id.etEventName);
-        etEventDescription = view.findViewById(R.id.etEventDescription);
-        etEventStartDate = view.findViewById(R.id.etEventStartDate);
-        etEventStartTime = view.findViewById(R.id.etEventStartTime);
-        etEventEndDate = view.findViewById(R.id.etEventEndDate);
-        etEventEndTime = view.findViewById(R.id.etEventEndTime);
-        btnEditEvent = view.findViewById(R.id.btnEditEvent);
-        ivEventImage = view.findViewById(R.id.ivEventImage);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_event);
 
-        bundle = getArguments();
+        globalActivity = new GlobalActivity();
+        layoutView = findViewById(R.id.AddEventActivity);
+        etEventName = findViewById(R.id.etEventName);
+        etEventDescription = findViewById(R.id.etEventDescription);
+        etEventStartDate = findViewById(R.id.etEventStartDate);
+        etEventStartTime = findViewById(R.id.etEventStartTime);
+        etEventEndDate = findViewById(R.id.etEventEndDate);
+        etEventEndTime = findViewById(R.id.etEventEndTime);
+        btnEditEvent = findViewById(R.id.btnEditEvent);
+        ivEventImage = findViewById(R.id.ivEventImage);
+
+        bundle = getIntent().getExtras();
         if (bundle != null) {
             String[] arrayEvent = bundle.getStringArray("arrayEvent");
-            currentEventID = (arrayEvent != null) ? arrayEvent[0] : "";
-            String currentEventName = (arrayEvent != null) ? arrayEvent[1] : "";
-            String currentEventDescription = (arrayEvent != null) ? arrayEvent[2] : "";
+            currentEventID = (arrayEvent != null) ? arrayEvent[0] : "id";
+            String currentEventName = (arrayEvent != null) ? arrayEvent[1] : "event_name";
+            String currentEventDescription = (arrayEvent != null) ? arrayEvent[2] : "event_description";
             String currentEventImage = (arrayEvent != null) ? arrayEvent[3] : DEFAULT_IMAGE;
-            String currentEventStartDate = (arrayEvent != null) ? arrayEvent[4] : "";
-            String currentEventStartTime = (arrayEvent != null) ? arrayEvent[5] : "";
-            String currentEventEndDate = (arrayEvent != null) ? arrayEvent[6] : "";
-            String currentEventEndTime = (arrayEvent != null) ? arrayEvent[7] : "";
+            String currentEventStartDate = (arrayEvent != null) ? arrayEvent[4] : "event_start_date";
+            String currentEventStartTime = (arrayEvent != null) ? arrayEvent[5] : "event_start_time";
+            String currentEventEndDate = (arrayEvent != null) ? arrayEvent[6] : "event_end_date";
+            String currentEventEndTime = (arrayEvent != null) ? arrayEvent[7] : "event_end_time";
             currentEventImage = (currentEventImage.equals("null")) ? DEFAULT_IMAGE : currentEventImage;
             Picasso.get().load(currentEventImage).into(ivEventImage);
             ivEventImage.setScaleType(ImageView.ScaleType.FIT_XY);
-            ivEventImage.getLayoutParams().height = ((getActivity().getResources().getDisplayMetrics().heightPixels) / 4);
+            ivEventImage.getLayoutParams().height = ((this.getResources().getDisplayMetrics().heightPixels) / 4);
             etEventName.setText(currentEventName);
             etEventDescription.setText(currentEventDescription);
             etEventStartDate.setText(currentEventStartDate);
@@ -93,8 +91,6 @@ public class EventEditFragment extends Fragment implements View.OnClickListener 
         etEventEndTime.setOnClickListener(this);
         btnEditEvent.setOnClickListener(this);
         ivEventImage.setOnClickListener(this);
-
-        return view;
     }
 
     @Override
@@ -105,7 +101,7 @@ public class EventEditFragment extends Fragment implements View.OnClickListener 
             uri = result.getUri();
             imageExtension = globalActivity.getImageName(uri);
             try {
-                bitmapContainer = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver() , result.getUri());
+                bitmapContainer = MediaStore.Images.Media.getBitmap(this.getContentResolver() , result.getUri());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -120,22 +116,22 @@ public class EventEditFragment extends Fragment implements View.OnClickListener 
         if (view == btnEditEvent) {
             callApi();
         } else if (view == ivEventImage) {
-            CropImage.activity().setAspectRatio(3 , 1).start(getActivity() , this);
+            CropImage.activity().setAspectRatio(3 , 1).start(this);
         } else if (view == etEventStartDate) {
-            globalActivity.createGlobalDatePickerDialog(getActivity(), "yyyy-MM-dd", etEventStartDate).show();
+            globalActivity.createGlobalDatePickerDialog(this, "yyyy-MM-dd", etEventStartDate).show();
         } else if (view == etEventStartTime) {
-           globalActivity.createGlobalTimePickerDialog(getActivity(), "HH:mm:00", etEventStartTime).show();
+            globalActivity.createGlobalTimePickerDialog(this, "HH:mm:00", etEventStartTime).show();
         } else if (view == etEventEndDate) {
-            globalActivity.createGlobalDatePickerDialog(getActivity(), "yyyy-MM-dd", etEventEndDate).show();
+            globalActivity.createGlobalDatePickerDialog(this, "yyyy-MM-dd", etEventEndDate).show();
         } else if (view == etEventEndTime){
-            globalActivity.createGlobalTimePickerDialog(getActivity(), "HH:mm:00", etEventEndTime).show();
+            globalActivity.createGlobalTimePickerDialog(this, "HH:mm:00", etEventEndTime).show();
         }
     }
 
     private void callApi () {
         final APIManager api = new APIManager();
 
-        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(getActivity());
+        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(this);
         String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
         String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";
         String eventID = (currentEventID.isEmpty()) ? "" : currentEventID;
@@ -161,11 +157,11 @@ public class EventEditFragment extends Fragment implements View.OnClickListener 
         params.put("image_ext" , imageExtension);
         String eventNameAlert = addorEdit + " Confirmation";
         String message = "Are you sure want to " + addorEdit + " ?";
-        AlertDialog.Builder builder = globalActivity.createGlobalAlertDialog(getActivity() , eventNameAlert , message);
+        AlertDialog.Builder builder = globalActivity.createGlobalAlertDialog(this , eventNameAlert , message);
         builder.setPositiveButton("Yes" , new DialogInterface.OnClickListener() {
             @Override
             public void onClick ( DialogInterface dialogInterface , int i ) {
-                api.updateOrCreateEvent(getActivity() , layoutView , params , EventEditFragment.this);
+                api.updateOrCreateEvent(activity , layoutView , params, null);
 
             }
         });

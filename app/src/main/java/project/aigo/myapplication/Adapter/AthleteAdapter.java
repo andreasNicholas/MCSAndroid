@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +26,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import project.aigo.myapplication.Activity.ChatActivity;
+import project.aigo.myapplication.Activity.GlobalActivity;
+import project.aigo.myapplication.Activity.ProfileActivity;
 import project.aigo.myapplication.Object.User;
 import project.aigo.myapplication.R;
 
@@ -45,7 +48,7 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
     @NonNull
     @Override
     public AthleteAdapter.ViewHolder onCreateViewHolder ( @NonNull ViewGroup parent , int viewType ) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.branch , parent , false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.athlete , parent , false);
 
         return new ViewHolder(v);
     }
@@ -58,9 +61,9 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
 
         Picasso.get().load(img).into(holder.ivPhoto);
 
-        holder.tvName.setText(user.getName());
-        holder.tvGender.setText(user.getGender());
-        holder.tvDetail.setText(user.getSport_branch());
+          holder.tvName.setText(user.getName());
+          holder.tvGender.setText(user.getGender());
+          holder.tvDetail.setText(user.getSport_branch());
     }
 
     @Override
@@ -96,6 +99,19 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
 
                             switch (i) {
                                 case 0:
+                                    GlobalActivity globalActivity = new GlobalActivity();
+                                    String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(mContext);
+                                    String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+                                    String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : null;
+                                    String athleteID = userList.get(position).getUserID();
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("userID", id);
+                                    bundle.putString("remember_token", remember_token);
+                                    bundle.putString("athleteID", athleteID);
+                                    Intent intent = new Intent(mContext, ProfileActivity.class);
+                                    intent.putExtras(bundle);
+                                    mContext.startActivity(intent);
                                     break;
                                 case 1:
 

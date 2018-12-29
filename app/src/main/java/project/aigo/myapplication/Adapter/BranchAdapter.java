@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Object.Branch;
 import project.aigo.myapplication.R;
 
@@ -17,8 +18,14 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
     private Context mContext;
     private List<Branch> branchList;
     private View layoutView;
+    private String holderGender;
 
     public BranchAdapter(Context context) {
+        this.mContext = context;
+        this.layoutView = layoutView;
+    }
+
+    public BranchAdapter(Context context, View layoutView) {
         this.mContext = context;
         this.branchList = branchList;
         this.layoutView = layoutView;
@@ -35,7 +42,7 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull BranchAdapter.ViewHolder holder, int position) {
-        final Branch branch = Branch.branchList.get(position);
+        Branch branch = Branch.branchList.get(position);
         holder.tvSport.setText(branch.getSportName());
         holder.tvBranch.setText(branch.getBranchName());
     }
@@ -50,8 +57,8 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
 
         private ViewHolder ( View itemView ) {
             super(itemView);
-            tvSport = itemView.findViewById(R.id.tvAthleteName);
-            tvBranch = itemView.findViewById(R.id.tvAthleteGender);
+            tvSport = itemView.findViewById(R.id.tvSport);
+            tvBranch = itemView.findViewById(R.id.tvbranch);
         }
     }
 }

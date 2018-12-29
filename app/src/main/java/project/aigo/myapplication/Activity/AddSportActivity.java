@@ -21,12 +21,14 @@ public class AddSportActivity extends AppCompatActivity implements View.OnClickL
     private SportAdapter sportAdapter;
     private RecyclerView recyclerView;
     private HashMap<String, String> paramsForAddSport;
-    private HashMap<String, String> paramsForGetSport;
+    private HashMap<String, String> paramsForAthleteSport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_sport);
+        mapParamsAthleteSport();
+        callApiGetSport();
 
         etSportName = findViewById(R.id.etSportName);
         btnAddSport = findViewById(R.id.btnAddSport);
@@ -37,6 +39,12 @@ public class AddSportActivity extends AppCompatActivity implements View.OnClickL
         sportAdapter = new SportAdapter(this.getBaseContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(sportAdapter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Sport.sportList.clear();
     }
 
     @Override
@@ -67,22 +75,19 @@ public class AddSportActivity extends AppCompatActivity implements View.OnClickL
         APIManager apiManagerAddSport = new APIManager();
         apiManagerAddSport.addSport(this, paramsForAddSport, sportAdapter);
     }
-/*
-USE LATER FOR BETTER METHOD
-    private void mapParamsGetSport () {
+
+    private void mapParamsAthleteSport(){
         GlobalActivity globalActivity = new GlobalActivity();
         String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(this);
         String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
-        String sportName = etSportName.getText().toString();
         String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : null;
-        paramsForGetSport = new HashMap<>();
+        paramsForAthleteSport = new HashMap<>();
 
-        paramsForGetSport.put("userID", id);
-        paramsForGetSport.put("remember_token" , remember_token);
+        paramsForAthleteSport.put("userID" , id);
+        paramsForAthleteSport.put("remember_token" , remember_token);
     }
-
-    private void callApigetSport() {
-        APIManager apiManagerGetSport = new APIManager();
-        apiManagerGetSport.getSport(this, paramsForGetSport);
-    }*/
+    private void callApiGetSport() {
+        APIManager apiManagerSport = new APIManager();
+        apiManagerSport.getSport(this, paramsForAthleteSport, null, null, 0, null);
+    }
 }

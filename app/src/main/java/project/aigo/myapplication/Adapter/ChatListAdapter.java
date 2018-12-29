@@ -50,11 +50,11 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         final int position = holder.getAdapterPosition();
         final ChatList chatList = chatLists.get(position);
 
-        if (!chatList.getLastTimeChat().isEmpty()) {
+       /* if (!chatList.getLastTimeChat().isEmpty()) {
             long lastTimeChat = Long.parseLong(chatList.getLastTimeChat());
             String date = globalActivity.getFriendlyTime(new Date(lastTimeChat));
             holder.tvLastTime.setText(date);
-        }
+        }*/
 
 
         holder.tvName.setText(chatList.getName());

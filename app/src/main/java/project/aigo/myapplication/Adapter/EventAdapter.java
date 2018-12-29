@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.Map;
 
 import project.aigo.myapplication.APIManager;
+import project.aigo.myapplication.Activity.AddEventActivity;
 import project.aigo.myapplication.Activity.EventCalendarActivity;
 import project.aigo.myapplication.Activity.EventDetailActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
-import project.aigo.myapplication.Fragment.EventEditFragment;
 import project.aigo.myapplication.Object.Event;
 import project.aigo.myapplication.R;
 
@@ -95,9 +95,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                                     String event_end_date = events.getEvent_end_datetime().substring(0 , 10);
                                     String event_end_time = events.getEvent_end_datetime().substring(11);
                                     String[] arrayEvent = {id , event_name , event_description , imageSrc , event_start_date , event_start_time , event_end_date , event_end_time};
+
+                                    Intent intent = new Intent(mContext, AddEventActivity.class);
                                     Bundle bundle = new Bundle();
                                     bundle.putStringArray("arrayEvent" , arrayEvent);
-                                    globalActivity.loadFragment(new EventEditFragment() , R.id.eventActivity , mContext , bundle , "editFragment");
+                                    intent.putExtras(bundle);
+                                    mContext.startActivity(intent);
+                                    //globalActivity.loadFragment(new EventEditFragment() , R.id.mainActivity , mContext , bundle , "editFragment");
                                     break;
                                 case 1:
                                     callApi(events.getId() , position);
@@ -147,6 +151,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     String imageSrc = (events.getEvent_image_path().equals("null")) ? DEFAULT_IMAGE : events.getEvent_image_path();
                     String event_start_datetime = events.getEvent_start_datetime();
                     String event_end_datetime = events.getEvent_end_datetime();
+
                     Intent intent = new Intent(mContext, EventDetailActivity.class);
 
                     intent.putExtra("event_name", event_name);

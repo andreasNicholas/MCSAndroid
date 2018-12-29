@@ -31,9 +31,6 @@
         <activity android:name=".Activity.AddAchievementActivity" />
         <activity android:name=".Activity.AddSportActivity" />
         <activity android:name=".Activity.AddBranchActivity" />
-        <activity
-            android:name=".Activity.EventActivity"
-            android:label="Event Activity" />
         <activity android:name=".Activity.EventCalendarActivity" />
         <activity android:name=".Activity.EventDetailActivity" />
         <activity android:name=".Activity.DetailNewsActivity" />
@@ -41,7 +38,10 @@
             android:name=".Activity.MainActivity"
             android:label="@string/title_activity_main" />
         <activity android:name=".Activity.AddNewsActivity" />
-        <activity android:name=".Activity.ChatActivity"></activity>
+        <activity android:name=".Activity.ChatActivity" />
+        <activity android:name=".Activity.AddUserBranchActivity" />
+        <activity android:name=".Activity.AddEventActivity" />
+        <activity android:name=".Activity.TestActivity"></activity>
     </application>
 
 </manifest>

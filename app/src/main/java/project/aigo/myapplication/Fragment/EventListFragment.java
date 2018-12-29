@@ -1,8 +1,9 @@
 package project.aigo.myapplication.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import project.aigo.myapplication.APIManager;
-import project.aigo.myapplication.Activity.EventActivity;
+import project.aigo.myapplication.Activity.AddEventActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Activity.MainActivity;
 import project.aigo.myapplication.Adapter.EventAdapter;
@@ -58,14 +59,16 @@ public class EventListFragment extends Fragment implements View.OnClickListener 
         });
         fabAddEvent = view.findViewById(R.id.fabAddEvent);
         fabAddEvent.setOnClickListener(this);
+        if ((role.equals("athlete")))
+            fabAddEvent.setVisibility(View.INVISIBLE);
+        else fabAddEvent.setVisibility(View.VISIBLE);
 
         eventsList = new ArrayList<>();
         if (getActivity() instanceof MainActivity) {
             layoutID = R.id.mainActivity;
-            limit = "5";
+            limit = "";
 
-        } else if (getActivity() instanceof EventActivity) {
-            layoutID = R.id.eventActivity;
+        } else {
             limit = "";
         }
         layoutView = getActivity().findViewById(layoutID);
@@ -74,31 +77,23 @@ public class EventListFragment extends Fragment implements View.OnClickListener 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(eventAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled ( RecyclerView recyclerView , int dx , int dy ) {
-                if (dy > 0 || dy < 0 && fabAddEvent.isShown())
+                if(dy >0)
                     fabAddEvent.hide();
             }
 
             @Override
             public void onScrollStateChanged ( RecyclerView recyclerView , int newState ) {
-
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if ((role.equals("athlete")) || getActivity() instanceof MainActivity)
-                        fabAddEvent.setVisibility(View.INVISIBLE);
-                    else fabAddEvent.show();
-
-                }
                 super.onScrollStateChanged(recyclerView , newState);
+                    fabAddEvent.show();
+
             }
 
         });
         refresh();
-
-        if (role.equals("athlete") || getActivity() instanceof MainActivity)
-            fabAddEvent.setVisibility(View.INVISIBLE);
 
         return view;
     }
@@ -128,7 +123,8 @@ public class EventListFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick ( View view ) {
         if (view == fabAddEvent) {
-            globalActivity.loadFragment(new EventEditFragment() , R.id.eventActivity , getActivity() , null , "addFragment");
+            Intent intent = new Intent(getActivity(), AddEventActivity.class);
+            startActivity(intent);
         }
 
     }

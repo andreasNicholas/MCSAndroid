@@ -40,7 +40,7 @@ public class ProfileCompetitionAdapter extends RecyclerView.Adapter<ProfileCompe
                 SimpleDateFormat formatter = new SimpleDateFormat("EEE dd MM yyyy", Locale.US);
 
                 holder.tvDate.setText(formatter.format(endDate));
-                String achievement = String.format("%s Position %s",achievementList.get(position).getEventName(),achievementList.get(position).getPosition());
+                String achievement = String.format("%s | %s %s | Position %s",achievementList.get(position).getEventName(), achievementList.get(position).getSport(), achievementList.get(position).getBranch(),achievementList.get(position).getPosition());
                 holder.tvAchievement.setText(achievement);
             }
     }

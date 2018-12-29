@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.AddBranchActivity">
+    tools:context=".Activity.AddUserBranchActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Add Branch"
+            android:text="Add Number Participation"
             android:textAppearance="@android:style/TextAppearance.Material.Medium"
             android:textColor="@color/colorBg"
             android:textStyle="bold|italic"
@@ -52,32 +52,48 @@
                 android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
             <Spinner
-                android:id="@+id/spinSport2"
+                android:id="@+id/spinSport3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dialog"/>
+                android:layout_height="wrap_content" />
 
-            <EditText
-                android:id="@+id/etBranchName"
+            <TextView
+                android:id="@+id/textView16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Branch Name"
-                android:inputType="textPersonName" />
+                android:layout_marginLeft="5dp"
+                android:text="Branch"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+            <Spinner
+                android:id="@+id/spinBranch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <Button
-                android:id="@+id/btnAddBranch"
+                android:id="@+id/btnAddUserBranch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:text="Add Branch" />
+                android:text="Add Number Participation" />
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
 
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My Participation"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                android:textColor="@color/colorBg"
+                android:textStyle="bold|italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvBranch"
+                android:id="@+id/rvUserBranch"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

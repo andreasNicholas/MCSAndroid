@@ -32,6 +32,8 @@ import java.util.Map;
 import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Activity.AddAchievementActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
+import project.aigo.myapplication.Activity.ProfileActivity;
+import project.aigo.myapplication.Adapter.AthleteAdapter;
 import project.aigo.myapplication.Adapter.ProfileCompetitionAdapter;
 import project.aigo.myapplication.Object.Achievement;
 import project.aigo.myapplication.R;
@@ -60,16 +62,21 @@ public class ProfileCompStatFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.rvAchievement);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(profileCompetitionAdapter);
+        fabAchievement.show();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled ( RecyclerView recyclerView , int dx , int dy ) {
-                super.onScrolled(recyclerView , dx , dy);
-                if (dy > 0 && fabAchievement.getVisibility() == View.VISIBLE) {
+                if(dy >0)
                     fabAchievement.hide();
-                } else if (dy < 0 && fabAchievement.getVisibility() != View.VISIBLE) {
-                    fabAchievement.show();
-                }
             }
+
+            @Override
+            public void onScrollStateChanged ( RecyclerView recyclerView , int newState ) {
+                super.onScrollStateChanged(recyclerView , newState);
+                fabAchievement.show();
+
+            }
+
         });
 
         fabAchievement.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +91,22 @@ public class ProfileCompStatFragment extends Fragment {
             @Override
             public void onItemSelected ( AdapterView<?> adapterView , View view , int i , long l ) {
                 detailAchievementList.clear();
-                mapParams();
-                callApi();
+                //JIKA SEARCH ATHLETE
+                try {
+                    if (!ProfileActivity.athleteBundle.isEmpty()) {
+                        mapParamsForAthlete();
+                        callApi();
+                    }
+                    //JIKA MY PROFILE
+                    else {
+                        mapParams();
+                        callApi();
+                    }
+                }
+                catch (Exception e){
+                    mapParams();
+                    callApi();
+                }
             }
 
             @Override
@@ -144,6 +165,24 @@ public class ProfileCompStatFragment extends Fragment {
     }
 
     private void callApi () {
+        APIManager apiManager = new APIManager();
+        apiManager.getAchievementNoMonth(getContext() , layoutView , params , chart);
+        apiManager.getAchievement(getActivity() , layoutView , params , profileCompetitionAdapter , achievementList, detailAchievementList);
+    }
+
+    private void mapParamsForAthlete () {
+        GlobalActivity globalActivity = new GlobalActivity();
+        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(getActivity());
+        String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+        String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : null;
+        params = new HashMap<>();
+
+        params.put("userID" , ProfileActivity.athleteBundle.getString("athleteID"));
+        params.put("remember_token" , remember_token);
+        params.put("year" , spinYear.getSelectedItem().toString());
+    }
+
+    private void callApiForAthlete () {
         APIManager apiManager = new APIManager();
         apiManager.getAchievementNoMonth(getContext() , layoutView , params , chart);
         apiManager.getAchievement(getActivity() , layoutView , params , profileCompetitionAdapter , achievementList, detailAchievementList);

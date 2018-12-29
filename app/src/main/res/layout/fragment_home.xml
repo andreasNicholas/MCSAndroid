@@ -21,15 +21,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/slider"
+
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
-
-            </android.support.v4.view.ViewPager>
-
+                android:layout_height="10dp" />
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
