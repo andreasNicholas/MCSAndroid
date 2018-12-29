@@ -21,6 +21,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <Button
+                android:id="@+id/btnEventCalendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@string/event_calendar" />
 
             <Space
                 android:layout_width="match_parent"
@@ -57,7 +63,7 @@
                         tools:layout_editor_absoluteY="187dp" />
 
                     <TextView
-                        android:id="@+id/textView9"
+                        android:id="@+id/tvNewsList"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

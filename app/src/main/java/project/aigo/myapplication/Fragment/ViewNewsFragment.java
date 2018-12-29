@@ -111,7 +111,6 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void mapParams () {
-        GlobalActivity globalActivity = new GlobalActivity();
         String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(getActivity());
         String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
         String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";
@@ -134,6 +133,12 @@ public class ViewNewsFragment extends Fragment implements View.OnClickListener {
             Intent intent = new Intent(getActivity() , AddNewsActivity.class);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onResume () {
+        super.onResume();
+        refresh();
     }
 
 }

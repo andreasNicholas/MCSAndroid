@@ -37,8 +37,7 @@ import java.util.Objects;
 public class GlobalActivity extends AppCompatActivity {
 
     public static final String DEFAULT_IMAGE = "https://via.placeholder.com/400x400";
-    protected static final int TIME_INTERVAL = 2000; // # milliseconds, desired time passed between two back presses.
-    protected long mBackPressed;
+    public static final String SMOOCH_APP_TOKEN = "5bd91ae8ec0d510022377119";
 
     public String toStringTrim ( EditText editText ) {
         return editText.getText().toString().trim();

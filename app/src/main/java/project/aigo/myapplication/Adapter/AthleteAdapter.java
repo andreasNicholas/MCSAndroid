@@ -38,11 +38,13 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
     private List<User> userList;
     private String sender;
     private String notificationKey;
+    private String role;
 
-    public AthleteAdapter ( Context context , List<User> userList , String sender ) {
+    public AthleteAdapter ( Context context , List<User> userList , String sender , String role ) {
         this.mContext = context;
         this.userList = userList;
         this.sender = sender;
+        this.role = role;
     }
 
     @NonNull
@@ -87,7 +89,9 @@ public class AthleteAdapter extends RecyclerView.Adapter<AthleteAdapter.ViewHold
                 @Override
                 public boolean onLongClick ( View view ) {
 
-                    String[] menu = {"View" , "Chat"};
+                    String[] menuAthelete = {"View" , "Chat"};
+                    String[] menuAdmin = {"View"};
+                    String[] menu = (role.equals("admin")) ? menuAdmin : menuAthelete;
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setIcon(R.drawable.ic_search_black_24dp);

@@ -10,7 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -61,7 +60,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import project.aigo.myapplication.Activity.AddUserBranchActivity;
 import project.aigo.myapplication.Activity.EventCalendarActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Activity.LoginActivity;
@@ -323,8 +321,8 @@ public class APIManager {
     }
 
     public void updateOrCreateNews ( final Context context , final View view , final Map<String, String> params ) {
-        //final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
-        //progressDialog.show();
+        final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
+        progressDialog.show();
 
         String url = globalActivity.route("updateOrCreateNews");
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
@@ -335,14 +333,14 @@ public class APIManager {
             public void onResponse ( String response ) {
                 String message = (params.get("newsID").isEmpty()) ? "Add" : "Update";
                 globalActivity.toastShort(context , message + " Success");
-                //progressDialog.dismiss();
+                progressDialog.dismiss();
 
             }
         } , new Response.ErrorListener() {
             @Override
             public void onErrorResponse ( VolleyError error ) {
                 globalActivity.snackShort(view , error.getMessage());
-                //progressDialog.dismiss();
+                progressDialog.dismiss();
             }
         }) {
             @Override
@@ -533,7 +531,7 @@ public class APIManager {
         mRequestQueue.add(mStringRequest);
     }
 
-    public void updateOrCreateEvent ( final Context context , final View view , final Map<String, String> params , final Fragment fragment ) {
+    public void updateOrCreateEvent ( final Context context , final View view , final Map<String, String> params ) {
         final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
         progressDialog.show();
 
@@ -546,8 +544,7 @@ public class APIManager {
             public void onResponse ( String response ) {
                 String message = (params.get("eventID").isEmpty()) ? "Add" : "Update";
                 globalActivity.toastShort(context , message + " Success");
-                //fragment.getFragmentManager().popBackStackImmediate();
-                //progressDialog.dismiss();
+                progressDialog.dismiss();
 
             }
         } , new Response.ErrorListener() {
@@ -796,7 +793,7 @@ public class APIManager {
         };
         mRequestQueue.add(jsonArrayRequest);
         if(layoutId!=0 || spinnerItem!=null || arrayAdapter!=null){
-            arrayAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item, spinnerItem);
+            arrayAdapter = new ArrayAdapter<>(context, R.layout.spinner_item, spinnerItem);
             arrayAdapter.notifyDataSetChanged();
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(arrayAdapter);
@@ -956,7 +953,7 @@ public class APIManager {
         String id = params.get("userID");
         String remember_token = params.get("remember_token");
 
-        String url = globalActivity.route("getAllEvents/" + id + "/" + remember_token);
+        String url = globalActivity.route("getEvents/" + id + "/" + remember_token);
 
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url , new Response.Listener<JSONArray>() {
@@ -1180,11 +1177,6 @@ public class APIManager {
         mRequestQueue.add(jsonArrayRequest);
     }
 
-    public void getAthleteByParam(final Context context,final Map<String, String> params){
-        String id = params.get("userID");
-        String remember_token = params.get("remember_token");
-        String athleteID = params.get("athleteID");
-    }
 
     public void getBranchBySportGender(final Context context , final Map<String, String> params, final ArrayList<String> spinnerItem, ArrayAdapter<String> arrayAdapter, final int layoutId, final Spinner spinner) {
         Branch.branchList.clear();

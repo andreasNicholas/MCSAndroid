@@ -1,13 +1,11 @@
 package project.aigo.myapplication.Activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,28 +22,22 @@ import java.util.Map;
 import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.R;
 
-import static project.aigo.myapplication.Activity.GlobalActivity.DEFAULT_IMAGE;
 
-public class AddEventActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddEventActivity extends GlobalActivity implements View.OnClickListener {
     private EditText etEventName, etEventDescription, etEventStartDate, etEventStartTime, etEventEndDate, etEventEndTime;
     private ImageView ivEventImage;
     private Button btnEditEvent;
     private String imageExtension = "";
     private Bitmap bitmapContainer;
-    private Bundle bundle;
-    private Uri uri;
     private String currentEventID = "";
     private View layoutView;
     private String addorEdit;
-    private GlobalActivity globalActivity;
-    private Activity activity = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-        globalActivity = new GlobalActivity();
         layoutView = findViewById(R.id.AddEventActivity);
         etEventName = findViewById(R.id.etEventName);
         etEventDescription = findViewById(R.id.etEventDescription);
@@ -56,7 +48,7 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         btnEditEvent = findViewById(R.id.btnEditEvent);
         ivEventImage = findViewById(R.id.ivEventImage);
 
-        bundle = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             String[] arrayEvent = bundle.getStringArray("arrayEvent");
             currentEventID = (arrayEvent != null) ? arrayEvent[0] : "id";
@@ -98,8 +90,8 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         super.onActivityResult(requestCode , resultCode , data);
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            uri = result.getUri();
-            imageExtension = globalActivity.getImageName(uri);
+            Uri uri = result.getUri();
+            imageExtension = getImageName(uri);
             try {
                 bitmapContainer = MediaStore.Images.Media.getBitmap(this.getContentResolver() , result.getUri());
 
@@ -118,32 +110,32 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         } else if (view == ivEventImage) {
             CropImage.activity().setAspectRatio(3 , 1).start(this);
         } else if (view == etEventStartDate) {
-            globalActivity.createGlobalDatePickerDialog(this, "yyyy-MM-dd", etEventStartDate).show();
+            createGlobalDatePickerDialog(this, "yyyy-MM-dd", etEventStartDate).show();
         } else if (view == etEventStartTime) {
-            globalActivity.createGlobalTimePickerDialog(this, "HH:mm:00", etEventStartTime).show();
+            createGlobalTimePickerDialog(this, "HH:mm:00", etEventStartTime).show();
         } else if (view == etEventEndDate) {
-            globalActivity.createGlobalDatePickerDialog(this, "yyyy-MM-dd", etEventEndDate).show();
+            createGlobalDatePickerDialog(this, "yyyy-MM-dd", etEventEndDate).show();
         } else if (view == etEventEndTime){
-            globalActivity.createGlobalTimePickerDialog(this, "HH:mm:00", etEventEndTime).show();
+            createGlobalTimePickerDialog(this, "HH:mm:00", etEventEndTime).show();
         }
     }
 
     private void callApi () {
         final APIManager api = new APIManager();
 
-        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(this);
+        String[] getDataforAuthenticate = getDataforAuthenticate(this);
         String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
         String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";
         String eventID = (currentEventID.isEmpty()) ? "" : currentEventID;
-        String event_name = globalActivity.toStringTrim(etEventName);
-        String event_description = globalActivity.toStringTrim(etEventDescription);
-        String event_start_date = globalActivity.toStringTrim(etEventStartDate);
-        String event_start_time = globalActivity.toStringTrim(etEventStartTime);
-        String event_end_date = globalActivity.toStringTrim(etEventEndDate);
-        String event_end_time = globalActivity.toStringTrim(etEventEndTime);
+        String event_name = toStringTrim(etEventName);
+        String event_description = toStringTrim(etEventDescription);
+        String event_start_date = toStringTrim(etEventStartDate);
+        String event_start_time = toStringTrim(etEventStartTime);
+        String event_end_date = toStringTrim(etEventEndDate);
+        String event_end_time = toStringTrim(etEventEndTime);
         String event_start_datetime = String.format("%s %s" , event_start_date , event_start_time);
         String event_end_datetime = String.format("%s %s" , event_end_date , event_end_time);
-        String image_base64 = (bitmapContainer == null) ? "" : globalActivity.encodeTobase64(bitmapContainer);
+        String image_base64 = (bitmapContainer == null) ? "" : encodeTobase64(bitmapContainer);
 
         final Map<String, String> params = new HashMap<>();
         params.put("userID" , id);
@@ -157,11 +149,11 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         params.put("image_ext" , imageExtension);
         String eventNameAlert = addorEdit + " Confirmation";
         String message = "Are you sure want to " + addorEdit + " ?";
-        AlertDialog.Builder builder = globalActivity.createGlobalAlertDialog(this , eventNameAlert , message);
+        AlertDialog.Builder builder = createGlobalAlertDialog(this , eventNameAlert , message);
         builder.setPositiveButton("Yes" , new DialogInterface.OnClickListener() {
             @Override
             public void onClick ( DialogInterface dialogInterface , int i ) {
-                api.updateOrCreateEvent(activity , layoutView , params, null);
+                api.updateOrCreateEvent(AddEventActivity.this , layoutView , params);
 
             }
         });

@@ -59,6 +59,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.6'
     implementation 'com.google.firebase:firebase-database:16.0.5'
     implementation 'com.onesignal:OneSignal:3.10.3'
+    implementation 'io.smooch:core:latest.release'
+    implementation 'io.smooch:ui:latest.release'
 
 }
 apply plugin: 'com.google.gms.google-services'

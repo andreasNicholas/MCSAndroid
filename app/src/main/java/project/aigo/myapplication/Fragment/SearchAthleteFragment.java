@@ -36,6 +36,7 @@ public class SearchAthleteFragment extends Fragment{
     AthleteAdapter athleteAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
     EditText etSearch;
+    GlobalActivity globalActivity;
     public SearchAthleteFragment() {
         // Required empty public constructor
     }
@@ -45,6 +46,7 @@ public class SearchAthleteFragment extends Fragment{
     public View onCreateView( @NonNull LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
 
+        globalActivity = new GlobalActivity();
         View view = inflater.inflate(R.layout.fragment_search_athlete , container , false);
 
         mapParams();
@@ -62,7 +64,8 @@ public class SearchAthleteFragment extends Fragment{
                 refresh();
             }
         });
-        athleteAdapter = new AthleteAdapter(getActivity() , userList, params.get("userID"));
+        String role = globalActivity.getRole(getActivity());
+        athleteAdapter = new AthleteAdapter(getActivity() , userList, params.get("userID"), role);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getActivity()) ,DividerItemDecoration.VERTICAL));
@@ -79,7 +82,7 @@ public class SearchAthleteFragment extends Fragment{
     }
 
     private void mapParams () {
-        GlobalActivity globalActivity = new GlobalActivity();
+
         String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(getActivity());
         String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
         String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";

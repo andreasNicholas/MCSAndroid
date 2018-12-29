@@ -28,14 +28,14 @@ public class MainActivity extends GlobalActivity {
             R.drawable.ic_settings_black_24dp
     };
     private String id;
-    private FirebaseDatabase database;
     private DatabaseReference myRef;
+    private TabAdapter adapter;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
         String[] getDataforAuthenticate = getDataforAuthenticate(this);
@@ -56,25 +56,33 @@ public class MainActivity extends GlobalActivity {
 
         ViewPager viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
-        TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HomeFragment(), null, "Home");
-        adapter.addFragment(new SearchAthleteFragment(), null, "Athletes");
-        adapter.addFragment(new ProfileChatFragment(), null, "Chat");
-        adapter.addFragment(new EventListFragment(), null, "Events");
-        adapter.addFragment(new ProfileSettingFragment(), null, "My Profile");
+        adapter = new TabAdapter(getSupportFragmentManager());
+
+        String role = getRole(this);
+        menuSetting(role);
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
+        setupTabIcons(role);
     }
 
-    private void setupTabIcons () {
+    private void menuSetting ( String role ) {
+        adapter.addFragment(new HomeFragment(), null, "Home");
+        adapter.addFragment(new SearchAthleteFragment(), null, "Athletes");
+        if (role.equals("admin")) adapter.addFragment(new EventListFragment(), null, "Events");
+        else adapter.addFragment(new ProfileChatFragment(), null, "Chat");
+        adapter.addFragment(new ProfileSettingFragment(), null, "My Profile");
+
+    }
+
+    private void setupTabIcons (String role) {
+
         Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(tabIcons[0]);
         Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(tabIcons[1]);
-        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(tabIcons[2]);
-        Objects.requireNonNull(tabLayout.getTabAt(3)).setIcon(tabIcons[3]);
-        Objects.requireNonNull(tabLayout.getTabAt(4)).setIcon(tabIcons[4]);
-    }
+        if (role.equals("admin")) Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(tabIcons[3]);
+        else Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(tabIcons[2]);
+        Objects.requireNonNull(tabLayout.getTabAt(3)).setIcon(tabIcons[4]);
 
+    }
 
 }
