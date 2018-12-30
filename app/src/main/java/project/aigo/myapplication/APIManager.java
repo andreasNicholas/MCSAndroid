@@ -323,8 +323,8 @@ public class APIManager {
     }
 
     public void updateOrCreateNews ( final Context context , final View view , final Map<String, String> params ) {
-        //final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
-        //progressDialog.show();
+        final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
+        progressDialog.show();
 
         String url = globalActivity.route("updateOrCreateNews");
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
@@ -335,14 +335,14 @@ public class APIManager {
             public void onResponse ( String response ) {
                 String message = (params.get("newsID").isEmpty()) ? "Add" : "Update";
                 globalActivity.toastShort(context , message + " Success");
-                //progressDialog.dismiss();
+                progressDialog.dismiss();
 
             }
         } , new Response.ErrorListener() {
             @Override
             public void onErrorResponse ( VolleyError error ) {
                 globalActivity.snackShort(view , error.getMessage());
-                //progressDialog.dismiss();
+                progressDialog.dismiss();
             }
         }) {
             @Override
@@ -547,7 +547,7 @@ public class APIManager {
                 String message = (params.get("eventID").isEmpty()) ? "Add" : "Update";
                 globalActivity.toastShort(context , message + " Success");
                 //fragment.getFragmentManager().popBackStackImmediate();
-                //progressDialog.dismiss();
+                progressDialog.dismiss();
 
             }
         } , new Response.ErrorListener() {
@@ -956,7 +956,7 @@ public class APIManager {
         String id = params.get("userID");
         String remember_token = params.get("remember_token");
 
-        String url = globalActivity.route("getAllEvents/" + id + "/" + remember_token);
+        String url = globalActivity.route("getEvents/" + id + "/" + remember_token);
 
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url , new Response.Listener<JSONArray>() {

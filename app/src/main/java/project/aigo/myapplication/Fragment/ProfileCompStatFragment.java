@@ -52,7 +52,7 @@ public class ProfileCompStatFragment extends Fragment {
     public View onCreateView ( @NonNull LayoutInflater inflater , ViewGroup container , Bundle savedInstanceState ) {
         View view = inflater.inflate(R.layout.fragment_profile_comp_stat , container , false);
         fabAchievement = view.findViewById(R.id.fabAddAchievement);
-        layoutView = view;
+        layoutView = getActivity().findViewById(R.id.profileActivity);
         profileCompetitionAdapter = new ProfileCompetitionAdapter(getActivity()  , detailAchievementList);
         chart = view.findViewById(R.id.chart);
         spinYear = view.findViewById(R.id.spinYear);
