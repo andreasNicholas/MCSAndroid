@@ -468,7 +468,7 @@ public class APIManager {
             @Override
             public void onErrorResponse ( VolleyError error ) {
                 globalActivity.snackShort(view , error.getMessage());
-                swipeRefreshLayout.setRefreshing(false);
+                if(swipeRefreshLayout != null) swipeRefreshLayout.setRefreshing(false);
 
             }
 
@@ -533,7 +533,7 @@ public class APIManager {
         mRequestQueue.add(mStringRequest);
     }
 
-    public void updateOrCreateEvent ( final Context context , final View view , final Map<String, String> params , final Fragment fragment ) {
+    public void updateOrCreateEvent ( final Context context , final View view , final Map<String, String> params  ) {
         final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
         progressDialog.show();
 
@@ -546,7 +546,6 @@ public class APIManager {
             public void onResponse ( String response ) {
                 String message = (params.get("eventID").isEmpty()) ? "Add" : "Update";
                 globalActivity.toastShort(context , message + " Success");
-                //fragment.getFragmentManager().popBackStackImmediate();
                 progressDialog.dismiss();
 
             }

@@ -12,14 +12,13 @@ import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Object.Event;
 import project.aigo.myapplication.R;
 
-public class EventCalendarActivity extends AppCompatActivity {
+public class EventCalendarActivity extends GlobalActivity {
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_calendar);
-        GlobalActivity globalActivity = new GlobalActivity();
-        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(this);
+        String[] getDataforAuthenticate = getDataforAuthenticate(this);
         String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
         String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";
         Map<String,String> params = new HashMap<>();
