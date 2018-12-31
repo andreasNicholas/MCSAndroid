@@ -27,6 +27,8 @@ public class AddSportActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_sport);
+
+        getSupportActionBar().setTitle("Add Sport");
         mapParamsAthleteSport();
         callApiGetSport();
 

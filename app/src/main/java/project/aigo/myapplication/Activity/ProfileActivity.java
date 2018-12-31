@@ -54,8 +54,12 @@ public class ProfileActivity extends AppCompatActivity {
             if(getIntent().getExtras()!=null){
                 athleteBundle = this.getIntent().getExtras();
                 athleteId = athleteBundle.getString("athleteID", athleteId);
+                getSupportActionBar().setTitle("Athlete Profile");
             }
+            else
+                getSupportActionBar().setTitle("My Profile");
         }catch (Exception e){
+            getSupportActionBar().setTitle("My Profile");
         }
 
         ViewPager viewPager = findViewById(R.id.viewPager);

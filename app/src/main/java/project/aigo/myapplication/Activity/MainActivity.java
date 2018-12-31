@@ -30,11 +30,17 @@ public class MainActivity extends GlobalActivity {
     private String id;
     private DatabaseReference myRef;
     private TabAdapter adapter;
+    private String role;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.overridePendingTransition(R.anim.animation_enter,
+                R.anim.animation_leave);
+
+        getSupportActionBar().setTitle("Home");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
@@ -58,12 +64,41 @@ public class MainActivity extends GlobalActivity {
         tabLayout = findViewById(R.id.tabLayout);
         adapter = new TabAdapter(getSupportFragmentManager());
 
-        String role = getRole(this);
+        role = getRole(this);
         menuSetting(role);
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons(role);
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+            @Override
+            public void onTabSelected(TabLayout.Tab tab){
+                if(!role.equals("admin")){
+                    if(tab.getPosition() == 0) getSupportActionBar().setTitle("Home");
+                    else if(tab.getPosition() == 1) getSupportActionBar().setTitle("Search Athlete");
+                    else if(tab.getPosition() == 2) getSupportActionBar().setTitle("Chat");
+                    else if(tab.getPosition() == 3) getSupportActionBar().setTitle("Settings");
+                }
+                else if(role.equals("admin")){
+                    if(tab.getPosition() == 0) getSupportActionBar().setTitle("Home");
+                    else if(tab.getPosition() == 1) getSupportActionBar().setTitle("Search Athlete");
+                    else if(tab.getPosition() == 2) getSupportActionBar().setTitle("Events");
+                    else if(tab.getPosition() == 3) getSupportActionBar().setTitle("Settings");
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
     }
 
     private void menuSetting ( String role ) {

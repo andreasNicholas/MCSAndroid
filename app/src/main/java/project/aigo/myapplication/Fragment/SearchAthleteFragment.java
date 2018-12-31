@@ -4,6 +4,7 @@ package project.aigo.myapplication.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import java.util.Objects;
 
 import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Activity.GlobalActivity;
+import project.aigo.myapplication.Activity.MainActivity;
 import project.aigo.myapplication.Adapter.AthleteAdapter;
 import project.aigo.myapplication.Object.User;
 import project.aigo.myapplication.R;
@@ -45,7 +47,6 @@ public class SearchAthleteFragment extends Fragment{
     @Override
     public View onCreateView( @NonNull LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
-
         globalActivity = new GlobalActivity();
         View view = inflater.inflate(R.layout.fragment_search_athlete , container , false);
 

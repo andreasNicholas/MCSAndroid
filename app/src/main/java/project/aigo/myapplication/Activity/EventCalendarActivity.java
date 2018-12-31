@@ -18,6 +18,8 @@ public class EventCalendarActivity extends GlobalActivity {
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_calendar);
+
+        getSupportActionBar().setTitle("Event");
         String[] getDataforAuthenticate = getDataforAuthenticate(this);
         String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
         String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : "";
@@ -29,6 +31,5 @@ public class EventCalendarActivity extends GlobalActivity {
         APIManager apiManager = new APIManager();
         View view = findViewById(R.id.eventCalendarActivity);
         apiManager.getEvents(this , view , params,null,eventList,null);
-
     }
 }

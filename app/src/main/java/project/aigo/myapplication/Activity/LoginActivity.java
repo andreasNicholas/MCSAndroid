@@ -24,6 +24,9 @@ public class LoginActivity extends GlobalActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        this.overridePendingTransition(R.anim.animation_enter,
+                R.anim.animation_leave);
+
         sharedPreferences = getSharedPreferences("spLogin" , MODE_PRIVATE);
 
         layoutView = findViewById(R.id.loginActivity);
@@ -33,8 +36,11 @@ public class LoginActivity extends GlobalActivity implements View.OnClickListene
         tvRegister = findViewById(R.id.tvRegister);
         btnLogin.setOnClickListener(this);
         tvRegister.setOnClickListener(this);
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -32,11 +33,14 @@ public class AddNewsActivity extends GlobalActivity implements View.OnClickListe
     private String currentNewsID = "";
     private View layoutView;
     private String addorEdit;
+    private TextView textView7;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_news);
+
+        textView7 = findViewById(R.id.textView7);
         layoutView = findViewById(R.id.addNewsActivity);
         etNewsTitle = findViewById(R.id.etNewsTitle);
         etNewsContent = findViewById(R.id.etNewsContent);
@@ -63,6 +67,8 @@ public class AddNewsActivity extends GlobalActivity implements View.OnClickListe
         addorEdit = (bundle == null) ? "Add" : "Edit";
         String btnNews = addorEdit.toUpperCase() + " NEWS";
         btnAddNews.setText(btnNews);
+        getSupportActionBar().setTitle(addorEdit+" News");
+        textView7.setText(addorEdit+" News");
 
         btnAddNews.setOnClickListener(this);
         ivNewsImage.setOnClickListener(this);

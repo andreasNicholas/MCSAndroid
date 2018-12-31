@@ -25,6 +25,9 @@ public class SplashScreenActivity extends GlobalActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
 
+        this.overridePendingTransition(R.anim.animation_enter,
+                R.anim.animation_leave);
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         database.setPersistenceEnabled(true);
         final DatabaseReference myRef = database.getReference();
@@ -98,5 +101,10 @@ public class SplashScreenActivity extends GlobalActivity {
                 finish();
             }
         } , 2000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

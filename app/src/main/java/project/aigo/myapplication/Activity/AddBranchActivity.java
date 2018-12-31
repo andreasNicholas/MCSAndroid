@@ -38,6 +38,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_branch);
+        getSupportActionBar().setTitle("Add Branch");
 
         etBranchName = findViewById(R.id.etBranchName);
         btnAddBranch = findViewById(R.id.btnAddBranch);

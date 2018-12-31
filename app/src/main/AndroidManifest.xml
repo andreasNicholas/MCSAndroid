@@ -13,15 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.SplashScreenActivity">
+        <activity android:name=".Activity.SplashScreenActivity"
+            android:theme="@style/noActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.RegisterActivity" />
-        <activity android:name=".Activity.LoginActivity" />
+        <activity android:name=".Activity.RegisterActivity"
+            android:theme="@style/noActionBar"/>
+        <activity android:name=".Activity.LoginActivity"
+            android:theme="@style/noActionBar"/>
         <activity android:name=".Activity.GlobalActivity" />
         <activity android:name=".Activity.NewsActivity" />
         <activity android:name=".Activity.ProfileActivity" />
@@ -41,7 +44,8 @@
         <activity android:name=".Activity.ChatActivity" />
         <activity android:name=".Activity.AddUserBranchActivity" />
         <activity android:name=".Activity.AddEventActivity" />
-        <activity android:name=".Activity.TestActivity"></activity>
+        <activity android:name=".Activity.TestActivity" />
+        <activity android:name=".Activity.EditProfileActivity"></activity>
     </application>
 
 </manifest>

@@ -29,6 +29,7 @@ public class DetailNewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_news);
 
+        getSupportActionBar().setTitle("News");
         tvName = findViewById(R.id.tvName);
         tvDescription = findViewById(R.id.tvDescription);
         ivImage = findViewById(R.id.ivImage);

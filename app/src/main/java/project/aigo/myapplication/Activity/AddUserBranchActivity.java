@@ -33,20 +33,19 @@ public class AddUserBranchActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user_branch);
-        //Branch.branchList.clear();
 
+        getSupportActionBar().setTitle("Add Branch Participation");
         spinSport3 = findViewById(R.id.spinSport3);
         spinBranch = findViewById(R.id.spinBranch);
         rvUserBranch = findViewById(R.id.rvUserBranch);
-
         btnAddUserBranch = findViewById(R.id.btnAddUserBranch);
+
         btnAddUserBranch.setOnClickListener(this);
 
         branchAdapter = new BranchAdapter(this.getBaseContext());
         mapParamsAthleteBranchAndSport();
         callApiGetBranchAndSport();
 
-        //branchAdapter.notifyDataSetChanged();
         rvUserBranch.setLayoutManager(new LinearLayoutManager(this));
         rvUserBranch.setAdapter(branchAdapter);
         initSpinner();

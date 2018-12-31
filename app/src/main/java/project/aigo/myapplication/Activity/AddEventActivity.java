@@ -76,6 +76,7 @@ public class AddEventActivity extends GlobalActivity implements View.OnClickList
         addorEdit = (bundle == null) ? "Add" : "Edit";
         String btnEvent = addorEdit.toUpperCase() + " EVENT";
         btnEditEvent.setText(btnEvent);
+        getSupportActionBar().setTitle(addorEdit+" Event");
 
         etEventStartDate.setOnClickListener(this);
         etEventStartTime.setOnClickListener(this);

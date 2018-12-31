@@ -28,6 +28,8 @@ public class EventDetailActivity extends AppCompatActivity {
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
+
+        getSupportActionBar().setTitle("Event");
         tvEventName = findViewById(R.id.tvEventName);
         tvEventDescription = findViewById(R.id.tvEventDescription);
         tvEventDatetime = findViewById(R.id.tvEventDatetime);

@@ -18,12 +18,13 @@ import project.aigo.myapplication.Activity.NewsActivity;
 import project.aigo.myapplication.R;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
+    Button btnEventCalendar;
+    TextView tvNewsList;
+
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    Button btnEventCalendar;
-    TextView tvNewsList;
     @Override
     public View onCreateView( @NonNull LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {

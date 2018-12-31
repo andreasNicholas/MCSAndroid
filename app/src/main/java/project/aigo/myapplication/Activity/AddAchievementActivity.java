@@ -48,6 +48,8 @@ public class AddAchievementActivity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().setTitle("Add Achievement");
         setContentView(R.layout.activity_add_achievement);
         etAchievementDesc = findViewById(R.id.etAchievementDesc);
         spinEvent = findViewById(R.id.spinEvent);
@@ -96,6 +98,18 @@ public class AddAchievementActivity extends AppCompatActivity implements View.On
         if(view == btnAdd){
             mapParamsAddAchievement();
             callApiAddAchievement();
+
+            etAchievementDesc.setText(null);
+            spinEvent.setSelection(0);
+            spinSport.setSelection(0);
+
+            branchSpinnerItem.clear();
+            branchSpinnerItem.add("--Choose--");
+            spinBranch.setSelection(0);
+
+            rbPos1.setChecked(false);
+            rbPos2.setChecked(false);
+            rbPos3.setChecked(false);
         }
     }
 

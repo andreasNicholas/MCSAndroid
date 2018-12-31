@@ -9,8 +9,8 @@ public class NewsActivity extends GlobalActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
+
+        getSupportActionBar().setTitle("News");
         loadFragment(new ViewNewsFragment(),R.id.newsActivity,this,null,null);
-
     }
-
 }

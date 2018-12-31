@@ -23,6 +23,7 @@ import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Activity.AddBranchActivity;
 import project.aigo.myapplication.Activity.AddSportActivity;
 import project.aigo.myapplication.Activity.AddUserBranchActivity;
+import project.aigo.myapplication.Activity.EditProfileActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Activity.LoginActivity;
 import project.aigo.myapplication.Activity.ProfileActivity;
@@ -33,7 +34,7 @@ import project.aigo.myapplication.R;
 import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileSettingFragment extends Fragment implements View.OnClickListener {
-    LinearLayout llLogout, llAddSport, llAddBranch, llMyProfile, llAddMySport, llChatWithUs;
+    LinearLayout llLogout, llAddSport, llAddBranch, llMyProfile, llAddMySport, llChatWithUs, llEditProfile;
 
     private Map<String, String> paramsForEvent;
 
@@ -51,14 +52,13 @@ public class ProfileSettingFragment extends Fragment implements View.OnClickList
             }
 
         });
-
+        llEditProfile = view.findViewById(R.id.llEditProfile);
         llLogout = view.findViewById(R.id.llLogout);
         llAddSport = view.findViewById(R.id.llAddSport);
         llAddBranch = view.findViewById(R.id.llAddBranch);
         llMyProfile = view.findViewById(R.id.llMyProfile);
         llAddMySport = view.findViewById(R.id.llAddMySport);
         llChatWithUs = view.findViewById(R.id.llChatWithUs);
-
 
         String role = globalActivity.getRole(getActivity());
 
@@ -70,6 +70,7 @@ public class ProfileSettingFragment extends Fragment implements View.OnClickList
             llAddBranch.setVisibility(View.GONE);
         }
 
+        llEditProfile.setOnClickListener(this);
         llLogout.setOnClickListener(this);
         llAddSport.setOnClickListener(this);
         llAddBranch.setOnClickListener(this);
@@ -125,7 +126,9 @@ public class ProfileSettingFragment extends Fragment implements View.OnClickList
             startActivity(intent);
         } else if(view == llChatWithUs){
             ConversationActivity.show(Objects.requireNonNull(getActivity()));
-
+        } else if (view == llEditProfile) {
+            Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+            startActivity(intent);
         }
     }
 }
