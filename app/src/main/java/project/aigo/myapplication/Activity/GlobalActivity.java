@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -124,6 +125,12 @@ public class GlobalActivity extends AppCompatActivity {
         image.compress(Bitmap.CompressFormat.PNG , 100 , baos);
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b , Base64.DEFAULT);
+    }
+
+    public static Bitmap decodeBase64(String input) {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory
+                .decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 
     public DatePickerDialog createGlobalDatePickerDialog ( Context context , final String format , final EditText editText ) {
