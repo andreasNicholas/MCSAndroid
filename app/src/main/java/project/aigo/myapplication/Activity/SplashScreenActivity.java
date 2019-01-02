@@ -20,6 +20,8 @@ import project.aigo.myapplication.R;
 
 public class SplashScreenActivity extends GlobalActivity {
 
+    static boolean called;
+
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
@@ -28,8 +30,12 @@ public class SplashScreenActivity extends GlobalActivity {
         this.overridePendingTransition(R.anim.animation_enter,
                 R.anim.animation_leave);
 
+        if (!called){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            called = true;
+        }
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);
         final DatabaseReference myRef = database.getReference();
         myRef.keepSynced(true);
         myRef.addValueEventListener(new ValueEventListener() {
