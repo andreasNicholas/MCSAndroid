@@ -26,7 +26,9 @@ import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Fragment.DatePickerFragment;
 import project.aigo.myapplication.R;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher, DatePickerDialog.OnDateSetListener {
+import static project.aigo.myapplication.Activity.GlobalActivity.DEFAULT_IMAGE;
+
+public class RegisterActivity extends GlobalActivity implements View.OnClickListener, TextWatcher, DatePickerDialog.OnDateSetListener {
     EditText etName, etEmail, etPassword, etRetypePassword, etPhone, etBirthDate, etAddress;
     RadioButton rdbtnMale, rdbtnFemale;
     CheckBox cbxTerm;
@@ -35,14 +37,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     int nameStat = 0, emailStat = 0, passwordStat = 0, retypePasswordStat = 0, phoneStat = 0, birthdateStat = 0, addressStat = 0, genderStat = 0, termCondStat = 0;
     String pickedGender;
     View layoutView;
-    GlobalActivity globalActivity;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        globalActivity = new GlobalActivity();
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -126,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 callApi();
             } else {
                 String message = "Please fill all field and check the agreement first!";
-                globalActivity.snackShort(layoutView , message);
+                snackShort(layoutView , message);
             }
         }
     }
@@ -155,13 +155,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void afterTextChanged ( Editable editable ) {
 
-        nameStat = (globalActivity.toStringTrim(etName).length() <= 0) ? 0 : 1;
-        emailStat = (globalActivity.toStringTrim(etEmail).length() <= 0) ? 0 : 1;
-        passwordStat = (globalActivity.toStringTrim(etPassword).length() <= 0) ? 0 : 1;
-        retypePasswordStat = (globalActivity.toStringTrim(etRetypePassword).length() <= 0) ? 0 : 1;
-        phoneStat = (globalActivity.toStringTrim(etPhone).length() <= 0) ? 0 : 1;
-        birthdateStat = (globalActivity.toStringTrim(etBirthDate).length() <= 0) ? 0 : 1;
-        addressStat = (globalActivity.toStringTrim(etAddress).length() <= 0) ? 0 : 1;
+        nameStat = (toStringTrim(etName).length() <= 0) ? 0 : 1;
+        emailStat = (toStringTrim(etEmail).length() <= 0) ? 0 : 1;
+        passwordStat = (toStringTrim(etPassword).length() <= 0) ? 0 : 1;
+        retypePasswordStat = (toStringTrim(etRetypePassword).length() <= 0) ? 0 : 1;
+        phoneStat = (toStringTrim(etPhone).length() <= 0) ? 0 : 1;
+        birthdateStat = (toStringTrim(etBirthDate).length() <= 0) ? 0 : 1;
+        addressStat = (toStringTrim(etAddress).length() <= 0) ? 0 : 1;
 
         pbRegister.setProgress(nameStat + emailStat + passwordStat + retypePasswordStat
                 + addressStat + birthdateStat + phoneStat + genderStat + termCondStat);
@@ -171,18 +171,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void callApi () {
 
         final Map<String, String> params = new HashMap<>();
-        params.put("name" , globalActivity.toStringTrim(etName));
-        params.put("email" , globalActivity.toStringTrim(etEmail));
-        params.put("password" , globalActivity.toStringTrim(etPassword));
-        params.put("password_confirmation" , globalActivity.toStringTrim(etRetypePassword));
+        params.put("name" , toStringTrim(etName));
+        params.put("email" , toStringTrim(etEmail));
+        params.put("password" , toStringTrim(etPassword));
+        params.put("password_confirmation" , toStringTrim(etRetypePassword));
+        params.put("photo", DEFAULT_IMAGE);
         params.put("gender" , pickedGender);
-        params.put("phone" , globalActivity.toStringTrim(etPhone));
-        params.put("birth_date" , globalActivity.toStringTrim(etBirthDate));
-        params.put("address" , globalActivity.toStringTrim(etAddress));
+        params.put("phone" , toStringTrim(etPhone));
+        params.put("birth_date" , toStringTrim(etBirthDate));
+        params.put("address" , toStringTrim(etAddress));
         String titleAlert = "Message Confirmation";
         String message = "Are you sure want to register?";
         final APIManager apiManager = new APIManager();
-        AlertDialog.Builder builder = globalActivity.createGlobalAlertDialog(this , titleAlert , message);
+        AlertDialog.Builder builder = createGlobalAlertDialog(this , titleAlert , message);
         builder.setPositiveButton("Yes" , new DialogInterface.OnClickListener() {
             @Override
             public void onClick ( DialogInterface dialogInterface , int i ) {

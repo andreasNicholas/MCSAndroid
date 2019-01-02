@@ -116,6 +116,7 @@ public class APIManager {
                         myRef.child("users").child(split[0]).setValue(params);
                         myRef.push();
 
+
                         Intent intent = new Intent(context , LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         context.startActivity(intent);
@@ -1413,20 +1414,52 @@ public class APIManager {
     }
 
     public void editProfile ( final Context context , final View view , final Map<String, String> params ) {
+
         final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
         progressDialog.show();
 
         String url = globalActivity.route("editProfile");
+
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
 
-        //String Request initialized
-        StringRequest mStringRequest = new StringRequest(Request.Method.POST , url , new Response.Listener<String>() {
-            @Override
-            public void onResponse ( String response ) {
-                //final String[] split = response.split(";");
+        JSONObject parameters = new JSONObject(params);
 
-                globalActivity.snackShort(view , "Success");
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST , url , parameters , new Response.Listener<JSONObject>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse ( JSONObject response ) {
+
+                try {
+                    String name = response.getString("name");
+                    String email = response.getString("email");
+                    String password = response.getString("password");
+                    String photo = response.getString("photo");
+                    String address = response.getString("address");
+                    String phone = response.getString("phone");
+                    String birthdate = response.getString("birthdate");
+                    String userID = response.getString("id");
+                    String message = response.getString("message");
+
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference myRef = database.getReference().child("users").child(userID);
+                    myRef.child("name").setValue(name);
+                    myRef.child("email").setValue(email);
+                    myRef.child("password").setValue(password);
+                    myRef.child("photo").setValue(photo);
+                    myRef.child("address").setValue(address);
+                    myRef.child("phone").setValue(phone);
+                    myRef.child("birth_date").setValue(birthdate);
+                    myRef.push();
+                    globalActivity.snackShort(view , message);
+                    progressDialog.dismiss();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+
+                }
+
                 progressDialog.dismiss();
+
             }
         } , new Response.ErrorListener() {
             @Override
@@ -1434,13 +1467,8 @@ public class APIManager {
                 globalActivity.snackShort(view , error.getMessage());
                 progressDialog.dismiss();
             }
+
         }) {
-            @Override
-            protected Map<String, String> getParams () {
-
-                return params;
-            }
-
             @Override
             protected VolleyError parseNetworkError ( VolleyError volleyError ) {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
@@ -1452,8 +1480,53 @@ public class APIManager {
             }
         };
 
-        mRequestQueue.add(mStringRequest);
+        mRequestQueue.add(jsonObjectRequest);
     }
+
+
+//    public void editProfile ( final Context context , final View view , final Map<String, String> params ) {
+//        final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
+//        progressDialog.show();
+//
+//        String url = globalActivity.route("editProfile");
+//        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+//
+//        //String Request initialized
+//        StringRequest mStringRequest = new StringRequest(Request.Method.POST , url , new Response.Listener<String>() {
+//            @Override
+//            public void onResponse ( String response ) {
+//                //final String[] split = response.split(";");
+//                FirebaseDatabase database = FirebaseDatabase.getInstance();
+//                DatabaseReference myRef = database.getReference();
+//                globalActivity.snackShort(view , "Success");
+//                progressDialog.dismiss();
+//            }
+//        } , new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse ( VolleyError error ) {
+//                globalActivity.snackShort(view , error.getMessage());
+//                progressDialog.dismiss();
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams () {
+//
+//                return params;
+//            }
+//
+//            @Override
+//            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
+//                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+//
+//                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+//                }
+//
+//                return volleyError;
+//            }
+//        };
+//
+//        mRequestQueue.add(mStringRequest);
+//    }
 
     public void getProfile(final Context context, final View view, final Map<String, String> params){
         String id = params.get("userID");
