@@ -50,6 +50,9 @@ public class EditProfileActivity extends GlobalActivity implements View.OnClickL
         ivEditPP = findViewById(R.id.ivEditPP);
         btnEditProfile = findViewById(R.id.btnEditProfile);
 
+        mapParamsGetProfile();
+        callApiGetProfile();
+
         final SharedPreferences sp = this.getSharedPreferences("spLogin" , MODE_PRIVATE);
 
         new Handler().postDelayed(new Runnable() {
@@ -60,18 +63,35 @@ public class EditProfileActivity extends GlobalActivity implements View.OnClickL
                 etEditAddress.setText(sp.getString("address", null));
                 etEditPhone.setText(sp.getString("phone", null));
                 etEditDOB.setText(sp.getString("birthdate", null));
+                /*
                 if (sp.getString("profilepicture", null) != (null)){
                     bitmapContainer = decodeBase64(sp.getString("profilepicture", null));
                     roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmapContainer);
                     roundedBitmapDrawable.setCircular(true);
                     ivEditPP.setImageDrawable(roundedBitmapDrawable);
-                }
+                }*/
             }
         } , 0);
 
         ivEditPP.setOnClickListener(this);
         etEditDOB.setOnClickListener(this);
         btnEditProfile.setOnClickListener(this);
+    }
+
+    private void mapParamsGetProfile() {
+        GlobalActivity globalActivity = new GlobalActivity();
+        String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(this);
+        String id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+        String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : null;
+        paramsForEditProfile = new HashMap<>();
+
+        paramsForEditProfile.put("userID", id);
+        paramsForEditProfile.put("remember_token" , remember_token);
+    }
+
+    private void callApiGetProfile() {
+        APIManager apiManageraddBranch = new APIManager();
+        apiManageraddBranch.getProfile(this, this.findViewById(R.id.editProfileActivity) ,paramsForEditProfile);
     }
 
     @Override
@@ -108,7 +128,6 @@ public class EditProfileActivity extends GlobalActivity implements View.OnClickL
         }
     }
 
-
     private void mapParamsEditProfile () {
         GlobalActivity globalActivity = new GlobalActivity();
         String[] getDataforAuthenticate = globalActivity.getDataforAuthenticate(this);
@@ -131,11 +150,11 @@ public class EditProfileActivity extends GlobalActivity implements View.OnClickL
         paramsForEditProfile.put("phone" , phone);
         paramsForEditProfile.put("birthdate" , birthdate);
         paramsForEditProfile.put("profilepicture", encodeTobase64(bitmapContainer));
-
+        paramsForEditProfile.put("extension", imageExtension);
     }
 
     private void callApiEditProfile() {
-        APIManager apiManageraddBranch = new APIManager();
-        apiManageraddBranch.editProfile(this, this.findViewById(R.id.editProfileActivity) ,paramsForEditProfile);
+        APIManager apiManagerEditProfile = new APIManager();
+        apiManagerEditProfile.editProfile(this, this.findViewById(R.id.editProfileActivity) ,paramsForEditProfile);
     }
 }

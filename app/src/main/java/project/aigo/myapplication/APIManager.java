@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,6 +14,8 @@ import android.os.Handler;
 import android.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +25,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -46,6 +52,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,12 +67,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Vector;
 
 import project.aigo.myapplication.Activity.AddUserBranchActivity;
 import project.aigo.myapplication.Activity.EventCalendarActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Activity.LoginActivity;
 import project.aigo.myapplication.Activity.MainActivity;
+import project.aigo.myapplication.Activity.ProfileActivity;
 import project.aigo.myapplication.Adapter.AthleteAdapter;
 import project.aigo.myapplication.Adapter.BranchAdapter;
 import project.aigo.myapplication.Adapter.EventAdapter;
@@ -78,6 +87,7 @@ import project.aigo.myapplication.Object.Sport;
 import project.aigo.myapplication.Object.User;
 
 import static android.content.Context.MODE_PRIVATE;
+import static project.aigo.myapplication.Activity.GlobalActivity.DEFAULT_IMAGE;
 
 public class APIManager {
 
@@ -1443,6 +1453,57 @@ public class APIManager {
         };
 
         mRequestQueue.add(mStringRequest);
+    }
 
+    public void getProfile(final Context context, final View view, final Map<String, String> params){
+        String id = params.get("userID");
+        String remember_token = params.get("remember_token");
+
+        String url = globalActivity.route("getProfile/" + id + "/"+ remember_token);
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int i=0; i<response.length();i++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        TextView tvUserName = view.findViewById(R.id.tvUserName);
+                        TextView tvUserEmail = view.findViewById(R.id.tvUserEmail);
+                        ImageView ivProfilePicture;
+                        if(view.getId() == R.id.profileActivity) {
+                            ivProfilePicture = view.findViewById(R.id.ivProfilePicture);
+                            tvUserName.setText(jsonObject.getString("name"));
+                            tvUserEmail.setText(jsonObject.getString("email"));
+                        }
+                        else{
+                            ivProfilePicture = view.findViewById(R.id.ivEditPP);
+                        }
+
+                        String img = jsonObject.getString("photo");
+                        ivProfilePicture.setVisibility(View.VISIBLE);
+                        Picasso.get().load(img).into(ivProfilePicture);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+
+        }) {
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+                return volleyError;
+            }
+        };
+        mRequestQueue.add(jsonArrayRequest);
     }
 }
