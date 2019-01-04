@@ -79,6 +79,7 @@ import project.aigo.myapplication.Adapter.AthleteAdapter;
 import project.aigo.myapplication.Adapter.BranchAdapter;
 import project.aigo.myapplication.Adapter.EventAdapter;
 import project.aigo.myapplication.Adapter.SportAdapter;
+import project.aigo.myapplication.Adapter.UserBranchAdapter;
 import project.aigo.myapplication.Object.Achievement;
 import project.aigo.myapplication.Object.Branch;
 import project.aigo.myapplication.Object.Event;
@@ -858,7 +859,7 @@ public class APIManager {
         mRequestQueue.add(jsonArrayRequest);
     }
 
-    public void getBranchByUserId ( final Context context , final Map<String, String> params, final BranchAdapter branchAdapter, RecyclerView rvUserBranch ) {
+    public void getBranchByUserId (final Context context , final Map<String, String> params, final BranchAdapter branchAdapter, RecyclerView rvUserBranch ) {
         Branch.branchList.clear();
 
         String id = params.get("userID");
@@ -884,6 +885,54 @@ public class APIManager {
                         branch.setSportName(jsonObject.getString("sport_name"));
 
                         Branch.branchList.add(branch);
+                        branchAdapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        } , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse ( VolleyError error ) {
+            }
+
+        }) {
+            @Override
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+                return volleyError;
+            }
+        };
+        mRequestQueue.add(jsonArrayRequest);
+    }
+
+    public void getBranchByUserId (final Context context , final Map<String, String> params, final UserBranchAdapter branchAdapter, RecyclerView rvUserBranch ) {
+        String id = params.get("userID");
+        String remember_token = params.get("remember_token");
+        final String athlete_id = params.get("athleteID");
+
+        String url = "";
+        if(athlete_id == null)url = globalActivity.route("getBranchesByUserId/" + id + "/" + remember_token);
+        else url = globalActivity.route("getBranchesByUserId/" + athlete_id + "/" + remember_token);
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url , new Response.Listener<JSONArray>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse ( JSONArray response ) {
+                for (int j = 0; j < response.length(); j++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(j);
+                        Branch branch = new Branch();
+                        branch.setBranchId(jsonObject.getInt("id"));
+                        branch.setBranchName(jsonObject.getString("branch_name"));
+                        branch.setSportId(jsonObject.getInt("sport_id"));
+                        branch.setSportName(jsonObject.getString("sport_name"));
+
+                        Branch.userBranchList.add(branch);
                         branchAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -1244,13 +1293,17 @@ public class APIManager {
         }
     }
 
-    public void addBranchUser ( final Context context , final HashMap<String, String> params , final BranchAdapter adapter ) {
+    public void addBranchUser ( final Context context , final HashMap<String, String> params , final UserBranchAdapter adapter ) {
         String url = globalActivity.route("addBranchUser");
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
 
         StringRequest mStringRequest = new StringRequest(Request.Method.POST , url , new Response.Listener<String>() {
             @Override
             public void onResponse ( String response ) {
+                Branch branch = new Branch();
+                branch.setBranchName(params.get("branch_name"));
+                branch.setSportName(params.get("sport_name"));
+                Branch.userBranchList.add(branch);
                 adapter.notifyDataSetChanged();
                 globalActivity.toastShort(context , response);
             }

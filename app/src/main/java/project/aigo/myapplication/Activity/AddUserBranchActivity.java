@@ -16,6 +16,7 @@ import java.util.HashMap;
 
 import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Adapter.BranchAdapter;
+import project.aigo.myapplication.Adapter.UserBranchAdapter;
 import project.aigo.myapplication.Object.Branch;
 import project.aigo.myapplication.Object.Sport;
 import project.aigo.myapplication.R;
@@ -28,6 +29,7 @@ public class AddUserBranchActivity extends AppCompatActivity implements View.OnC
     private ArrayList<String> sportSpinnerItem = new ArrayList<String>(), branchSpinnerItem = new ArrayList<String>();
     private RecyclerView rvUserBranch;
     private BranchAdapter branchAdapter;
+    private UserBranchAdapter branchAdapterForParticipationList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +45,12 @@ public class AddUserBranchActivity extends AppCompatActivity implements View.OnC
         btnAddUserBranch.setOnClickListener(this);
 
         branchAdapter = new BranchAdapter(this.getBaseContext());
+        branchAdapterForParticipationList = new UserBranchAdapter(this.getBaseContext());
         mapParamsAthleteBranchAndSport();
         callApiGetBranchAndSport();
 
         rvUserBranch.setLayoutManager(new LinearLayoutManager(this));
-        rvUserBranch.setAdapter(branchAdapter);
+        rvUserBranch.setAdapter(branchAdapterForParticipationList);
         initSpinner();
 
         spinSport3.setOnItemSelectedListener(this);
@@ -84,7 +87,7 @@ public class AddUserBranchActivity extends AppCompatActivity implements View.OnC
         APIManager apiManagerBranch = new APIManager();
         APIManager apiManagerSport = new APIManager();
         apiManagerSport.getSport(this.getBaseContext(), paramsForAthleteSport, sportSpinnerItem, adapterSport, android.R.layout.simple_spinner_dropdown_item , spinSport3);
-        apiManagerBranch.getBranchByUserId(this.getBaseContext(), paramsForAthleteBranch, branchAdapter, rvUserBranch);
+        apiManagerBranch.getBranchByUserId(this.getBaseContext(), paramsForAthleteBranch, branchAdapterForParticipationList, rvUserBranch);
     }
 
     private void mapParamsAthleteBranchBySportGender(){
@@ -110,13 +113,12 @@ public class AddUserBranchActivity extends AppCompatActivity implements View.OnC
         if(view == btnAddUserBranch&&(!spinSport3.getSelectedItem().toString().equals("--Choose--")&&!spinBranch.getSelectedItem().toString().equals("--Choose--"))){
             mapParamsAddBranchUser();
             callApiAddBranchUser();
-            //REFRESH BUT FLICKER, FOR BETTER USE A FUNCTION
-            Intent intent = getIntent();
-            overridePendingTransition(0, 0);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            /*finish();
-            overridePendingTransition(0, 0);
-            startActivity(intent);*/
+
+            spinSport3.setSelection(0);
+            branchSpinnerItem.add("--Choose--");
+            adapterBranch = new ArrayAdapter<String>(this.getBaseContext(), android.R.layout.simple_spinner_dropdown_item, branchSpinnerItem);
+            adapterBranch.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinBranch.setAdapter(adapterBranch);
         }
     }
 
@@ -137,7 +139,7 @@ public class AddUserBranchActivity extends AppCompatActivity implements View.OnC
 
     private void callApiAddBranchUser() {
         APIManager apiManagerAddBranchUser = new APIManager();
-        apiManagerAddBranchUser.addBranchUser(this.getBaseContext(), paramsForAddBranchUser, branchAdapter);
+        apiManagerAddBranchUser.addBranchUser(this.getBaseContext(), paramsForAddBranchUser, branchAdapterForParticipationList);
     }
 
     @Override

@@ -42,12 +42,23 @@
 
             </LinearLayout>
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivEventImage"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="125dp"
-                android:scaleType="centerCrop"
-                android:visibility="gone" />
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/ivEventImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="125dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    android:padding="6dp"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/frame" />
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/tvDescription"

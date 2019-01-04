@@ -4,6 +4,7 @@ import java.util.Vector;
 
 public class Branch {
     public static Vector<Branch> branchList = new Vector<>();
+    public static Vector<Branch> userBranchList = new Vector<>();
 
     private int branchId;
     private String branchName;

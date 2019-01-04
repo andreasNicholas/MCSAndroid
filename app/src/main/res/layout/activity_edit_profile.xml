@@ -25,7 +25,7 @@
             <ImageView
                 android:id="@+id/ivEditPP"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="150dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 app:srcCompat="@drawable/ic_account_circle_black_24dp" />
@@ -78,7 +78,7 @@
 
                 <EditText
                     android:id="@+id/etEditEmail"
-                    android:layout_width="250dp"
+                    android:layout_width="200dp"
                     android:layout_height="0dp"
                     android:ems="10"
                     android:hint="Email"
@@ -124,7 +124,7 @@
 
                 <EditText
                     android:id="@+id/etEditPassword"
-                    android:layout_width="250dp"
+                    android:layout_width="200dp"
                     android:layout_height="0dp"
                     android:ems="10"
                     android:hint="New Password"
@@ -170,7 +170,7 @@
 
                 <EditText
                     android:id="@+id/etEditAddress"
-                    android:layout_width="250dp"
+                    android:layout_width="200dp"
                     android:layout_height="0dp"
                     android:ems="10"
                     android:hint="Address"
@@ -216,7 +216,7 @@
 
                 <EditText
                     android:id="@+id/etEditPhone"
-                    android:layout_width="250dp"
+                    android:layout_width="200dp"
                     android:layout_height="0dp"
                     android:ems="10"
                     android:hint="Phone"
@@ -264,7 +264,7 @@
 
                 <EditText
                     android:id="@+id/etEditDOB"
-                    android:layout_width="250dp"
+                    android:layout_width="200dp"
                     android:layout_height="0dp"
                     android:ems="10"
                     android:focusable="false"
@@ -298,7 +298,6 @@
                     android:id="@+id/btnEditProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|right"
                     android:text="Save"
                     app:layout_constraintBottom_toTopOf="@+id/space25"
                     app:layout_constraintEnd_toStartOf="@+id/space21" />

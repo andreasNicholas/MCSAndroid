@@ -108,7 +108,7 @@ public class EditProfileActivity extends GlobalActivity implements View.OnClickL
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            ivEditPP.setImageDrawable(roundedBitmapDrawable);
+            ivEditPP.setImageBitmap(bitmapContainer);
         }
     }
 
@@ -124,7 +124,7 @@ public class EditProfileActivity extends GlobalActivity implements View.OnClickL
             SharedPreferences.Editor editor = sp.edit();
             editor.putString("profilepicture", encodeTobase64(bitmapContainer));
             editor.commit();
-            ivEditPP.setImageDrawable(roundedBitmapDrawable);
+            ivEditPP.setImageBitmap(bitmapContainer);
         }
     }
 
