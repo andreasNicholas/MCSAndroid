@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activity.SplashScreenActivity"
-            android:theme="@style/noActionBar">
+            android:theme="@style/noActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,30 +23,49 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.RegisterActivity"
-            android:theme="@style/noActionBar"/>
+            android:theme="@style/noActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Activity.LoginActivity"
-            android:theme="@style/noActionBar"/>
-        <activity android:name=".Activity.GlobalActivity" />
-        <activity android:name=".Activity.NewsActivity" />
-        <activity android:name=".Activity.ProfileActivity" />
+            android:theme="@style/noActionBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.GlobalActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.NewsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.ProfileActivity"
+            android:screenOrientation="portrait"/>
         <activity
+            android:screenOrientation="portrait"
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
-        <activity android:name=".Activity.AddAchievementActivity" />
-        <activity android:name=".Activity.AddSportActivity" />
-        <activity android:name=".Activity.AddBranchActivity" />
-        <activity android:name=".Activity.EventCalendarActivity" />
-        <activity android:name=".Activity.EventDetailActivity" />
-        <activity android:name=".Activity.DetailNewsActivity" />
+        <activity android:name=".Activity.AddAchievementActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.AddSportActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.AddBranchActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activity.EventCalendarActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activity.EventDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.DetailNewsActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.MainActivity"
-            android:label="@string/title_activity_main" />
-        <activity android:name=".Activity.AddNewsActivity" />
-        <activity android:name=".Activity.ChatActivity" />
-        <activity android:name=".Activity.AddUserBranchActivity" />
-        <activity android:name=".Activity.AddEventActivity" />
-        <activity android:name=".Activity.TestActivity" />
-        <activity android:name=".Activity.EditProfileActivity"></activity>
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.AddNewsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.ChatActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.AddUserBranchActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.AddEventActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.TestActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activity.EditProfileActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
