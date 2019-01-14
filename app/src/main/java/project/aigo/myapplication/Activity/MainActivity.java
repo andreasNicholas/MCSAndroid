@@ -49,6 +49,7 @@ public class MainActivity extends GlobalActivity {
 
         OneSignal.startInit(this).init();
         OneSignal.setSubscription(true);
+        OneSignal.setInFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification);
         OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
             @Override
             public void idsAvailable ( String userId , String registrationId ) {

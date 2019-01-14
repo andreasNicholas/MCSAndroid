@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.onesignal.OneSignal;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -107,6 +109,8 @@ public class ProfileSettingFragment extends Fragment implements View.OnClickList
     @Override
     public void onClick ( View view ) {
         if (view == llLogout) {
+
+            OneSignal.setSubscription(false);
             SharedPreferences sp = Objects.requireNonNull(getActivity()).getSharedPreferences("spLogin" , MODE_PRIVATE);
             sp.edit().clear().apply();
             Intent intent = new Intent(getActivity() , LoginActivity.class);
