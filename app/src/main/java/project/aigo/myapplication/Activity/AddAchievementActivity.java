@@ -142,7 +142,7 @@ public class AddAchievementActivity extends AppCompatActivity implements View.On
 
     private void callApiGetSport() {
         APIManager apiManagerSport = new APIManager();
-        apiManagerSport.getSport(this.getBaseContext(), paramsForAthleteSport, sportSpinnerItem, adapterSport, android.R.layout.simple_spinner_dropdown_item , spinSport);
+        apiManagerSport.getSportByBranchUser(this.getBaseContext(), paramsForAthleteSport, sportSpinnerItem, adapterSport, android.R.layout.simple_spinner_dropdown_item , spinSport);
     }
 
     private void mapParamsAthleteBranch(){

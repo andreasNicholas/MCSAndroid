@@ -904,6 +904,57 @@ public class APIManager {
         }
     }
 
+    public void getSportByBranchUser ( final Context context , final Map<String, String> params, final ArrayList<String> spinnerItem, ArrayAdapter<String> arrayAdapter, final int layoutId, final Spinner spinner) {
+        Sport.sportList.clear();
+        if(spinnerItem!=null) spinnerItem.clear();
+        String id = params.get("userID");
+        String remember_token = params.get("remember_token");
+
+        String url = globalActivity.route("getSportsByBranchUser/" + id + "/" + remember_token);
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url , new Response.Listener<JSONArray>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse ( JSONArray response ) {
+                for (int j = 0; j < response.length(); j++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(j);
+                        Sport sport = new Sport();
+                        sport.setSportId(jsonObject.getInt("sport_id"));
+                        sport.setSportName(jsonObject.getString("sport_name"));
+
+                        Sport.sportList.add(sport);
+                        if(spinnerItem!=null)spinnerItem.add(Sport.sportList.get(j).getSportName());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        } , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse ( VolleyError error ) {
+            }
+
+        }) {
+            @Override
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+                return volleyError;
+            }
+        };
+        mRequestQueue.add(jsonArrayRequest);
+        if(layoutId!=0 || spinnerItem!=null || arrayAdapter!=null){
+            arrayAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item, spinnerItem);
+            arrayAdapter.notifyDataSetChanged();
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(arrayAdapter);
+        }
+    }
+
     public void getBranch ( final Context context , final Map<String, String> params ) {
         Branch.branchList.clear();
         String id = params.get("userID");
