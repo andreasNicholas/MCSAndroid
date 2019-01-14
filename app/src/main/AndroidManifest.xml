@@ -84,8 +84,12 @@
         <activity
             android:name=".Activity.EditProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.RequestChangePasswordActivity" />
-        <activity android:name=".Activity.ChangePasswordActivity"></activity>
+        <activity
+            android:name=".Activity.RequestChangePasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ChangePasswordActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
