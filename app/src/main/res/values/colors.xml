@@ -6,4 +6,8 @@
     <color name="colorBg">#c80900</color>
     <color name="colorBlack">#000000</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="Smooch_accent">#D81B60</color>
+    <color name="Smooch_accentDark">#00574B</color>
+    <color name="Smooch_accentLight">#008577</color>
 </resources>

@@ -10,6 +10,9 @@ import com.onesignal.OneSignal;
 
 import java.util.Objects;
 
+import io.smooch.core.Settings;
+import io.smooch.core.Smooch;
+import io.smooch.core.SmoochCallback;
 import project.aigo.myapplication.Adapter.TabAdapter;
 import project.aigo.myapplication.Fragment.EventListFragment;
 import project.aigo.myapplication.Fragment.HomeFragment;
@@ -46,6 +49,14 @@ public class MainActivity extends GlobalActivity {
 
         String[] getDataforAuthenticate = getDataforAuthenticate(this);
         id = getDataforAuthenticate != null ? getDataforAuthenticate[0] : "";
+
+        Smooch.init(Objects.requireNonNull(this).getApplication(), new Settings(GlobalActivity.SMOOCH_APP_TOKEN), new SmoochCallback() {
+            @Override
+            public void run(Response response) {
+                // Your code after init is complete
+            }
+
+        });
 
         OneSignal.startInit(this).init();
         OneSignal.setSubscription(true);

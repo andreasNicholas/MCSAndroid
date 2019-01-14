@@ -48,13 +48,7 @@ public class ProfileSettingFragment extends Fragment implements View.OnClickList
         GlobalActivity globalActivity = new GlobalActivity();
         View view = inflater.inflate(R.layout.fragment_profile_setting , container , false);
 
-        Smooch.init(Objects.requireNonNull(getActivity()).getApplication(), new Settings(GlobalActivity.SMOOCH_APP_TOKEN), new SmoochCallback() {
-            @Override
-            public void run(Response response) {
-                // Your code after init is complete
-            }
 
-        });
         llEditProfile = view.findViewById(R.id.llEditProfile);
         llLogout = view.findViewById(R.id.llLogout);
         llChangePassword = view.findViewById(R.id.llChangePassword);
