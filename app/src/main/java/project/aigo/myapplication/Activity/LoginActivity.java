@@ -16,7 +16,7 @@ import project.aigo.myapplication.R;
 public class LoginActivity extends GlobalActivity implements View.OnClickListener {
     View layoutView;
     Button btnLogin;
-    TextView tvRegister;
+    TextView tvRegister, tvForgotPassword;
     EditText etEmail, etPassword;
     SharedPreferences sharedPreferences;
     @Override
@@ -34,8 +34,10 @@ public class LoginActivity extends GlobalActivity implements View.OnClickListene
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         tvRegister = findViewById(R.id.tvRegister);
+        tvForgotPassword = findViewById(R.id.tvForgotPassword);
         btnLogin.setOnClickListener(this);
         tvRegister.setOnClickListener(this);
+        tvForgotPassword.setOnClickListener(this);
     }
 
     @Override
@@ -59,6 +61,9 @@ public class LoginActivity extends GlobalActivity implements View.OnClickListene
             //startActivity(intent);
         } else if (view == tvRegister) {
             Intent intent = new Intent(this , RegisterActivity.class);
+            startActivity(intent);
+        } else if (view == tvForgotPassword){
+            Intent intent = new Intent(this, RequestChangePasswordActivity.class);
             startActivity(intent);
         }
     }

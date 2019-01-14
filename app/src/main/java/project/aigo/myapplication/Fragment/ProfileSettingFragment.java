@@ -23,6 +23,7 @@ import project.aigo.myapplication.APIManager;
 import project.aigo.myapplication.Activity.AddBranchActivity;
 import project.aigo.myapplication.Activity.AddSportActivity;
 import project.aigo.myapplication.Activity.AddUserBranchActivity;
+import project.aigo.myapplication.Activity.ChangePasswordActivity;
 import project.aigo.myapplication.Activity.EditProfileActivity;
 import project.aigo.myapplication.Activity.GlobalActivity;
 import project.aigo.myapplication.Activity.LoginActivity;
@@ -34,7 +35,7 @@ import project.aigo.myapplication.R;
 import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileSettingFragment extends Fragment implements View.OnClickListener {
-    LinearLayout llLogout, llAddSport, llAddBranch, llMyProfile, llAddMySport, llChatWithUs, llEditProfile;
+    LinearLayout llLogout, llChangePassword, llAddSport, llAddBranch, llMyProfile, llAddMySport, llChatWithUs, llEditProfile;
 
     private Map<String, String> paramsForEvent;
 
@@ -54,6 +55,7 @@ public class ProfileSettingFragment extends Fragment implements View.OnClickList
         });
         llEditProfile = view.findViewById(R.id.llEditProfile);
         llLogout = view.findViewById(R.id.llLogout);
+        llChangePassword = view.findViewById(R.id.llChangePassword);
         llAddSport = view.findViewById(R.id.llAddSport);
         llAddBranch = view.findViewById(R.id.llAddBranch);
         llMyProfile = view.findViewById(R.id.llMyProfile);
@@ -72,6 +74,7 @@ public class ProfileSettingFragment extends Fragment implements View.OnClickList
 
         llEditProfile.setOnClickListener(this);
         llLogout.setOnClickListener(this);
+        llChangePassword.setOnClickListener(this);
         llAddSport.setOnClickListener(this);
         llAddBranch.setOnClickListener(this);
         llMyProfile.setOnClickListener(this);
@@ -128,6 +131,9 @@ public class ProfileSettingFragment extends Fragment implements View.OnClickList
             ConversationActivity.show(Objects.requireNonNull(getActivity()));
         } else if (view == llEditProfile) {
             Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+            startActivity(intent);
+        } else if( view == llChangePassword){
+            Intent intent = new Intent(getActivity(), ChangePasswordActivity.class);
             startActivity(intent);
         }
     }

@@ -230,6 +230,96 @@ public class APIManager {
         mRequestQueue.add(jsonObjectRequest);
     }
 
+
+    public void requestChangePassword(final Context context, final View view, final Map<String,String> params){
+        final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
+        progressDialog.show();
+
+        String url = globalActivity.route("forgotPassword");
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+
+        //String Request initialized
+        StringRequest mStringRequest = new StringRequest(Request.Method.POST , url , new Response.Listener<String>() {
+            @Override
+            public void onResponse ( String response ) {
+                globalActivity.snackShort(view, response
+                );
+                progressDialog.dismiss();
+
+            }
+        } , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse ( VolleyError error ) {
+                globalActivity.snackShort(view , error.getMessage());
+                progressDialog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams () {
+
+                return params;
+            }
+
+            @Override
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+
+                return volleyError;
+            }
+        };
+
+        mRequestQueue.add(mStringRequest);
+
+    }
+
+    public void changePassword(final Context context, final View view, final Map<String,String> params){
+        final ProgressDialog progressDialog = globalActivity.showProgressDialog(context);
+        progressDialog.show();
+
+        String url = globalActivity.route("changePass");
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+
+        //String Request initialized
+        StringRequest mStringRequest = new StringRequest(Request.Method.POST , url , new Response.Listener<String>() {
+            @Override
+            public void onResponse ( String response ) {
+                globalActivity.snackShort(view, response
+                );
+                progressDialog.dismiss();
+
+            }
+        } , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse ( VolleyError error ) {
+                globalActivity.snackShort(view , error.getMessage());
+                progressDialog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams () {
+
+                return params;
+            }
+
+            @Override
+            protected VolleyError parseNetworkError ( VolleyError volleyError ) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+
+                    volleyError = new VolleyError(new String(volleyError.networkResponse.data));
+                }
+
+                return volleyError;
+            }
+        };
+
+        mRequestQueue.add(mStringRequest);
+
+    }
+
+
     public void getNews ( final Context context , final View view , final Map<String, String> params ,
                           final RecyclerView.Adapter adapter , final List<News> newsList , final SwipeRefreshLayout swipeRefreshLayout ) {
 

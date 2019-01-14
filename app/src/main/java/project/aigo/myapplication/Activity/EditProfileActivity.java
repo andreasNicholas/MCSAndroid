@@ -27,7 +27,7 @@ import project.aigo.myapplication.Object.Sport;
 import project.aigo.myapplication.R;
 
 public class EditProfileActivity extends GlobalActivity implements View.OnClickListener {
-    private EditText etEditEmail, etEditPassword, etEditAddress, etEditPhone, etEditDOB, etEditName;
+    private EditText etEditEmail, etEditAddress, etEditPhone, etEditDOB, etEditName;
     private ImageView ivEditPP;
     private Button btnEditProfile;
     private String imageExtension = "";
@@ -42,7 +42,6 @@ public class EditProfileActivity extends GlobalActivity implements View.OnClickL
         getSupportActionBar().setTitle("Edit My Profile");
 
         etEditEmail = findViewById(R.id.etEditEmail);
-        etEditPassword = findViewById(R.id.etEditPassword);
         etEditAddress = findViewById(R.id.etEditAddress);
         etEditPhone = findViewById(R.id.etEditPhone);
         etEditDOB = findViewById(R.id.etEditDOB);
@@ -135,7 +134,6 @@ public class EditProfileActivity extends GlobalActivity implements View.OnClickL
         String remember_token = getDataforAuthenticate != null ? getDataforAuthenticate[1] : null;
         String name = etEditName.getText().toString();
         String email = etEditEmail.getText().toString();
-        String password = etEditPassword.getText().toString();
         String address = etEditAddress.getText().toString();
         String phone = etEditPhone.getText().toString();
         String birthdate = etEditDOB.getText().toString();
@@ -145,7 +143,6 @@ public class EditProfileActivity extends GlobalActivity implements View.OnClickL
         paramsForEditProfile.put("remember_token" , remember_token);
         paramsForEditProfile.put("name" , name);
         paramsForEditProfile.put("email" , email);
-        paramsForEditProfile.put("password" , password);
         paramsForEditProfile.put("address" , address);
         paramsForEditProfile.put("phone" , phone);
         paramsForEditProfile.put("birthdate" , birthdate);

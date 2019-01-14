@@ -94,6 +94,12 @@ public class GlobalActivity extends AppCompatActivity {
         return sp.getString("role" , "");
     }
 
+    public String getEmail ( Context context ) {
+        SharedPreferences sp = context.getSharedPreferences("spLogin" , MODE_PRIVATE);
+
+        return sp.getString("email" , "");
+    }
+
     public ProgressDialog showProgressDialog ( Context context , String[]... array ) {
         ProgressDialog progressDialog = new ProgressDialog(context);
 

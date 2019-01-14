@@ -288,9 +288,10 @@
 
         <LinearLayout
             android:id="@+id/llChatWithUs"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
@@ -337,6 +338,60 @@
                 android:layout_height="1dp"
                 android:layout_weight="0"
                 android:background="?android:attr/listDivider" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llChangePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_weight="0" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0" />
+
+                <ImageView
+                    android:id="@+id/icChangePassword"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_update_black_24dp"
+                    android:rotationY="180" />
+
+                <TextView
+                    android:id="@+id/tvChangePassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="Change Password"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="5dp"
+                android:layout_weight="0" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="0"
+                android:background="?android:attr/listDivider" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -393,9 +448,6 @@
                 android:background="?android:attr/listDivider" />
 
         </LinearLayout>
-
-
-
 
 
     </LinearLayout>

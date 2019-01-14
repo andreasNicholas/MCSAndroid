@@ -34,4 +34,6 @@
     <string name="view_all"><![CDATA[View All >]]></string>
     <string name="title_activity_main">MainActivity</string>
     <string name="event_calendar">Event Calendar</string>
+    <string name="forgot_pass">Forgot password? click here!</string>
+    <string name="change_passw">Change Password</string>
 </resources>
