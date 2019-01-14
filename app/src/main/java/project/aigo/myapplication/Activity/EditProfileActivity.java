@@ -119,11 +119,11 @@ public class EditProfileActivity extends GlobalActivity implements View.OnClickL
         else if(view == btnEditProfile){
             mapParamsEditProfile();
             callApiEditProfile();
-
-            final SharedPreferences sp = this.getSharedPreferences("spLogin" , MODE_PRIVATE);
-            SharedPreferences.Editor editor = sp.edit();
-            editor.putString("profilepicture", encodeTobase64(bitmapContainer));
-            editor.commit();
+//            naro image di SP terlalu berat
+//            final SharedPreferences sp = this.getSharedPreferences("spLogin" , MODE_PRIVATE);
+//            SharedPreferences.Editor editor = sp.edit();
+//            editor.putString("profilepicture", encodeTobase64(bitmapContainer));
+//            editor.commit();
             ivEditPP.setImageBitmap(bitmapContainer);
         }
     }

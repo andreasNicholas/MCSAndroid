@@ -722,7 +722,7 @@ public class APIManager {
                 legend.setTextColor(R.color.colorBg);
                 legend.setEnabled(true);
                 ArrayList<LegendEntry> legendEntry = new ArrayList<>();
-                legendEntry.add(new LegendEntry("Position" , Legend.LegendForm.CIRCLE , 15f , 10f , null , Color.RED));
+                legendEntry.add(new LegendEntry("Count Win" , Legend.LegendForm.CIRCLE , 15f , 10f , null , Color.RED));
                 legend.setCustom(legendEntry);
 
                 Description description = chart.getDescription();
